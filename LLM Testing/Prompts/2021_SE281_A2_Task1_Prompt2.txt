@@ -1,0 +1,28 @@
+Please fix the following code to add two bot players named "Bot1" and "Bot2":
+"""
+	public BlackJack() {
+		players = new ArrayList<>();
+		dealer = null; // FIXME Task 2
+		players.add(new HumanPlayer("Player1"));
+		// ADDHERE Task 1
+	}
+"""
+This is the test case that must pass:
+"""
+@Test
+        public void testBotAreCreated() {
+            BlackJack game = new BlackJack();
+            assertNotNull("The field players in the BlackJack class should not be null", game.getPlayers());
+
+            Utils.scanner = new Scanner("" + "5 hold " + System.getProperty("line.separator") + " "
+                    + System.getProperty("line.separator") + " " + System.getProperty("line.separator") + " "
+                    + System.getProperty("line.separator") + " " + "no");
+            game.start();
+            assertEquals("We should have three players, a human and two bots", 3, game.getPlayers().size());
+            assertTrue("the first player should be human", game.getPlayers().get(0) instanceof HumanPlayer);
+            assertTrue("the second player should be a bot", game.getPlayers().get(1) instanceof BotPlayer);
+            assertTrue("the third player should be a bot", game.getPlayers().get(2) instanceof BotPlayer);
+            assertTrue("I cannot find = \"Bot2's score is:\" did you name the Bots correctly: Bot1 and Bot2 ? ",
+                    myOut.toString().contains("Bot2's score is: "));
+        }
+"""
