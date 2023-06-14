@@ -1,0 +1,19 @@
+{  "id": "chatcmpl-7RFPhqNV095y0CpnNpK9LoGNzeqiO",
+  "object": "chat.completion",
+  "created": 1686728461,
+  "model": "gpt-3.5-turbo-0301",
+  "usage": {
+    "prompt_tokens": 2961,
+    "completion_tokens": 568,
+    "total_tokens": 3529
+  },
+  "choices":
+  [{
+    "message":
+    {
+      "role": "assistant",
+      "content": "package nz.ac.auckland.se281;\n\nimport nz.ac.auckland.se281.Main.PolicyType;\n\nimport java.util.ArrayList;\nimport java.util.List;\n\npublic class InsuranceSystem {\n    private List<ClientProfile> database = new ArrayList<>();\n\n    public InsuranceSystem() {\n        // Only this constructor can be used (if you need to initialise fields).\n    }\n\n    public void printDatabase() {\n        if (database.isEmpty()) {\n            System.out.println(MessageCli.PRINT_DB_POLICY_COUNT.getMessage(\"0\", \"s\", \".\"));\n        } else if (database.size() == 1) {\n            System.out.println(MessageCli.PRINT_DB_POLICY_COUNT.getMessage(\"1\", \"\", \":\"));\n            System.out.println(MessageCli.PRINT_DB_PROFILE_HEADER_MINIMAL.getMessage());\n            System.out.println(\" 1: \" + database.get(0).getTitleCaseName() + \", \" + database.get(0).getAge());\n        } else {\n            System.out.println(MessageCli.PRINT_DB_POLICY_COUNT.getMessage(String.valueOf(database.size()), \"s\", \":\"));\n            System.out.println(MessageCli.PRINT_DB_PROFILE_HEADER_MINIMAL.getMessage());\n            for (int i = 0; i < database.size(); i++) {\n                System.out.println(\" \" + (i+1) + \": \" + database.get(i).getTitleCaseName() + \", \" + database.get(i).getAge());\n            }\n        }\n    }\n\n    public void createNewProfile(String userName, String age) {\n        if (userName.length() < 3) {\n            System.out.println(MessageCli.CREATE_PROFILE_INVALID_USERNAME.getMessage(userName));\n            return;\n        }\n        int ageInt;\n        try {\n            ageInt = Integer.parseInt(age);\n        } catch (NumberFormatException e) {\n            System.out.println(MessageCli.CREATE_PROFILE_INVALID_AGE.getMessage(age, userName));\n            return;\n        }\n        if (ageInt <= 0) {\n            System.out.println(MessageCli.CREATE_PROFILE_INVALID_AGE.getMessage(age, userName));\n            return;\n        }\n        for (ClientProfile profile : database) {\n            if (profile.getName().equalsIgnoreCase(userName)) {\n                System.out.println(MessageCli.CREATE_PROFILE_DUPLICATE_USERNAME.getMessage(userName));\n                return;\n            }\n        }\n        ClientProfile newProfile = new ClientProfile(userName);\n        newProfile.setAge(ageInt);\n        database.add(newProfile);\n        System.out.println(MessageCli.CREATE_PROFILE_SUCCESS.getMessage(newProfile.getTitleCaseName(), newProfile.getAge()));\n    }\n\n    public void loadProfile(String userName) {\n        // TODO: Complete this method.\n    }\n\n    public void unloadProfile() {\n        // TODO: Complete this method.\n    }\n\n    public void deleteProfile(String userName) {\n        // TODO: Complete this method.\n    }\n\n    public void createPolicy(PolicyType type, String[] options) {\n        // TODO: Complete this method.\n    }\n}"      },
+      "finish_reason": "stop",
+      "index": 0
+    }
+  ]}
