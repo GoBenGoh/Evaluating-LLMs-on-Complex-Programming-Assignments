@@ -1,0 +1,318 @@
+The instructions for Task 1 are below marked between a pair of "///":
+///
+Task 1 will require you to implement (some of) the logic for the CREATE_PROFILE and PRINT_DB commands.
+
+The CREATE_PROFILE command creates a new client profile with the specified username and age (passed as arguments to the CREATE_PROFILE command). The username should be unique across all other usernames currently in the system, and the age should be a positive integer. If the username is not unique, or the age is not a positive integer, an error message should be printed.
+
+The PRINT_DB command prints the entire insurance database. If the database is empty, it prints the following:
+
+Database has 0 profiles.
+If the database has exactly one profile, it prints the following:
+
+Database has 1 profile:
+ 1: Jordan, 21
+If the database has more than one profile, it prints the following:
+
+Database has 2 profiles:
+ 1: Jordan, 21
+ 2: John, 22
+Take note of the differences between the 3 cases above:
+
+In the first example, “profiles” is plural, and the sentence ends with a period (“.”)
+In the second example, “profile” is singular, and the sentence ends with a colon (“:”)
+In the third example, “profiles” is plural, and the sentence ends with a colon (“:”)
+Hint: Have a look at the MessageCli.PRINT_DB_POLICY_COUNT message template:
+
+PRINT_DB_POLICY_COUNT("Database has %s profile%s%s")
+This message template has three %s placeholders:
+
+The first %s is for the number of profiles (e.g., “0”, “1”, “2”, etc.)
+The second %s is for the word “profile”, whether you want it to be singular or plural (i.e., “profile” or “profiles”)
+The third %s is for ending the sentence (i.e., “.” or “:”)
+To get the messahe "Database has 2 profiles:", you can do one of the following:
+
+MessageCli.PRINT_DB_POLICY_COUNT.getMessage("2", "s", ":");    // Using the getMessage() method
+MessageCli.PRINT_DB_POLICY_COUNT.printMessage("2", "s", ":");  // Using the printMessage() method
+
+In addition to above header, if there is at least one profile in the database, the PRINT_DB should also print the following for every profile in the database:
+
+<SPACE><RANK><COLON><SPACE><USERNAME><COMMA><SPACE><AGE>
+For example, for the database with two profiles:
+
+Database has 2 profiles:
+ 1: Jordan, 21
+ 2: Jenny, 25
+
+Hint: The <RANK> is the position of the profile in the database, in the order they were added successfully into the system, starting from 1. This is not an “ID” of the profile (so, you should not be trying to implement this using static variables).
+
+Hint: See the MessageCli.PRINT_DB_PROFILE_HEADER_MINIMAL message template.
+
+When a new profile is created, it should be added to the database. The arguments have the following requirements:
+
+<USERNAME> (✭)
+Must be unique across all other usernames currently in the system
+Must be at least 3 characters long
+The username will only be a single word (✱)
+The user may type the username using any case, but your system needs to always process it in title case (i.e., the first letter of each word is capitalised, with the rest of the letters being lowercase)
+<AGE> (✭)
+Should be a positive integer
+✱ You do not need to worry about the user typing in a username that is more than one word. For example, you do not need to worry about the user typing in CREATE_PROFILE John Smith 21. You can assume that the user will always type in a username that is a single word.
+
+✭ You do not need to worry about test cases where there are multiple errors in the same command. For example, you do not need to worry about the user typing in CREATE_PROFILE Jo twenty (i.e., the username is too short, and the age is not a positive integer). You can assume that the user will always type in a command that has only one error.
+
+When a successful profile is created, a success message should be printed.
+
+New profile created for <USERNAME> with age <AGE>.
+For example:
+
+insurance system> create-profile joRDaN 21
+New profile created for Jordan with age 21.  // success message
+Take note of how the system printed the name as “Jordan” (i.e., in title case), even though the user typed “joRDaN” (i.e., in weird case).
+
+The format of this message is very strict. Make sure you check for an appropriate message template in MessageCli to help you.
+
+If there was something wrong with the username, then the above success message should not be printed. Instead, one of the following messages gets printed.
+
+If the username is too short, then the following message gets printed:
+
+'<USERNAME>' is an invalid username, it should be at least 3 characters long. No profile was created.
+Consider the following example, paying attention to how the user types the username versus how the system prints it:
+
+insurance system> create-profile jo 21
+'Jo' is an invalid username, it should be at least 3 characters long. No profile was created.
+The system printed the name as “Jo” (i.e., in title case), even though the user typed “jo”.
+
+If the username already exists, then the following message gets printed:
+
+Usernames must be unique. No profile was created for '<USERNAME>'.
+Consider the following example, paying attention to how the user types the username versus how the system prints it:
+
+insurance system> create-profile jordan 21  // first time adding a Jordan, so this is successful
+New profile created for Jordan with age 21.
+insurance system> create-profile jorDan 35  // second time adding a Jordan, so this is unsuccessful
+Usernames must be unique. No profile was created for 'Jordan'.
+If the age is not a positive integer, then following message gets printed:
+
+'<AGE>' is an invalid age, please provide a positive whole number only. No profile was created for <USERNAME>.
+Again, remember that the system will always print the username in title case, regardless of how the user types it.
+///
+
+Please fix the following code according to these instructions:
+"""
+package nz.ac.auckland.se281;
+
+import nz.ac.auckland.se281.Main.PolicyType;
+
+public class InsuranceSystem {
+  public InsuranceSystem() {
+    // Only this constructor can be used (if you need to initialise fields).
+  }
+
+  public void printDatabase() {
+    // TODO: Complete this method.
+  }
+
+  public void createNewProfile(String userName, String age) {
+    // TODO: Complete this method.
+  }
+
+  public void loadProfile(String userName) {
+    // TODO: Complete this method.
+  }
+
+  public void unloadProfile() {
+    // TODO: Complete this method.
+  }
+
+  public void deleteProfile(String userName) {
+    // TODO: Complete this method.
+  }
+
+  public void createPolicy(PolicyType type, String[] options) {
+    // TODO: Complete this method.
+  }
+}
+"""
+Here are the test cases that must pass:
+"""
+package nz.ac.auckland.se281;
+
+import static nz.ac.auckland.se281.Main.Command.*;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import org.junit.runners.Suite.SuiteClasses;
+
+@RunWith(Suite.class)
+@SuiteClasses({MainTest.Task1.class})
+public class MainTest {
+
+  public static class Task1 extends CliTest {
+
+    public Task1() {
+      super(Main.class);
+    }
+
+    @Test
+    public void T1_01_empty_database() throws Exception {
+      runCommands(PRINT_DB);
+      assertContains("Database has 0 profiles.");
+    }
+
+    @Test
+    public void T1_02_add_one_client() throws Exception {
+      runCommands(CREATE_PROFILE, "Jordan", "21", PRINT_DB);
+      assertContains("Database has 1 profile:");
+      assertContains("New profile created for Jordan with age 21.");
+      assertDoesNotContain("Database has 0 profiles", true);
+    }
+
+    @Test
+    public void T1_xx_add_one_client_with_info() throws Exception {
+      runCommands(CREATE_PROFILE, "Jordan", "21", PRINT_DB);
+      assertContains("Database has 1 profile:");
+      assertContains("New profile created for Jordan with age 21.");
+      assertContains("1: Jordan, 21");
+      assertDoesNotContain("Database has 0 profiles", true);
+    }
+
+    @Test
+    public void T1_xx_ignore_short_name() throws Exception {
+      runCommands(CREATE_PROFILE, "Jo", "21", PRINT_DB);
+      assertContains("Database has 0 profiles.");
+      assertContains(
+          "'Jo' is an invalid username, it should be at least 3 characters long. No profile was"
+              + " created.");
+      assertDoesNotContain("Database has 1 profile", true);
+      assertDoesNotContain("New profile created", true);
+      assertDoesNotContain("21");
+    }
+
+    @Test
+    public void T1_xx_ignore_short_name_to_titlecase() throws Exception {
+      runCommands(CREATE_PROFILE, "aL", "21", PRINT_DB);
+      assertContains("Database has 0 profiles.");
+      assertContains(
+          "'Al' is an invalid username, it should be at least 3 characters long. No profile was"
+              + " created.");
+      assertDoesNotContain("Database has 1 profile", true);
+      assertDoesNotContain("New profile created", true);
+      assertDoesNotContain("21");
+    }
+
+    @Test
+    public void T1_xx_add_two_clients() throws Exception {
+      runCommands(CREATE_PROFILE, "Jordan", "21", CREATE_PROFILE, "Tom", "25", PRINT_DB);
+      assertContains("Database has 2 profiles:");
+      assertContains("1: Jordan, 21");
+      assertContains("2: Tom, 25");
+      assertDoesNotContain("Database has 0 profiles", true);
+      assertDoesNotContain("Database has 1 profile", true);
+    }
+
+    @Test
+    public void T1_xx_add_five_clients() throws Exception {
+      runCommands( //
+          CREATE_PROFILE,
+          "Jordan",
+          "21", //
+          CREATE_PROFILE,
+          "Jenny",
+          "22", //
+          CREATE_PROFILE,
+          "TOM",
+          "23", //
+          CREATE_PROFILE,
+          "tOmmY",
+          "24", //
+          CREATE_PROFILE,
+          "aLeX",
+          "25", //
+          PRINT_DB);
+
+      assertContains("Database has 5 profiles:");
+      assertContains("1: Jordan, 21");
+      assertContains("2: Jenny, 22");
+      assertContains("3: Tom, 23");
+      assertContains("4: Tommy, 24");
+      assertContains("5: Alex, 25");
+    }
+
+    @Test
+    public void T1_xx_username_to_titlecase() throws Exception {
+      runCommands(CREATE_PROFILE, "jorDan", "21", CREATE_PROFILE, "TOM", "25", PRINT_DB);
+      assertContains("Database has 2 profiles:");
+      assertContains("1: Jordan, 21");
+      assertContains("2: Tom, 25");
+      assertDoesNotContain("jorDan");
+      assertDoesNotContain("TOM");
+    }
+
+    @Test
+    public void T1_xx_add_ignore_duplicate() throws Exception {
+      runCommands(CREATE_PROFILE, "Jordan", "21", CREATE_PROFILE, "Jordan", "35", PRINT_DB);
+      assertContains("Database has 1 profile:");
+      assertContains("1: Jordan, 21");
+
+      assertContains("Usernames must be unique. No profile was created for 'Jordan'.");
+
+      assertDoesNotContain("Database has 0 profiles", true);
+      assertDoesNotContain("Database has 2 profiles", true);
+      assertDoesNotContain("Jordan, 35", true);
+    }
+
+    @Test
+    public void T1_xx_add_ignore_duplicate_added_later() throws Exception {
+      runCommands(
+          CREATE_PROFILE,
+          "tom",
+          "21", //
+          CREATE_PROFILE,
+          "jordan",
+          "25", //
+          CREATE_PROFILE,
+          "Jenny",
+          "23", //
+          CREATE_PROFILE,
+          "TOM",
+          "32", //
+          PRINT_DB);
+      assertContains("Database has 3 profiles:");
+      assertContains("1: Tom, 21");
+      assertContains("2: Jordan, 25");
+      assertContains("3: Jenny, 23");
+
+      assertContains("Usernames must be unique. No profile was created for 'Tom'.");
+
+      assertDoesNotContain("Database has 4 profiles", true);
+      assertDoesNotContain("Tom, 32", true);
+    }
+
+    @Test
+    public void T1_xx_ignore_invalid_age_negative() throws Exception {
+      runCommands(CREATE_PROFILE, "Jordan", "-1", PRINT_DB);
+      assertContains("Database has 0 profiles.");
+      assertContains(
+          "'-1' is an invalid age, please provide a positive whole number only. No profile was"
+              + " created for Jordan.");
+      assertDoesNotContain("Database has 1 profile", true);
+      assertDoesNotContain("Jordan, -1", true);
+      assertDoesNotContain("New profile created", true);
+    }
+
+    @Test
+    public void T1_xx_add_success_after_invalid_age() throws Exception {
+      runCommands(CREATE_PROFILE, "Jordan", "-1", CREATE_PROFILE, "Jordan", "20", PRINT_DB);
+      assertContains(
+          "'-1' is an invalid age, please provide a positive whole number only. No profile was"
+              + " created for Jordan.");
+      assertContains("Database has 1 profile:");
+      assertContains("1: Jordan, 20");
+      assertDoesNotContain("Database has 0 profiles", true);
+      assertDoesNotContain("Jordan, -1", true);
+    }
+  }
+}
+"""
+DO NOT ASSUME ANOTHER CLASS EXISTS!

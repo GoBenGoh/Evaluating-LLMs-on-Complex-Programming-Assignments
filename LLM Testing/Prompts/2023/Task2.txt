@@ -1,0 +1,443 @@
+The instructions for Task 2 are below marked between a pair of "///":
+///
+Now that the system supports creating profiles, it is time to manage those profiles. This will include loading, unloading, and deleting profiles as explained below.
+
+Loading Profiles
+The LOAD_PROFILE command loads a profile into the system. This command requires exactly one argument, representing the username to be loaded. Again, the user might type the username in any case, but the system will always process it in title case.
+
+A success message occurs when the profile is found and successfully loaded:
+
+Profile loaded for <USERNAME>.
+If the profile is not found, then the following message gets printed:
+
+No profile found for <USERNAME>. Profile not loaded.
+When a profile is successfully loaded, the PRINT_DB command should print an extra *** in front of the currently-loaded profile. For example, if the database has three profiles, and the second profile is successfully loaded, then the PRINT_DB command should print the following:
+
+Database has 3 profiles:
+ 1: Jordan, 21
+*** 2: Jenny, 25
+ 3: John, 30
+
+Hint: See the MessageCli.PRINT_DB_PROFILE_HEADER_SHORT message template.
+
+While a profile is loaded, the LOAD_PROFILE command could be executed again. The new load will only succeed if the profile is found (as a usual load), otherwise it fails with the usual error when a username cannot be loaded. In this case, the currently-loaded profile remains loaded.
+
+If the new load succeeds, the system will unload the currently-loaded profile, and load the new profile. For example, if the database has three profiles, and the second profile is successfully loaded, and then the third profile is successfully loaded, then the PRINT_DB command should print the following:
+
+Database has 3 profiles:
+ 1: Jordan, 21
+ 2: Jenny, 25
+*** 3: John, 30
+While a profile is loaded, the CREATE_PROFILE command should not be allowed. If the user tries to create a profile while a profile is already loaded, then the following message should be printed:
+
+Cannot create a new profile. First unload the profile for <CURRENT_LOADED_PROFILE_USERNAME>.
+Creating a new profile can go ahead, only after the currently-loaded profile is unloaded (see below).
+
+Unloading Profiles
+The UNLOAD_PROFILE command unloads the currently-loaded profile. This command requires no arguments.
+
+When a profile is successfully unloaded, the following message should be printed:
+
+Profile unloaded for <USERNAME>.
+If there is no currently-loaded profile, then the following message should be printed:
+
+No profile is currently loaded.
+
+Deleting Profiles
+The DELETE_PROFILE command deletes a profile from the database. This command requires exactly one argument, representing the username to be deleted.
+
+When a profile is successfully deleted, the following message should be printed:
+
+Profile deleted for <USERNAME>.
+When a profile is successfully deleted, this means it will no longer exist in the database.
+
+If the profile is not found, then the following message gets printed:
+
+No profile found for <USERNAME>. No profile was deleted.
+If the profile is currently loaded, then the deletion should not go ahead and the following message gets printed:
+
+Cannot delete profile for <USERNAME> while loaded. No profile was deleted.
+The loaded profile must be unloaded before it can be deleted.
+
+It is however perfectly fine to delete a profile that is not currently loaded, as long as it exists in the database.
+///
+
+Please fix the following code according to these instructions:
+"""
+package nz.ac.auckland.se281;
+
+import nz.ac.auckland.se281.Main.PolicyType;
+
+public class InsuranceSystem {
+  public InsuranceSystem() {
+    // Only this constructor can be used (if you need to initialise fields).
+  }
+
+  public void printDatabase() {
+    // TODO: Complete this method.
+  }
+
+  public void createNewProfile(String userName, String age) {
+    // TODO: Complete this method.
+  }
+
+  public void loadProfile(String userName) {
+    // TODO: Complete this method.
+  }
+
+  public void unloadProfile() {
+    // TODO: Complete this method.
+  }
+
+  public void deleteProfile(String userName) {
+    // TODO: Complete this method.
+  }
+
+  public void createPolicy(PolicyType type, String[] options) {
+    // TODO: Complete this method.
+  }
+}
+"""
+Here are the test cases that must pass:
+"""
+package nz.ac.auckland.se281;
+
+import static nz.ac.auckland.se281.Main.Command.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import org.junit.runners.Suite.SuiteClasses;
+
+@RunWith(Suite.class)
+@SuiteClasses({
+  MainTest.Task2.class, // Uncomment this line when to start Task 2
+  MainTest.Task3.class, // Uncomment this line when to start Task 3
+  // MainTest.YourTests.class, // Uncomment this line to run your own tests
+})
+public class MainTest {
+
+  public static class Task2 extends CliTest {
+
+    public Task2() {
+      super(Main.class);
+    }
+
+    @Test
+    public void T2_xx_load_profile_found() throws Exception {
+      runCommands(
+          unpack( //
+              CREATE_SOME_CLIENTS, //
+              LOAD_PROFILE,
+              "Tom"));
+
+      assertContains("Profile loaded for Tom.");
+      assertDoesNotContain("No profile found for Tom. Profile not loaded.", true);
+    }
+
+    @Test
+    public void T2_xx_load_profile_not_found() throws Exception {
+      runCommands(
+          unpack( //
+              CREATE_SOME_CLIENTS, //
+              LOAD_PROFILE,
+              "Alex"));
+
+      assertContains("No profile found for Alex. Profile not loaded.");
+      assertDoesNotContain("Profile loaded for Alex.", true);
+    }
+
+    @Test
+    public void T2_xx_load_profile_found_display() throws Exception {
+      runCommands(
+          unpack( //
+              CREATE_SOME_CLIENTS, //
+              LOAD_PROFILE,
+              "Tom", //
+              PRINT_DB));
+
+      assertContains("Profile loaded for Tom.");
+
+      assertContains("Database has 3 profiles:");
+      assertContains("1: Jordan, 21");
+      assertContains("*** 2: Tom, 25");
+      assertContains("3: Jenny, 23");
+    }
+
+    @Test
+    public void T2_xx_load_profile_not_found_display() throws Exception {
+      runCommands(
+          unpack( //
+              CREATE_SOME_CLIENTS, //
+              LOAD_PROFILE,
+              "Alex", //
+              PRINT_DB));
+
+      assertContains("No profile found for Alex. Profile not loaded.");
+      assertDoesNotContain("Profile loaded for Alex.", true);
+
+      assertContains("Database has 3 profiles:");
+      assertContains("1: Jordan, 21");
+      assertContains("2: Tom, 25");
+      assertContains("3: Jenny, 23");
+
+      assertDoesNotContain("***");
+    }
+
+    @Test
+    public void T2_xx_load_profile_found_ignore_case_display() throws Exception {
+      runCommands(
+          unpack( //
+              CREATE_SOME_CLIENTS, //
+              LOAD_PROFILE,
+              "tom", //
+              PRINT_DB));
+
+      assertContains("Profile loaded for Tom.");
+
+      assertContains("Database has 3 profiles:");
+      assertContains("1: Jordan, 21");
+      assertContains("*** 2: Tom, 25");
+      assertContains("3: Jenny, 23");
+    }
+
+    @Test
+    public void T2_xx_load_profile_switch_profiles() throws Exception {
+      runCommands(
+          unpack( //
+              CREATE_SOME_CLIENTS, //
+              LOAD_PROFILE,
+              "tom", //
+              LOAD_PROFILE,
+              "jenny", //
+              PRINT_DB));
+
+      assertContains("Profile loaded for Tom.");
+      assertContains("Profile loaded for Jenny.");
+
+      assertContains("Database has 3 profiles:");
+      assertContains("1: Jordan, 21");
+      assertContains("2: Tom, 25");
+      assertContains("*** 3: Jenny, 23");
+      assertDoesNotContain("*** 1: Jordan, 21", true);
+      assertDoesNotContain("*** 2: Tom, 25", true);
+    }
+
+    @Test
+    public void T2_xx_load_profile_ignore_invalid_switch() throws Exception {
+      runCommands(
+          unpack( //
+              CREATE_SOME_CLIENTS, //
+              LOAD_PROFILE,
+              "jordan", //
+              LOAD_PROFILE,
+              "unknown", //
+              PRINT_DB));
+
+      assertContains("Profile loaded for Jordan.");
+      assertContains("No profile found for Unknown. Profile not loaded.");
+
+      assertContains("Database has 3 profiles:");
+      assertContains("*** 1: Jordan, 21");
+      assertContains("2: Tom, 25");
+      assertContains("3: Jenny, 23");
+
+      assertDoesNotContain("Profile loaded for unknown", true);
+      assertDoesNotContain("*** 2: Tom, 25", true);
+      assertDoesNotContain("*** 3: Jenny, 23", true);
+    }
+
+    @Test
+    public void T2_xx_unload_profile() throws Exception {
+      runCommands(
+          unpack( //
+              CREATE_SOME_CLIENTS, //
+              LOAD_PROFILE,
+              "Jenny", //
+              UNLOAD_PROFILE, //
+              PRINT_DB));
+
+      assertContains("Profile loaded for Jenny.");
+      assertContains("Profile unloaded for Jenny.");
+
+      assertContains("1: Jordan, 21");
+      assertContains("2: Tom, 25");
+      assertContains("3: Jenny, 23");
+
+      assertDoesNotContain("*** 1: Jordan, 21", true);
+      assertDoesNotContain("*** 2: Tom, 25", true);
+      assertDoesNotContain("*** 3: Jenny, 23", true);
+    }
+
+    @Test
+    public void T2_xx_unload_invalid_profile() throws Exception {
+      runCommands(
+          unpack( //
+              CREATE_SOME_CLIENTS, //
+              LOAD_PROFILE,
+              "jen", //
+              UNLOAD_PROFILE, //
+              PRINT_DB));
+
+      assertContains("No profile is currently loaded.");
+
+      assertContains("1: Jordan, 21");
+      assertContains("2: Tom, 25");
+      assertContains("3: Jenny, 23");
+
+      assertDoesNotContain("*** 1: Jordan, 21", true);
+      assertDoesNotContain("*** 2: Tom, 25", true);
+      assertDoesNotContain("*** 3: Jenny, 23", true);
+    }
+
+    @Test
+    public void T2_xx_cannot_create_profile_while_loaded() throws Exception {
+      runCommands(
+          unpack( //
+              CREATE_SOME_CLIENTS, //
+              LOAD_PROFILE,
+              "TOM", //
+              CREATE_PROFILE,
+              "Who",
+              19, //
+              PRINT_DB));
+
+      assertContains("1: Jordan, 21");
+      assertContains("*** 2: Tom, 25");
+      assertContains("3: Jenny, 23");
+
+      assertContains("Cannot create a new profile. First unload the profile for Tom.");
+
+      assertDoesNotContain("*** 1: Jordan, 21", true);
+      assertDoesNotContain("*** 3: Jenny, 23", true);
+      assertDoesNotContain("Who, 19", true);
+    }
+
+    @Test
+    public void T2_xx_can_create_profile_after_unloading() throws Exception {
+      runCommands(
+          unpack( //
+              CREATE_SOME_CLIENTS, //
+              LOAD_PROFILE,
+              "TOM", //
+              UNLOAD_PROFILE, //
+              CREATE_PROFILE,
+              "who",
+              19, //
+              PRINT_DB));
+
+      assertContains("1: Jordan, 21");
+      assertContains("2: Tom, 25");
+      assertContains("3: Jenny, 23");
+      assertContains("4: Who, 19");
+
+      assertDoesNotContain("Cannot create a new profile. First unload the profile for Tom.", true);
+
+      assertDoesNotContain("*** 1: Jordan, 21", true);
+      assertDoesNotContain("*** 2: Tom, 25", true);
+      assertDoesNotContain("*** 3: Jenny, 23", true);
+    }
+
+    @Test
+    public void T2_xx_delete_profile_found() throws Exception {
+      runCommands(
+          unpack( //
+              CREATE_SOME_CLIENTS, //
+              DELETE_PROFILE,
+              "jordan", //
+              PRINT_DB));
+
+      assertContains("Profile deleted for Jordan.");
+      assertContains("Database has 2 profiles:");
+      assertContains("1: Tom, 25");
+      assertContains("2: Jenny, 23");
+      assertDoesNotContain("Jordan, 21", true);
+    }
+
+    @Test
+    public void T2_xx_delete_profile_not_found() throws Exception {
+      runCommands(
+          unpack( //
+              CREATE_SOME_CLIENTS, //
+              DELETE_PROFILE,
+              "alex", //
+              PRINT_DB));
+
+      assertDoesNotContain("Profile deleted for Alex", true);
+      assertContains("No profile found for Alex. No profile was deleted.");
+
+      assertContains("Database has 3 profiles:");
+      assertContains("1: Jordan, 21");
+      assertContains("2: Tom, 25");
+      assertContains("3: Jenny, 23");
+    }
+
+    @Test
+    public void T2_xx_delete_profile_while_loaded() throws Exception {
+      runCommands(
+          unpack( //
+              CREATE_SOME_CLIENTS, //
+              LOAD_PROFILE,
+              "Jenny", //
+              DELETE_PROFILE,
+              "jenny", //
+              PRINT_DB));
+
+      assertContains("Profile loaded for Jenny.");
+
+      assertContains("Cannot delete profile for Jenny while loaded. No profile was deleted.");
+      assertDoesNotContain("Profile deleted for Jenny", true);
+
+      assertContains("Database has 3 profiles:");
+      assertContains("1: Jordan, 21");
+      assertContains("2: Tom, 25");
+      assertContains("3: Jenny, 23");
+    }
+
+    @Test
+    public void T2_xx_delete_profile_while_another_is_loaded() throws Exception {
+      runCommands(
+          unpack( //
+              CREATE_SOME_CLIENTS, //
+              LOAD_PROFILE,
+              "Jenny", //
+              DELETE_PROFILE,
+              "tom", //
+              PRINT_DB));
+
+      assertContains("Profile loaded for Jenny.");
+      assertContains("Profile deleted for Tom.");
+
+      assertContains("Database has 2 profiles:");
+      assertContains("1: Jordan, 21");
+      assertContains("2: Jenny, 23");
+      assertDoesNotContain("Tom, 25", true);
+    }
+
+    @Test
+    public void T2_xx_delete_profile_after_unloaded() throws Exception {
+      runCommands(
+          unpack( //
+              CREATE_SOME_CLIENTS, //
+              LOAD_PROFILE,
+              "tom", //
+              UNLOAD_PROFILE, //
+              DELETE_PROFILE,
+              "TOM", //
+              PRINT_DB));
+
+      assertContains("Profile loaded for Tom.");
+      assertContains("Profile unloaded for Tom.");
+      assertContains("Profile deleted for Tom.");
+
+      assertContains("Database has 2 profiles:");
+      assertContains("1: Jordan, 21");
+      assertContains("2: Jenny, 23");
+      assertDoesNotContain("Tom, 25", true);
+    }
+  }
+}
+"""
+DO NOT ASSUME ANOTHER CLASS EXISTS!
