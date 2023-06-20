@@ -1,3 +1,6 @@
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -13,7 +16,7 @@ public class ChatGPTAPI {
             //Make sure you put the right Organization key saved earlier.
             con.setDoOutput(true);
             //Make sure you put the right API Key saved earlier.
-            con.setRequestProperty("Authorization", "Bearer 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");
+            con.setRequestProperty("Authorization", "Bearer PLACEHOLDER_KEY");
             //Make sure to REPLACE the path of the json file!
             String jsonInputString = FileHelper.readLinesAsString(new File("C:\\Users\\benja\\Documents\\GitHub\\WhoWroteThisCode-HumanOrAI\\LLM Testing\\ChatGPT-API\\InitialTask1Request.json"));
             try (OutputStream os = con.getOutputStream()) {
@@ -30,8 +33,13 @@ public class ChatGPTAPI {
                 response.append(inputLine);
             }
             in.close();
+            JsonObject jsonObject = JsonParser.parseString(String.valueOf(response)).getAsJsonObject();
+            JsonElement choices =  jsonObject.get("choices");
+            JsonElement message = choices.getAsJsonArray().get(0).getAsJsonObject().get("message");
+            JsonElement content = message.getAsJsonObject().get("content");
+            System.out.println(content);
             try(PrintWriter out = new PrintWriter("response.txt")){
-                out.println(response);
+                out.println(content.getAsString());
             }
             catch (Exception e){
                 System.out.println(e.getMessage());

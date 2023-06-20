@@ -1,1 +1,80 @@
-{  "id": "chatcmpl-7T0XDd4AfLZG5zDNlsssr9G4HqZbV",  "object": "chat.completion",  "created": 1687147923,  "model": "gpt-3.5-turbo-0301",  "usage": {    "prompt_tokens": 2961,    "completion_tokens": 704,    "total_tokens": 3665  },  "choices": [    {      "message": {        "role": "assistant",        "content": "Here is the fixed code for Task 1:\n\n```\npackage nz.ac.auckland.se281;\n\nimport java.util.ArrayList;\nimport java.util.List;\n\nimport nz.ac.auckland.se281.MessageCli;\nimport nz.ac.auckland.se281.Main.PolicyType;\n\npublic class InsuranceSystem {\n\n    private List<ClientProfile> database = new ArrayList<>();\n\n    public InsuranceSystem() {\n        // Only this constructor can be used (if you need to initialise fields).\n    }\n\n    public void printDatabase() {\n        if (database.isEmpty()) {\n            MessageCli.PRINT_DB_POLICY_COUNT.printMessage(\"0\", \"s\", \".\");\n        } else if (database.size() == 1) {\n            MessageCli.PRINT_DB_POLICY_COUNT.printMessage(\"1\", \"\", \":\");\n            MessageCli.PRINT_DB_PROFILE_HEADER_MINIMAL.printMessage();\n            ClientProfile profile = database.get(0);\n            System.out.printf(\" 1: %s%n\", profile.toString());\n        } else {\n            MessageCli.PRINT_DB_POLICY_COUNT.printMessage(String.valueOf(database.size()), \"s\", \":\");\n            MessageCli.PRINT_DB_PROFILE_HEADER_MINIMAL.printMessage();\n            for (int i = 0; i < database.size(); i++) {\n                ClientProfile profile = database.get(i);\n                System.out.printf(\" %d: %s%n\", i + 1, profile.toString());\n            }\n        }\n    }\n\n    public void createNewProfile(String userName, String age) {\n        try {\n            int ageInt = Integer.parseInt(age);\n            if (ageInt <= 0) {\n                throw new IllegalArgumentException();\n            }\n            String titleCaseName = toTitleCase(userName);\n            if (titleCaseName.length() < 3) {\n                throw new IllegalArgumentException();\n            }\n            for (ClientProfile profile : database) {\n                if (profile.getUsername().equals(titleCaseName)) {\n                    System.out.printf(\n                            \"Usernames must be unique. No profile was created for '%s'.%n\", titleCaseName);\n                    return;\n                }\n            }\n            ClientProfile newProfile = new ClientProfile(titleCaseName, ageInt);\n            database.add(newProfile);\n            System.out.printf(\"New profile created for %s with age %d.%n\", newProfile.toString(), ageInt);\n        } catch (NumberFormatException e) {\n            System.out.printf(\"'%s' is an invalid age, please provide a positive whole number only. No profile was created for %s.%n\", age, toTitleCase(userName));\n        } catch (IllegalArgumentException e) {\n            System.out.printf(\"'%s' is an invalid username, it should be at least 3 characters long. No profile was created.%n\", toTitleCase(userName));\n        }\n    }\n\n    public void loadProfile(String userName) {\n        // TODO: Complete this method.\n    }\n\n    public void unloadProfile() {\n        // TODO: Complete this method.\n    }\n\n    public void deleteProfile(String userName) {\n        // TODO: Complete this method.\n    }\n\n    public void createPolicy(PolicyType type, String[] options) {\n        // TODO: Complete this method.\n    }\n\n    private static String toTitleCase(String input) {\n        String[] words = input.split(\"\\\\s\");\n        StringBuilder sb = new StringBuilder();\n        for (String word : words) {\n            sb.append(Character.toUpperCase(word.charAt(0)));\n            sb.append(word.substring(1).toLowerCase());\n            sb.append(\" \");\n        }\n        return sb.toString().trim();\n    }\n}\n```"      },      "finish_reason": "stop",      "index": 0    }  ]}
+Here is the updated code:
+
+```
+package nz.ac.auckland.se281;
+
+import nz.ac.auckland.se281.Main.PolicyType;
+import java.util.ArrayList;
+import java.util.List;
+
+public class InsuranceSystem {
+  private List<ClientProfile> database = new ArrayList<>();
+
+  public InsuranceSystem() {
+    // Only this constructor can be used (if you need to initialise fields).
+  }
+
+  public void printDatabase() {
+    if (database.isEmpty()) {
+      MessageCli.PRINT_DB_POLICY_COUNT.printMessage("0", "s", ".");
+    } else if (database.size() == 1) {
+      MessageCli.PRINT_DB_POLICY_COUNT.printMessage("1", "", ":");
+      MessageCli.PRINT_DB_PROFILE_HEADER_MINIMAL.printMessage();
+      database.get(0).printProfile(1);
+    } else {
+      MessageCli.PRINT_DB_POLICY_COUNT.printMessage(String.valueOf(database.size()), "s", ":");
+      MessageCli.PRINT_DB_PROFILE_HEADER_MINIMAL.printMessage();
+      for (int i = 0; i < database.size(); i++) {
+        database.get(i).printProfile(i + 1);
+      }
+    }
+  }
+
+  public void createNewProfile(String userName, String age) {
+    if (userName.length() < 3) {
+      MessageCli.CREATE_PROFILE_INVALID_USERNAME.printMessage(userName);
+      return;
+    }
+
+    int ageInt;
+    try {
+      ageInt = Integer.parseInt(age);
+    } catch (NumberFormatException e) {
+      MessageCli.CREATE_PROFILE_INVALID_AGE.printMessage(age, userName);
+      return;
+    }
+
+    if (ageInt <= 0) {
+      MessageCli.CREATE_PROFILE_INVALID_AGE.printMessage(age, userName);
+      return;
+    }
+
+    for (ClientProfile profile : database) {
+      if (profile.getUserName().equalsIgnoreCase(userName)) {
+        MessageCli.CREATE_PROFILE_DUPLICATE_USERNAME.printMessage(userName);
+        return;
+      }
+    }
+
+    ClientProfile newProfile = new ClientProfile(userName, ageInt);
+    database.add(newProfile);
+    MessageCli.CREATE_PROFILE_SUCCESS.printMessage(newProfile.getUserName(), String.valueOf(newProfile.getAge()));
+  }
+
+  public void loadProfile(String userName) {
+    // TODO: Complete this method.
+  }
+
+  public void unloadProfile() {
+    // TODO: Complete this method.
+  }
+
+  public void deleteProfile(String userName) {
+    // TODO: Complete this method.
+  }
+
+  public void createPolicy(PolicyType type, String[] options) {
+    // TODO: Complete this method.
+  }
+}
+```
