@@ -1,0 +1,80 @@
+Here is the updated code:
+
+```
+package nz.ac.auckland.se281;
+
+import nz.ac.auckland.se281.Main.PolicyType;
+import java.util.ArrayList;
+import java.util.List;
+
+public class InsuranceSystem {
+  private List<ClientProfile> database = new ArrayList<>();
+
+  public InsuranceSystem() {
+    // Only this constructor can be used (if you need to initialise fields).
+  }
+
+  public void printDatabase() {
+    if (database.isEmpty()) {
+      MessageCli.PRINT_DB_POLICY_COUNT.printMessage("0", "s", ".");
+    } else if (database.size() == 1) {
+      MessageCli.PRINT_DB_POLICY_COUNT.printMessage("1", "", ":");
+      MessageCli.PRINT_DB_PROFILE_HEADER_MINIMAL.printMessage();
+      database.get(0).printProfile(1);
+    } else {
+      MessageCli.PRINT_DB_POLICY_COUNT.printMessage(String.valueOf(database.size()), "s", ":");
+      MessageCli.PRINT_DB_PROFILE_HEADER_MINIMAL.printMessage();
+      for (int i = 0; i < database.size(); i++) {
+        database.get(i).printProfile(i + 1);
+      }
+    }
+  }
+
+  public void createNewProfile(String userName, String age) {
+    if (userName.length() < 3) {
+      MessageCli.CREATE_PROFILE_INVALID_USERNAME.printMessage(userName);
+      return;
+    }
+
+    int ageInt;
+    try {
+      ageInt = Integer.parseInt(age);
+    } catch (NumberFormatException e) {
+      MessageCli.CREATE_PROFILE_INVALID_AGE.printMessage(age, userName);
+      return;
+    }
+
+    if (ageInt <= 0) {
+      MessageCli.CREATE_PROFILE_INVALID_AGE.printMessage(age, userName);
+      return;
+    }
+
+    for (ClientProfile profile : database) {
+      if (profile.getUserName().equalsIgnoreCase(userName)) {
+        MessageCli.CREATE_PROFILE_DUPLICATE_USERNAME.printMessage(userName);
+        return;
+      }
+    }
+
+    ClientProfile newProfile = new ClientProfile(userName, ageInt);
+    database.add(newProfile);
+    MessageCli.CREATE_PROFILE_SUCCESS.printMessage(newProfile.getUserName(), String.valueOf(newProfile.getAge()));
+  }
+
+  public void loadProfile(String userName) {
+    // TODO: Complete this method.
+  }
+
+  public void unloadProfile() {
+    // TODO: Complete this method.
+  }
+
+  public void deleteProfile(String userName) {
+    // TODO: Complete this method.
+  }
+
+  public void createPolicy(PolicyType type, String[] options) {
+    // TODO: Complete this method.
+  }
+}
+```

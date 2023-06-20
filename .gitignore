@@ -1,4 +1,4 @@
-## IntelliJ ###
+### IntelliJ ###
 *.idea
 *.iml
 *.class
@@ -15,3 +15,6 @@ local.properties
 .settings/
 .loadpath
 .recommenders
+
+### Maven ###
+target/
