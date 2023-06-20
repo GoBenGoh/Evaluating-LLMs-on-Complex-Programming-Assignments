@@ -16,9 +16,9 @@ public class ChatGPTAPI {
             //Make sure you put the right Organization key saved earlier.
             con.setDoOutput(true);
             //Make sure you put the right API Key saved earlier.
-            con.setRequestProperty("Authorization", "Bearer PLACEHOLDER_KEY");
+            con.setRequestProperty("Authorization", "Bearer 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");
             //Make sure to REPLACE the path of the json file!
-            String jsonInputString = FileHelper.readLinesAsString(new File("src/main/java/Task1CompilationFailureRequest.json"));
+            String jsonInputString = FileHelper.readLinesAsString(new File("src/main/java/Task2FailedTestsRequest.json"));
             try (OutputStream os = con.getOutputStream()) {
                 byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
                 os.write(input, 0, input.length);

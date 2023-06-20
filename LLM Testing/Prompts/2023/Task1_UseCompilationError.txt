@@ -1,0 +1,249 @@
+The instructions for Task 1 are below marked between a pair of "///":
+///
+Task 1 will require you to implement (some of) the logic for the CREATE_PROFILE and PRINT_DB commands.
+
+The CREATE_PROFILE command creates a new client profile with the specified username and age (passed as arguments to the CREATE_PROFILE command). The username should be unique across all other usernames currently in the system, and the age should be a positive integer. If the username is not unique, or the age is not a positive integer, an error message should be printed.
+
+The PRINT_DB command prints the entire insurance database. If the database is empty, it prints the following:
+
+Database has 0 profiles.
+If the database has exactly one profile, it prints the following:
+
+Database has 1 profile:
+ 1: Jordan, 21
+If the database has more than one profile, it prints the following:
+
+Database has 2 profiles:
+ 1: Jordan, 21
+ 2: John, 22
+Take note of the differences between the 3 cases above:
+
+In the first example, “profiles” is plural, and the sentence ends with a period (“.”)
+In the second example, “profile” is singular, and the sentence ends with a colon (“:”)
+In the third example, “profiles” is plural, and the sentence ends with a colon (“:”)
+Hint: Have a look at the MessageCli.PRINT_DB_POLICY_COUNT message template:
+
+PRINT_DB_POLICY_COUNT("Database has %s profile%s%s")
+This message template has three %s placeholders:
+
+The first %s is for the number of profiles (e.g., “0”, “1”, “2”, etc.)
+The second %s is for the word “profile”, whether you want it to be singular or plural (i.e., “profile” or “profiles”)
+The third %s is for ending the sentence (i.e., “.” or “:”)
+To get the messahe "Database has 2 profiles:", you can do one of the following:
+
+MessageCli.PRINT_DB_POLICY_COUNT.getMessage("2", "s", ":");    // Using the getMessage() method
+MessageCli.PRINT_DB_POLICY_COUNT.printMessage("2", "s", ":");  // Using the printMessage() method
+
+In addition to above header, if there is at least one profile in the database, the PRINT_DB should also print the following for every profile in the database:
+
+<SPACE><RANK><COLON><SPACE><USERNAME><COMMA><SPACE><AGE>
+For example, for the database with two profiles:
+
+Database has 2 profiles:
+ 1: Jordan, 21
+ 2: Jenny, 25
+
+Hint: The <RANK> is the position of the profile in the database, in the order they were added successfully into the system, starting from 1. This is not an “ID” of the profile (so, you should not be trying to implement this using static variables).
+
+Hint: See the MessageCli.PRINT_DB_PROFILE_HEADER_MINIMAL message template.
+
+When a new profile is created, it should be added to the database. The arguments have the following requirements:
+
+<USERNAME> (✭)
+Must be unique across all other usernames currently in the system
+Must be at least 3 characters long
+The username will only be a single word (✱)
+The user may type the username using any case, but your system needs to always process it in title case (i.e., the first letter of each word is capitalised, with the rest of the letters being lowercase)
+<AGE> (✭)
+Should be a positive integer
+✱ You do not need to worry about the user typing in a username that is more than one word. For example, you do not need to worry about the user typing in CREATE_PROFILE John Smith 21. You can assume that the user will always type in a username that is a single word.
+
+✭ You do not need to worry about test cases where there are multiple errors in the same command. For example, you do not need to worry about the user typing in CREATE_PROFILE Jo twenty (i.e., the username is too short, and the age is not a positive integer). You can assume that the user will always type in a command that has only one error.
+
+When a successful profile is created, a success message should be printed.
+
+New profile created for <USERNAME> with age <AGE>.
+For example:
+
+insurance system> create-profile joRDaN 21
+New profile created for Jordan with age 21.  // success message
+Take note of how the system printed the name as “Jordan” (i.e., in title case), even though the user typed “joRDaN” (i.e., in weird case).
+
+The format of this message is very strict. Make sure you check for an appropriate message template in MessageCli to help you.
+
+If there was something wrong with the username, then the above success message should not be printed. Instead, one of the following messages gets printed.
+
+If the username is too short, then the following message gets printed:
+
+'<USERNAME>' is an invalid username, it should be at least 3 characters long. No profile was created.
+Consider the following example, paying attention to how the user types the username versus how the system prints it:
+
+insurance system> create-profile jo 21
+'Jo' is an invalid username, it should be at least 3 characters long. No profile was created.
+The system printed the name as “Jo” (i.e., in title case), even though the user typed “jo”.
+
+If the username already exists, then the following message gets printed:
+
+Usernames must be unique. No profile was created for '<USERNAME>'.
+Consider the following example, paying attention to how the user types the username versus how the system prints it:
+
+insurance system> create-profile jordan 21  // first time adding a Jordan, so this is successful
+New profile created for Jordan with age 21.
+insurance system> create-profile jorDan 35  // second time adding a Jordan, so this is unsuccessful
+Usernames must be unique. No profile was created for 'Jordan'.
+If the age is not a positive integer, then following message gets printed:
+
+'<AGE>' is an invalid age, please provide a positive whole number only. No profile was created for <USERNAME>.
+Again, remember that the system will always print the username in title case, regardless of how the user types it.
+///
+The following Task 1 code does not compile as the ClientProfile class does not exist. Please rewrite the code so that this compilation error does not occur again.
+```package nz.ac.auckland.se281;
+
+import nz.ac.auckland.se281.Main.PolicyType;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class InsuranceSystem {
+  private List<ClientProfile> database;
+  private ClientProfile loadedProfile;
+
+  public InsuranceSystem() {
+    this.database = new ArrayList<>();
+    this.loadedProfile = null;
+  }
+
+  public void printDatabase() {
+    if (database.isEmpty()) {
+      MessageCli.PRINT_DB_POLICY_COUNT.printMessage("0", "s", ".");
+    } else if (database.size() == 1) {
+      MessageCli.PRINT_DB_POLICY_COUNT.printMessage("1", "", ":");
+      MessageCli.PRINT_DB_PROFILE_HEADER_MINIMAL.printMessage("1", database.get(0).getUsername(), String.valueOf(database.get(0).getAge()));
+    } else {
+      MessageCli.PRINT_DB_POLICY_COUNT.printMessage(String.valueOf(database.size()), "s", ":");
+      for (int i = 0; i < database.size(); i++) {
+        MessageCli.PRINT_DB_PROFILE_HEADER_MINIMAL.printMessage(String.valueOf(i + 1), database.get(i).getUsername(), String.valueOf(database.get(i).getAge()));
+      }
+    }
+  }
+
+  public void createNewProfile(String userName, String age) {
+    if (!isUniqueUsername(userName)) {
+      MessageCli.INVALID_USERNAME_NOT_UNIQUE.printMessage(userName);
+    } else if (userName.length() < 3) {
+      MessageCli.INVALID_USERNAME_TOO_SHORT.printMessage(userName);
+    } else if (!isPositiveInteger(age)) {
+      MessageCli.INVALID_AGE.printMessage(age, userName);
+    } else {
+      String formattedUserName = toTitleCase(userName);
+      int formattedAge = Integer.parseInt(age);
+      ClientProfile newProfile = new ClientProfile(formattedUserName, formattedAge);
+      database.add(newProfile);
+      MessageCli.PROFILE_CREATED.printMessage(formattedUserName, String.valueOf(formattedAge));
+    }
+  }
+
+  public void loadProfile(String userName) {
+    if (loadedProfile != null) {
+      MessageCli.CANNOT_CREATE_WHILE_LOADED.printMessage(loadedProfile.getUsername());
+    } else {
+      ClientProfile profile = findProfileByUsername(userName);
+      if (profile == null) {
+        MessageCli.NO_PROFILE_FOUND_TO_LOAD.printMessage(userName);
+      } else {
+        loadedProfile = profile;
+        MessageCli.PROFILE_LOADED.printMessage(profile.getUsername());
+      }
+    }
+  }
+
+  public void unloadProfile() {
+    if (loadedProfile == null) {
+      MessageCli.NO_PROFILE_LOADED.printMessage();
+    } else {
+      MessageCli.PROFILE_UNLOADED.printMessage(loadedProfile.getUsername());
+      loadedProfile = null;
+    }
+  }
+
+  public void deleteProfile(String userName) {
+    if (loadedProfile != null && loadedProfile.getUsername().equals(userName)) {
+      MessageCli.CANNOT_DELETE_PROFILE_WHILE_LOADED.printMessage(userName);
+    } else {
+      ClientProfile profile = findProfileByUsername(userName);
+      if (profile == null) {
+        MessageCli.NO_PROFILE_FOUND_TO_DELETE.printMessage(userName);
+      } else {
+        database.remove(profile);
+        MessageCli.PROFILE_DELETED.printMessage(userName);
+      }
+    }
+  }
+
+  public void createPolicy(PolicyType type, String[] options) {
+    if (loadedProfile == null) {
+      MessageCli.NO_PROFILE_FOUND_TO_CREATE_POLICY.printMessage();
+    } else {
+      switch (type) {
+        case HOME:
+          createHomePolicy(options);
+          break;
+        case CAR:
+          createCarPolicy(options);
+          break;
+        case LIFE:
+          createLifePolicy(options);
+          break;
+      }
+    }
+  }
+
+  private void createHomePolicy(String[] options) {
+    // TODO: Implement this method.
+  }
+
+  private void createCarPolicy(String[] options) {
+    // TODO: Implement this method.
+  }
+
+  private void createLifePolicy(String[] options) {
+    // TODO: Implement this method.
+  }
+
+  private boolean isUniqueUsername(String userName) {
+    for (ClientProfile profile : database) {
+      if (profile.getUsername().equalsIgnoreCase(userName)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private boolean isPositiveInteger(String str) {
+    try {
+      int num = Integer.parseInt(str);
+      return num > 0;
+    } catch (NumberFormatException e) {
+      return false;
+    }
+  }
+
+  private String toTitleCase(String str) {
+    String[] words = str.split(" ");
+    StringBuilder result = new StringBuilder();
+    for (String word : words) {
+      result.append(Character.toUpperCase(word.charAt(0))).append(word.substring(1).toLowerCase()).append(" ");
+    }
+    return result.toString().trim();
+  }
+
+  private ClientProfile findProfileByUsername(String userName) {
+    for (ClientProfile profile : database) {
+      if (profile.getUsername().equalsIgnoreCase(userName)) {
+        return profile;
+      }
+    }
+    return null;
+  }
+}
+```

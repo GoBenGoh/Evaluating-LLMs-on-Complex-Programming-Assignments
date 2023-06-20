@@ -29,7 +29,7 @@ This message template has three %s placeholders:
 The first %s is for the number of profiles (e.g., “0”, “1”, “2”, etc.)
 The second %s is for the word “profile”, whether you want it to be singular or plural (i.e., “profile” or “profiles”)
 The third %s is for ending the sentence (i.e., “.” or “:”)
-To get the messahe "Database has 2 profiles:", you can do one of the following:
+To get the message "Database has 2 profiles:", you can do one of the following:
 
 MessageCli.PRINT_DB_POLICY_COUNT.getMessage("2", "s", ":");    // Using the getMessage() method
 MessageCli.PRINT_DB_POLICY_COUNT.printMessage("2", "s", ":");  // Using the printMessage() method
@@ -96,7 +96,315 @@ If the age is not a positive integer, then following message gets printed:
 '<AGE>' is an invalid age, please provide a positive whole number only. No profile was created for <USERNAME>.
 Again, remember that the system will always print the username in title case, regardless of how the user types it.
 ///
+The following section is the an existing Java class named MessageCli:
+```
+package nz.ac.auckland.se281;
 
+/** You cannot modify this class! */
+public enum MessageCli {
+  COMMAND_NOT_FOUND(
+      "Error! Command not found! (run 'help' for the list of available commands): \"%s\""),
+  WRONG_ARGUMENT_COUNT(
+      "Error! Incorrect number of arguments provided. Expected %s argument%s for the \"%s\""
+          + " command"),
+
+  PRINT_DB_POLICY_COUNT("Database has %s profile%s%s"),
+  PRINT_DB_PROFILE_HEADER_MINIMAL(" %s: %s, %s"),
+  PRINT_DB_PROFILE_HEADER_SHORT(" %s%s: %s, %s"),
+  PRINT_DB_PROFILE_HEADER_MEDIUM(" %s%s: %s, %s, %s polic%s"),
+  PRINT_DB_PROFILE_HEADER_LONG(" %s%s: %s, %s, %s polic%s for a total of $%s"),
+
+  PRINT_DB_CAR_POLICY("\tCar Policy (%s, Sum Insured: $%s, Premium: $%s -> $%s)"),
+  PRINT_DB_HOME_POLICY("\tHome Policy (%s, Sum Insured: $%s, Premium: $%s -> $%s)"),
+  PRINT_DB_LIFE_POLICY("\tLife Policy (Sum Insured: $%s, Premium: $%s -> $%s)"),
+
+  INVALID_USERNAME_TOO_SHORT(
+      "'%s' is an invalid username, it should be at least 3 characters long. No profile was"
+          + " created."),
+  INVALID_USERNAME_NOT_UNIQUE("Usernames must be unique. No profile was created for '%s'."),
+  INVALID_AGE(
+      "'%s' is an invalid age, please provide a positive whole number only. No profile was created"
+          + " for %s."),
+
+  CANNOT_CREATE_WHILE_LOADED("Cannot create a new profile. First unload the profile for %s."),
+
+  PROFILE_CREATED("New profile created for %s with age %s."),
+  PROFILE_DELETED("Profile deleted for %s."),
+  PROFILE_LOADED("Profile loaded for %s."),
+  PROFILE_UNLOADED("Profile unloaded for %s."),
+
+  NO_PROFILE_FOUND_TO_LOAD("No profile found for %s. Profile not loaded."),
+  NO_PROFILE_FOUND_TO_DELETE("No profile found for %s. No profile was deleted."),
+  NO_PROFILE_FOUND_TO_CREATE_POLICY("Need to load a profile in order to create a policy."),
+
+  NO_PROFILE_LOADED("No profile is currently loaded."),
+  CANNOT_DELETE_PROFILE_WHILE_LOADED(
+      "Cannot delete profile for %s while loaded. No profile was deleted."),
+
+  NEW_POLICY_CREATED("New %s policy created for %s."),
+  ALREADY_HAS_LIFE_POLICY("%s already has a life policy. No new policy was created."),
+  OVER_AGE_LIMIT_LIFE_POLICY("%s is over the age limit. No policy was created."),
+
+  DISCOUNT_TWO("Two policies are in place, client will get 10% discount"),
+  DISCOUNT_MULTIPLE("Multiple policies are in place, client will get 20% discount"),
+
+  END("You closed the terminal. Goodbye.");
+
+  private final String msg;
+
+  private MessageCli(final String msg) {
+    this.msg = msg;
+  }
+
+  public String getMessage(final String... args) {
+    String tmpMessage = msg;
+
+    for (final String arg : args) {
+      tmpMessage = tmpMessage.replaceFirst("%s", arg);
+    }
+
+    return tmpMessage;
+  }
+
+  public void printMessage(final String... args) {
+    System.out.println(getMessage(args));
+  }
+
+  @Override
+  public String toString() {
+    return msg;
+  }
+}
+```
+The following section shows the Main Java class:
+```
+package nz.ac.auckland.se281;
+
+import java.util.Scanner;
+
+/** You cannot modify this class! */
+public class Main {
+  public enum PolicyType {
+    HOME,
+    CAR,
+    LIFE,
+  }
+
+  public enum Command {
+    PRINT_DB(0, "Print the entire insurance database"),
+
+    CREATE_PROFILE(2, "Create a new client profile <USERNAME> <AGE>"),
+    LOAD_PROFILE(1, "Load the specified profile <USERNAME>"),
+    UNLOAD_PROFILE(0, "Unload the currently-loaded profile"),
+    DELETE_PROFILE(1, "Delete the specified profile <USERNAME> from the database"),
+
+    POLICY_HOME(
+        0,
+        "Create a new home policy for the currently-loaded profile",
+        "Sum to insure",
+        "Property address",
+        "Rental? (y/n)"),
+    POLICY_CAR(
+        0,
+        "Create a new car policy for the currently-loaded profile",
+        "Sum to insure",
+        "Make and model",
+        "License plate",
+        "Mechanical warranty? (y/n)"),
+    POLICY_LIFE(0, "Create a new life policy for the currently-loaded profile", "Sum to insure"),
+
+    HELP(0, "Print usage"),
+    EXIT(0, "Exit the application");
+
+    private final int numArgs;
+    private final String message;
+    private final String[] optionPrompts;
+
+    private Command(final int numArgs, final String message) {
+      this(numArgs, message, new String[] {});
+    }
+
+    private Command(final int numArgs, final String message, final String... optionPrompts) {
+      this.numArgs = numArgs;
+      this.message = message;
+      this.optionPrompts = optionPrompts;
+    }
+
+    public boolean hasArguments() {
+      return numArgs > 0;
+    }
+
+    public int getNumArgs() {
+      return numArgs;
+    }
+
+    public boolean hasOptions() {
+      return optionPrompts.length > 0;
+    }
+
+    public int getNumOptions() {
+      return optionPrompts.length;
+    }
+
+    public String getOptionPrompt(final int index) {
+      return optionPrompts[index];
+    }
+  }
+
+  private static final String COMMAND_PREFIX = "insurance system> ";
+
+  public static void main(final String[] args) {
+    new Main(new Scanner(System.in), new InsuranceSystem()).start();
+  }
+
+  public static String help() {
+    final StringBuilder sb = new StringBuilder();
+
+    for (final Command command : Command.values()) {
+      sb.append(command).append("\t");
+
+      // Add extra padding to align the argument counts
+      // if the command name is less than the tab width.
+      if (command.toString().length() < 8) {
+        sb.append("\t");
+      }
+
+      if (command.numArgs > 0) {
+        sb.append("[").append(command.numArgs).append(" arguments]");
+      } else {
+        sb.append("[no args]");
+      }
+
+      sb.append("\t").append(command.message).append(System.lineSeparator());
+    }
+
+    return sb.toString();
+  }
+
+  private static void printBanner() {
+    // https://patorjk.com/software/taag/
+    // https://www.freeformatter.com/java-dotnet-escape.html#before-output
+
+    System.out.println(
+        "\r\n"
+            + " $$$$$$\\   $$$$$$\\    $$\\         $$$$$$\\\r\n"
+            + "$$  __$$\\ $$  __$$\\ $$$$ |        \\_$$  _|\r\n"
+            + "\\__/  $$ |$$ /  $$ |\\_$$ |          $$ |  $$$$$$$\\   $$$$$$$\\ $$\\   $$\\ "
+            + " $$$$$$\\  $$$$$$\\  $$$$$$$\\   $$$$$$$\\  $$$$$$\\\r\n"
+            + " $$$$$$  | $$$$$$  |  $$ |          $$ |  $$  __$$\\ $$  _____|$$ |  $$ |$$  __$$\\"
+            + " \\____$$\\ $$  __$$\\ $$  _____|$$  __$$\\\r\n"
+            + "$$  ____/ $$  __$$<   $$ |          $$ |  $$ |  $$ |\\$$$$$$\\  $$ |  $$ |$$ | "
+            + " \\__|$$$$$$$ |$$ |  $$ |$$ /      $$$$$$$$ |\r\n"
+            + "$$ |      $$ /  $$ |  $$ |          $$ |  $$ |  $$ | \\____$$\\ $$ |  $$ |$$ |    "
+            + " $$  __$$ |$$ |  $$ |$$ |      $$   ____|\r\n"
+            + "$$$$$$$$\\ \\$$$$$$  |$$$$$$\\       $$$$$$\\ $$ |  $$ |$$$$$$$  |\\$$$$$$  |$$ |   "
+            + "  \\$$$$$$$ |$$ |  $$ |\\$$$$$$$\\ \\$$$$$$$\\\r\n"
+            + "\\________| \\______/ \\______|      \\______|\\__|  \\__|\\_______/  \\______/"
+            + " \\__|      \\_______|\\__|  \\__| \\_______| \\_______|\r\n");
+  }
+
+  private final Scanner scanner;
+
+  private final InsuranceSystem insuranceSystem;
+
+  public Main(final Scanner scanner, final InsuranceSystem insuranceSystem) {
+    this.scanner = scanner;
+    this.insuranceSystem = insuranceSystem;
+  }
+
+  public void start() {
+    printBanner();
+    System.out.println(help());
+
+    String command;
+
+    // Prompt and process commands until the exit command.
+    do {
+      System.out.print(COMMAND_PREFIX);
+      command = scanner.nextLine().trim();
+    } while (processCommand(command));
+  }
+
+  private boolean processCommand(String input) {
+    // Remove whitespace at the beginning and end of the input.
+    input = input.trim();
+
+    final String[] args = input.split(" ");
+
+    // Allow any case, and dashes to be used instead of underscores.
+    final String commandStr = args[0].toUpperCase().replaceAll("-", "_");
+
+    final Command command;
+
+    try {
+      // Command names correspond to the enum names.
+      command = Command.valueOf(commandStr);
+    } catch (final Exception e) {
+      MessageCli.COMMAND_NOT_FOUND.printMessage(commandStr);
+      return true;
+    }
+
+    if (!checkArgs(command, args)) {
+      MessageCli.WRONG_ARGUMENT_COUNT.printMessage(
+          String.valueOf(command.getNumArgs()), command.getNumArgs() > 1 ? "s" : "", commandStr);
+      return true;
+    }
+
+    switch (command) {
+      case CREATE_PROFILE:
+        insuranceSystem.createNewProfile(args[1], args[2]);
+        break;
+      case LOAD_PROFILE:
+        insuranceSystem.loadProfile(args[1]);
+        break;
+      case UNLOAD_PROFILE:
+        insuranceSystem.unloadProfile();
+        break;
+      case DELETE_PROFILE:
+        insuranceSystem.deleteProfile(args[1]);
+        break;
+      case PRINT_DB:
+        insuranceSystem.printDatabase();
+        break;
+      case POLICY_HOME:
+        insuranceSystem.createPolicy(PolicyType.HOME, processOptions(command));
+        break;
+      case POLICY_CAR:
+        insuranceSystem.createPolicy(PolicyType.CAR, processOptions(command));
+        break;
+      case POLICY_LIFE:
+        insuranceSystem.createPolicy(PolicyType.LIFE, processOptions(command));
+        break;
+      case EXIT:
+        MessageCli.END.printMessage();
+
+        // Signal that the program should exit.
+        return false;
+      case HELP:
+        System.out.println(help());
+        break;
+    }
+
+    // Signal that another command is expected.
+    return true;
+  }
+
+  private String[] processOptions(final Command command) {
+    final String[] options = new String[command.getNumOptions()];
+
+    for (int i = 0; i < command.getNumOptions(); i++) {
+      System.out.print("\t" + command.getOptionPrompt(i) + ": ");
+      options[i] = scanner.nextLine().trim();
+    }
+
+    return options;
+  }
+
+  private boolean checkArgs(final Command command, final String[] args) {
+    return command.getNumArgs() == args.length - 1;
+  }
+}
+```
 Please fix the following code according to these instructions:
 """
 package nz.ac.auckland.se281;
