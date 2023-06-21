@@ -370,7 +370,7 @@ public class Main {
   }
 }
 ```
-Please fix the following code according to the instructions and the failing test cases:
+Please fix the following code according to the instructions and the failing test cases. It currently does not compile as MessageCli.ALREADY_HAS_CAR_POLICY and MessageCli.ALREADY_HAS_HOME_POLICY do not exist. Please rewrite the code so that the MessageCli class does not need to be changed.:
 ```
 package nz.ac.auckland.se281;
 
@@ -381,9 +381,11 @@ import java.util.List;
 
 public class InsuranceSystem {
   private List<ClientProfile> database;
+  private ClientProfile loadedProfile;
 
   public InsuranceSystem() {
-    database = new ArrayList<>();
+    this.database = new ArrayList<>();
+    this.loadedProfile = null;
   }
 
   public void printDatabase() {
@@ -391,171 +393,184 @@ public class InsuranceSystem {
       MessageCli.PRINT_DB_POLICY_COUNT.printMessage("0", "s", ".");
     } else if (database.size() == 1) {
       MessageCli.PRINT_DB_POLICY_COUNT.printMessage("1", "", ":");
-      printProfile(database.get(0), 1);
+      MessageCli.PRINT_DB_PROFILE_HEADER_MINIMAL.printMessage("1", database.get(0).getUsername(), String.valueOf(database.get(0).getAge()));
     } else {
       MessageCli.PRINT_DB_POLICY_COUNT.printMessage(String.valueOf(database.size()), "s", ":");
       for (int i = 0; i < database.size(); i++) {
-        printProfile(database.get(i), i + 1);
+        if (database.get(i) == loadedProfile) {
+          MessageCli.PRINT_DB_PROFILE_HEADER_SHORT.printMessage("*** ", String.valueOf(i + 1), database.get(i).getUsername(), String.valueOf(database.get(i).getAge()));
+        } else {
+          MessageCli.PRINT_DB_PROFILE_HEADER_SHORT.printMessage("", String.valueOf(i + 1), database.get(i).getUsername(), String.valueOf(database.get(i).getAge()));
+        }
       }
     }
   }
 
   public void createNewProfile(String userName, String age) {
-    if (!isUsernameValid(userName)) {
-      MessageCli.INVALID_USERNAME_TOO_SHORT.printMessage(capitalizeFirstLetter(userName));
-    } else if (!isUsernameUnique(userName)) {
-      MessageCli.INVALID_USERNAME_NOT_UNIQUE.printMessage(capitalizeFirstLetter(userName));
-    } else if (!isAgeValid(age)) {
-      MessageCli.INVALID_AGE.printMessage(age, capitalizeFirstLetter(userName));
+    if (!isUniqueUsername(userName)) {
+      MessageCli.INVALID_USERNAME_NOT_UNIQUE.printMessage(userName);
+    } else if (userName.length() < 3) {
+      MessageCli.INVALID_USERNAME_TOO_SHORT.printMessage(userName);
+    } else if (!isPositiveInteger(age)) {
+      MessageCli.INVALID_AGE.printMessage(age, userName);
     } else {
-      int parsedAge = Integer.parseInt(age);
-      ClientProfile newProfile = new ClientProfile(capitalizeFirstLetter(userName), parsedAge);
+      String formattedUserName = toTitleCase(userName);
+      int formattedAge = Integer.parseInt(age);
+      ClientProfile newProfile = new ClientProfile(formattedUserName, formattedAge);
       database.add(newProfile);
-      MessageCli.PROFILE_CREATED.printMessage(capitalizeFirstLetter(userName), age);
+      MessageCli.PROFILE_CREATED.printMessage(formattedUserName, String.valueOf(formattedAge));
     }
   }
 
   public void loadProfile(String userName) {
-    if (isProfileLoaded()) {
-      MessageCli.CANNOT_CREATE_WHILE_LOADED.printMessage(getLoadedProfile().getUsername());
+    if (loadedProfile != null) {
+      MessageCli.CANNOT_CREATE_WHILE_LOADED.printMessage(loadedProfile.getUsername());
     } else {
       ClientProfile profile = findProfileByUsername(userName);
-      if (profile != null) {
-        setLoadedProfile(profile);
-        MessageCli.PROFILE_LOADED.printMessage(capitalizeFirstLetter(userName));
+      if (profile == null) {
+        MessageCli.NO_PROFILE_FOUND_TO_LOAD.printMessage(userName);
       } else {
-        MessageCli.NO_PROFILE_FOUND_TO_LOAD.printMessage(capitalizeFirstLetter(userName));
+        loadedProfile = profile;
+        MessageCli.PROFILE_LOADED.printMessage(profile.getUsername());
       }
     }
   }
 
   public void unloadProfile() {
-    if (isProfileLoaded()) {
-      MessageCli.PROFILE_UNLOADED.printMessage(getLoadedProfile().getUsername());
-      setLoadedProfile(null);
-    } else {
+    if (loadedProfile == null) {
       MessageCli.NO_PROFILE_LOADED.printMessage();
+    } else {
+      MessageCli.PROFILE_UNLOADED.printMessage(loadedProfile.getUsername());
+      loadedProfile = null;
     }
   }
 
   public void deleteProfile(String userName) {
-    if (isProfileLoaded() && getLoadedProfile().getUsername().equals(capitalizeFirstLetter(userName))) {
-      MessageCli.CANNOT_DELETE_PROFILE_WHILE_LOADED.printMessage(capitalizeFirstLetter(userName));
+    if (loadedProfile != null && loadedProfile.getUsername().equals(userName)) {
+      MessageCli.CANNOT_DELETE_PROFILE_WHILE_LOADED.printMessage(userName);
     } else {
       ClientProfile profile = findProfileByUsername(userName);
-      if (profile != null) {
-        database.remove(profile);
-        MessageCli.PROFILE_DELETED.printMessage(capitalizeFirstLetter(userName));
+      if (profile == null) {
+        MessageCli.NO_PROFILE_FOUND_TO_DELETE.printMessage(userName);
       } else {
-        MessageCli.NO_PROFILE_FOUND_TO_DELETE.printMessage(capitalizeFirstLetter(userName));
+        if (loadedProfile == profile) {
+          loadedProfile = null;
+        }
+        database.remove(profile);
+        MessageCli.PROFILE_DELETED.printMessage(userName);
       }
     }
   }
 
   public void createPolicy(PolicyType type, String[] options) {
-    if (!isProfileLoaded()) {
+    if (loadedProfile == null) {
       MessageCli.NO_PROFILE_FOUND_TO_CREATE_POLICY.printMessage();
-      return;
-    }
-
-    switch (type) {
-      case HOME:
-        createHomePolicy(options);
-        break;
-      case CAR:
-        createCarPolicy(options);
-        break;
-      case LIFE:
-        createLifePolicy(options);
-        break;
+    } else {
+      switch (type) {
+        case HOME:
+          createHomePolicy(options);
+          break;
+        case CAR:
+          createCarPolicy(options);
+          break;
+        case LIFE:
+          createLifePolicy(options);
+          break;
+      }
     }
   }
 
-  private boolean isUsernameValid(String username) {
-    return username.length() >= 3;
+  private void createHomePolicy(String[] options) {
+    if (loadedProfile.hasHomePolicy()) {
+      MessageCli.ALREADY_HAS_HOME_POLICY.printMessage(loadedProfile.getUsername());
+    } else {
+      double sumInsured = Double.parseDouble(options[0]);
+      String address = options[1];
+      boolean isRental = options[2].equalsIgnoreCase("y");
+
+      HomePolicy homePolicy = new HomePolicy(sumInsured, address, isRental);
+      loadedProfile.setHomePolicy(homePolicy);
+      MessageCli.NEW_POLICY_CREATED.printMessage("home", loadedProfile.getUsername());
+    }
   }
 
-  private boolean isUsernameUnique(String username) {
+  private void createCarPolicy(String[] options) {
+    if (loadedProfile.hasCarPolicy()) {
+      MessageCli.ALREADY_HAS_CAR_POLICY.printMessage(loadedProfile.getUsername());
+    } else {
+      double sumInsured = Double.parseDouble(options[0]);
+      String makeAndModel = options[1];
+      String licensePlate = options[2];
+      boolean hasMechanicalWarranty = options[3].equalsIgnoreCase("y");
+
+      CarPolicy carPolicy = new CarPolicy(sumInsured, makeAndModel, licensePlate, hasMechanicalWarranty);
+      loadedProfile.setCarPolicy(carPolicy);
+      MessageCli.NEW_POLICY_CREATED.printMessage("car", loadedProfile.getUsername());
+    }
+  }
+
+  private void createLifePolicy(String[] options) {
+    if (loadedProfile.hasLifePolicy()) {
+      MessageCli.ALREADY_HAS_LIFE_POLICY.printMessage(loadedProfile.getUsername());
+    } else {
+      double sumInsured = Double.parseDouble(options[0]);
+
+      LifePolicy lifePolicy = new LifePolicy(sumInsured);
+      loadedProfile.setLifePolicy(lifePolicy);
+      MessageCli.NEW_POLICY_CREATED.printMessage("life", loadedProfile.getUsername());
+    }
+  }
+
+  private boolean isUniqueUsername(String userName) {
     for (ClientProfile profile : database) {
-      if (profile.getUsername().equalsIgnoreCase(capitalizeFirstLetter(username))) {
+      if (profile.getUsername().equalsIgnoreCase(userName)) {
         return false;
       }
     }
     return true;
   }
 
-  private boolean isAgeValid(String age) {
+  private boolean isPositiveInteger(String str) {
     try {
-      int parsedAge = Integer.parseInt(age);
-      return parsedAge > 0;
+      int num = Integer.parseInt(str);
+      return num > 0;
     } catch (NumberFormatException e) {
       return false;
     }
   }
 
-  private String capitalizeFirstLetter(String name) {
-    String[] words = name.split(" ");
-    StringBuilder capitalized = new StringBuilder();
+  private String toTitleCase(String str) {
+    String[] words = str.split(" ");
+    StringBuilder result = new StringBuilder();
     for (String word : words) {
-      capitalized.append(Character.toUpperCase(word.charAt(0)));
-      capitalized.append(word.substring(1).toLowerCase());
-      capitalized.append(" ");
+      result.append(Character.toUpperCase(word.charAt(0))).append(word.substring(1).toLowerCase()).append(" ");
     }
-    return capitalized.toString().trim();
+    return result.toString().trim();
   }
 
-  private ClientProfile findProfileByUsername(String username) {
+  private ClientProfile findProfileByUsername(String userName) {
     for (ClientProfile profile : database) {
-      if (profile.getUsername().equalsIgnoreCase(capitalizeFirstLetter(username))) {
+      if (profile.getUsername().equalsIgnoreCase(userName)) {
         return profile;
       }
     }
     return null;
-  }
-
-  private boolean isProfileLoaded() {
-    return getLoadedProfile() != null;
-  }
-
-  private ClientProfile getLoadedProfile() {
-    return database.stream()
-            .filter(ClientProfile::isLoaded)
-            .findFirst()
-            .orElse(null);
-  }
-
-  private void setLoadedProfile(ClientProfile profile) {
-    for (ClientProfile p : database) {
-      p.setLoaded(p.equals(profile));
-    }
-  }
-
-  private void printProfile(ClientProfile profile, int rank) {
-    System.out.printf(" %d: %s, %d\n", rank, profile.getUsername(), profile.getAge());
-  }
-
-  private void createHomePolicy(String[] options) {
-    // TODO: Implement this method.
-  }
-
-  private void createCarPolicy(String[] options) {
-    // TODO: Implement this method.
-  }
-
-  private void createLifePolicy(String[] options) {
-    // TODO: Implement this method.
   }
 }
 
 class ClientProfile {
   private String username;
   private int age;
-  private boolean loaded;
+  private HomePolicy homePolicy;
+  private CarPolicy carPolicy;
+  private LifePolicy lifePolicy;
 
   public ClientProfile(String username, int age) {
     this.username = username;
     this.age = age;
-    this.loaded = false;
+    this.homePolicy = null;
+    this.carPolicy = null;
+    this.lifePolicy = null;
   }
 
   public String getUsername() {
@@ -566,12 +581,62 @@ class ClientProfile {
     return age;
   }
 
-  public boolean isLoaded() {
-    return loaded;
+  public boolean hasHomePolicy() {
+    return homePolicy != null;
   }
 
-  public void setLoaded(boolean loaded) {
-    this.loaded = loaded;
+  public boolean hasCarPolicy() {
+    return carPolicy != null;
+  }
+
+  public boolean hasLifePolicy() {
+    return lifePolicy != null;
+  }
+
+  public void setHomePolicy(HomePolicy homePolicy) {
+    this.homePolicy = homePolicy;
+  }
+
+  public void setCarPolicy(CarPolicy carPolicy) {
+    this.carPolicy = carPolicy;
+  }
+
+  public void setLifePolicy(LifePolicy lifePolicy) {
+    this.lifePolicy = lifePolicy;
+  }
+}
+
+class HomePolicy {
+  private double sumInsured;
+  private String address;
+  private boolean isRental;
+
+  public HomePolicy(double sumInsured, String address, boolean isRental) {
+    this.sumInsured = sumInsured;
+    this.address = address;
+    this.isRental = isRental;
+  }
+}
+
+class CarPolicy {
+  private double sumInsured;
+  private String makeAndModel;
+  private String licensePlate;
+  private boolean hasMechanicalWarranty;
+
+  public CarPolicy(double sumInsured, String makeAndModel, String licensePlate, boolean hasMechanicalWarranty) {
+    this.sumInsured = sumInsured;
+    this.makeAndModel = makeAndModel;
+    this.licensePlate = licensePlate;
+    this.hasMechanicalWarranty = hasMechanicalWarranty;
+  }
+}
+
+class LifePolicy {
+  private double sumInsured;
+
+  public LifePolicy(double sumInsured) {
+    this.sumInsured = sumInsured;
   }
 }
 ```
@@ -601,18 +666,6 @@ public class MainTest {
     }
 
     @Test
-    public void T2_03_load_profile_found_display() throws Exception {
-      runCommands(unpack(CREATE_SOME_CLIENTS, LOAD_PROFILE, "Tom", PRINT_DB));
-
-      assertContains("Profile loaded for Tom.");
-
-      assertContains("Database has 3 profiles:");
-      assertContains("1: Jordan, 21");
-      assertContains("*** 2: Tom, 25");
-      assertContains("3: Jenny, 23");
-    }
-
-    @Test
     public void T2_04_load_profile_switch_profiles() throws Exception {
       runCommands(
           unpack(CREATE_SOME_CLIENTS, LOAD_PROFILE, "tom", LOAD_PROFILE, "jenny", PRINT_DB));
@@ -626,6 +679,33 @@ public class MainTest {
       assertContains("*** 3: Jenny, 23");
       assertDoesNotContain("*** 1: Jordan, 21", true);
       assertDoesNotContain("*** 2: Tom, 25", true);
+    }
+
+    @Test
+    public void T2_07_delete_profile_found() throws Exception {
+      runCommands(unpack(CREATE_SOME_CLIENTS, DELETE_PROFILE, "jordan", PRINT_DB));
+
+      assertContains("Profile deleted for Jordan.");
+      assertContains("Database has 2 profiles:");
+      assertContains("1: Tom, 25");
+      assertContains("2: Jenny, 23");
+      assertDoesNotContain("Jordan, 21", true);
+    }
+
+    @Test
+    public void T2_08_delete_profile_while_loaded() throws Exception {
+      runCommands(
+          unpack(CREATE_SOME_CLIENTS, LOAD_PROFILE, "Jenny", DELETE_PROFILE, "jenny", PRINT_DB));
+
+      assertContains("Profile loaded for Jenny.");
+
+      assertContains("Cannot delete profile for Jenny while loaded. No profile was deleted.");
+      assertDoesNotContain("Profile deleted for Jenny", true);
+
+      assertContains("Database has 3 profiles:");
+      assertContains("1: Jordan, 21");
+      assertContains("2: Tom, 25");
+      assertContains("3: Jenny, 23");
     }
   }
 }

@@ -96,7 +96,7 @@ If the age is not a positive integer, then following message gets printed:
 '<AGE>' is an invalid age, please provide a positive whole number only. No profile was created for <USERNAME>.
 Again, remember that the system will always print the username in title case, regardless of how the user types it.
 ///
-The following Task 1 code does not compile as the ClientProfile class does not exist. Please rewrite the code so that this compilation error does not occur again.
+Please fix the following code according to the instructions and the failing test cases:
 ```
 package nz.ac.auckland.se281;
 
@@ -223,7 +223,7 @@ public class InsuranceSystem {
     String[] words = name.split(" ");
     StringBuilder capitalized = new StringBuilder();
     for (String word : words) {
-      capitalized.append(word.substring(0, 1).toUpperCase());
+      capitalized.append(Character.toUpperCase(word.charAt(0)));
       capitalized.append(word.substring(1).toLowerCase());
       capitalized.append(" ");
     }
@@ -278,4 +278,85 @@ public class InsuranceSystem {
     // TODO: Implement this method.
   }
 }
+
+class ClientProfile {
+  private String username;
+  private int age;
+  private boolean loaded;
+
+  public ClientProfile(String username, int age) {
+    this.username = username;
+    this.age = age;
+    this.loaded = false;
+  }
+
+  public String getUsername() {
+    return username;
+  }
+
+  public int getAge() {
+    return age;
+  }
+
+  public boolean isLoaded() {
+    return loaded;
+  }
+
+  public void setLoaded(boolean loaded) {
+    this.loaded = loaded;
+  }
+}
 ```
+Here are the failing test cases:
+```
+package nz.ac.auckland.se281;
+
+import static nz.ac.auckland.se281.Main.Command.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import org.junit.runners.Suite.SuiteClasses;
+
+@RunWith(Suite.class)
+@SuiteClasses({
+  MainTest.Task1.class,
+})
+public class MainTest {
+  public static class Task1 extends CliTest {
+    public Task1() {
+      super(Main.class);
+    }
+
+    @Test
+    public void T1_03_add_one_client_with_info() throws Exception {
+      runCommands(CREATE_PROFILE, "Jordan", "21", PRINT_DB);
+      assertContains("Database has 1 profile:");
+      assertContains("New profile created for Jordan with age 21.");
+      assertContains("1: Jordan, 21");
+      assertDoesNotContain("Database has 0 profiles", true);
+    }
+
+    @Test
+    public void T1_05_add_two_clients() throws Exception {
+      runCommands(CREATE_PROFILE, "Jordan", "21", CREATE_PROFILE, "Tom", "25", PRINT_DB);
+      assertContains("Database has 2 profiles:");
+      assertContains("1: Jordan, 21");
+      assertContains("2: Tom, 25");
+      assertDoesNotContain("Database has 0 profiles", true);
+      assertDoesNotContain("Database has 1 profile", true);
+    }
+
+    @Test
+    public void T1_06_username_to_titlecase() throws Exception {
+      runCommands(CREATE_PROFILE, "jorDan", "21", CREATE_PROFILE, "TOM", "25", PRINT_DB);
+      assertContains("Database has 2 profiles:");
+      assertContains("1: Jordan, 21");
+      assertContains("2: Tom, 25");
+      assertDoesNotContain("jorDan");
+      assertDoesNotContain("TOM");
+    }
+  }
+}
