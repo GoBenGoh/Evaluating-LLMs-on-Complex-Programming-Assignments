@@ -18,7 +18,7 @@ public class ChatGPTAPI {
             //Make sure you put the right API Key saved earlier.
             con.setRequestProperty("Authorization", "Bearer PLACEHOLDER_KEY");
             //Make sure to REPLACE the path of the json file!
-            String jsonInputString = FileHelper.readLinesAsString(new File("C:\\Users\\benja\\Documents\\GitHub\\WhoWroteThisCode-HumanOrAI\\LLM Testing\\ChatGPT-API\\InitialTask1Request.json"));
+            String jsonInputString = FileHelper.readLinesAsString(new File("src/main/java/Task2FailedTestsRequest.json"));
             try (OutputStream os = con.getOutputStream()) {
                 byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
                 os.write(input, 0, input.length);
@@ -39,6 +39,9 @@ public class ChatGPTAPI {
             JsonElement content = message.getAsJsonObject().get("content");
             System.out.println(content);
             try(PrintWriter out = new PrintWriter("response.txt")){
+                out.println(response);
+            }
+            try(PrintWriter out = new PrintWriter("content.txt")){
                 out.println(content.getAsString());
             }
             catch (Exception e){
