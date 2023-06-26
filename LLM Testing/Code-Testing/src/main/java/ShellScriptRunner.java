@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 public class ShellScriptRunner {
     public static void main(String[] args) {
         try {
-            String[] command = {"C:\\Program Files\\Git\\bin\\bash.exe", "-c", "./Code-Testing/src/main/java/script.sh ./repos_output/assignment-1-repository-12 TEST"};
+            String[] command = {"C:\\Program Files\\Git\\bin\\bash.exe", "-c", "./Code-Testing/src/main/java/script.sh ./repos_output/assignment-1-repository-12 COMPILE"};
             ProcessBuilder processBuilder = new ProcessBuilder(command);
             processBuilder.redirectErrorStream(true);
             Process process = processBuilder.start();
@@ -14,7 +14,13 @@ public class ShellScriptRunner {
             // Read the script's output
             String outputString = readOutput(process);
 
-            System.out.println("Output: " + outputString);
+            boolean isBuildSucceeded = outputString.contains("BUILD SUCCESS");
+            if (isBuildSucceeded) {
+                System.out.println("Build Succeeded");
+            } else {
+                System.out.println("Build Failed");
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
