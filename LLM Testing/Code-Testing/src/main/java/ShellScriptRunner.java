@@ -12,19 +12,23 @@ public class ShellScriptRunner {
             Process process = processBuilder.start();
 
             // Read the script's output
-            InputStream inputStream = process.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-            StringBuilder output = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                output.append(line).append(System.lineSeparator());
-            }
-            String outputString = output.toString();
+            String outputString = readOutput(process);
 
             System.out.println("Output: " + outputString);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private static String readOutput(Process process) throws IOException {
+        InputStream inputStream = process.getInputStream();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        StringBuilder output = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            output.append(line).append(System.lineSeparator());
+        }
+        return output.toString();
     }
 }
 
