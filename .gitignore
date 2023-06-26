@@ -18,3 +18,4 @@ local.properties
 
 ### Maven ###
 target/
+LLM Testing/repos_output/
