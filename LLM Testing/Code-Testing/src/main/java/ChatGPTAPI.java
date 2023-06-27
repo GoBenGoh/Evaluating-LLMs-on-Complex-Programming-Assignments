@@ -1,12 +1,11 @@
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
+
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 public class ChatGPTAPI {
-    public static void prompts() {
+    public static void sendRequest(String request) {
         try {
             URL url = new URL("https://api.openai.com/v1/chat/completions");
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -18,7 +17,7 @@ public class ChatGPTAPI {
             //Make sure you put the right API Key saved earlier.
             con.setRequestProperty("Authorization", "Bearer PLACEHOLDER_KEY");
             //Make sure to REPLACE the path of the json file!
-            String jsonInputString = FileHelper.readLinesAsString(new File("src/main/java/Task1CompilationFailureRequest.json"));
+            String jsonInputString = FileHelper.readLinesAsString(new File(request));
             try (OutputStream os = con.getOutputStream()) {
                 byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
                 os.write(input, 0, input.length);
@@ -53,16 +52,56 @@ public class ChatGPTAPI {
     }
     public static void main(String[] args) throws IOException {
         ChatGPTAPI app = new ChatGPTAPI();
-        String prompt = app.getFileFromResourceAsStream("Prompt Templates/Task2_CompilationError.txt");
         String responseContent = app.getFileFromResourceAsStream("content.txt");
-        PromptWriter promptWriter = new PromptWriter(prompt, responseContent,"java: cannot find symbol\n" +
-                "  symbol:   method printSingleProfileDB()\n" +
-                "  location: class nz.ac.auckland.se281.InsuranceSystem", "c");
+        String request;
+        String promptTemplate;
+        PromptWriter promptWriter;
+        if (args[0].equals("1")){
+            request = "src/main/java/InitialTask1Request.json";
+            sendRequest(request);
+            return;
+        }
+        else if (args[0].equals("1c")){
+            request = "src/main/java/Task1CompilationFailureRequest.json";
+            promptTemplate = app.getFileFromResourceAsStream("Prompt Templates/Task1_CompilationError.txt");
+            promptWriter = new PromptWriter(promptTemplate, responseContent,"PLACEHOLDER_ERROR", "c");
+        }
+        else if (args[0].equals("1f")){
+            request = "src/main/java/Task1FailedTestsRequest.json";
+            promptTemplate = app.getFileFromResourceAsStream("Prompt Templates/Task1_FailedTests.txt");
+            promptWriter = new PromptWriter(promptTemplate, responseContent,"PLACEHOLDER_FAILURE", "f");
+        }
+        else if (args[0].equals("2")){
+            request = "src/main/java/InitialTask2Request.json";
+            promptTemplate = app.getFileFromResourceAsStream("Prompt Templates/Task2");
+            promptWriter = new PromptWriter(promptTemplate, responseContent, "t2");
+        }
+        else if (args[0].equals("2c")){
+            request = "src/main/java/Task2CompilationFailureRequest.json";
+            promptTemplate = app.getFileFromResourceAsStream("Prompt Templates/Task2_CompilationError.txt");
+            promptWriter = new PromptWriter(promptTemplate, responseContent,"PLACEHOLDER_ERROR", "c");
+        }
+        else if (args[0].equals("2f")){
+            request = "src/main/java/Task2FailedTestsRequest.json";
+            promptTemplate = app.getFileFromResourceAsStream("Prompt Templates/Task2_FailedTests.txt");
+            promptWriter = new PromptWriter(promptTemplate, responseContent,"PLACEHOLDER_FAILURE", "f");
+        }
+        else {
+            throw new RuntimeException("The prompt argument is invalid.");
+        }
         String newPrompt = promptWriter.output();
-        try(PrintWriter out = new PrintWriter("src/main/resources/prompt.txt")){
+        Request newRequest = new Request("gpt-3.5-turbo-16k", newPrompt, "0.7");
+        System.out.println(newRequest.messages[0].content);
+        Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+        JsonElement jsonElement = gson.toJsonTree(newRequest);
+        String jsonString = gson.toJson(jsonElement);
+        try(PrintWriter out = new PrintWriter(request)){
+            out.println(jsonString);
+        }
+        try(PrintWriter out = new PrintWriter("src/main/resources/newPrompt.txt")){
             out.println(newPrompt);
         }
-        //prompts();
+        //sendRequest(request);
     }
     private String getFileFromResourceAsStream(String fileName) throws IOException {
 
