@@ -5,24 +5,31 @@ import java.io.InputStreamReader;
 
 public class ShellScriptRunner {
     public static void main(String[] args) {
+        String repositoryDirectory = "./repos_output/assignment-1-repository-12";
+        String compileResponse = runCommand(repositoryDirectory, "COMPILE");
+
+        boolean isBuildSucceeded = compileResponse.contains("BUILD SUCCESS");
+        if (isBuildSucceeded) {
+            System.out.println("Build Succeeded");
+
+            String testResponse = runCommand(repositoryDirectory, "TEST");
+            System.out.println(testResponse);
+        } else {
+            System.out.println("Build Failed");
+        }
+    }
+
+    private static String runCommand(String repositoryDirectory, String command) {
         try {
-            String[] command = {"C:\\Program Files\\Git\\bin\\bash.exe", "-c", "./Code-Testing/src/main/java/script.sh ./repos_output/assignment-1-repository-12 COMPILE"};
-            ProcessBuilder processBuilder = new ProcessBuilder(command);
+            String[] scriptCommand = {"C:\\Program Files\\Git\\bin\\bash.exe", "-c", "./Code-Testing/src/main/java/script.sh " + repositoryDirectory + " " + command};
+            ProcessBuilder processBuilder = new ProcessBuilder(scriptCommand);
             processBuilder.redirectErrorStream(true);
             Process process = processBuilder.start();
-
-            // Read the script's output
-            String outputString = readOutput(process);
-
-            boolean isBuildSucceeded = outputString.contains("BUILD SUCCESS");
-            if (isBuildSucceeded) {
-                System.out.println("Build Succeeded");
-            } else {
-                System.out.println("Build Failed");
-            }
+            return readOutput(process);
 
         } catch (IOException e) {
             e.printStackTrace();
+            return "";
         }
     }
 
