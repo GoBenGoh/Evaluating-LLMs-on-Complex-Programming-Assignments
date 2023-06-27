@@ -96,7 +96,7 @@ If the age is not a positive integer, then following message gets printed:
 '<AGE>' is an invalid age, please provide a positive whole number only. No profile was created for <USERNAME>.
 Again, remember that the system will always print the username in title case, regardless of how the user types it.
 ///
-The following section is the an existing Java class named MessageCli:
+The following section is an existing Java class named MessageCli:
 ```
 package nz.ac.auckland.se281;
 
@@ -405,121 +405,9 @@ public class Main {
   }
 }
 ```
-The following Task 1 code does not compile. The compilation error is displayed below.
+Please fix the following code according to the instructions and the failing test cases. Do not assume another class exists! Do not explain the changes made! Only respond with java code!
 ```
-java: cannot find symbol
-  symbol:   method printSingleProfileDatabase()
-  location: class nz.ac.auckland.se281.InsuranceSystem
-java: cannot find symbol
-  symbol:   method printMultiProfileDatabase()
-  location: class nz.ac.auckland.se281.InsuranceSystem
 ```
-Please rewrite the code below so that it compiles. Do not assume another class exists! Do not explain the changes made! Only respond with java code!
+Here are the failing test cases:
 ```
-package nz.ac.auckland.se281;
-
-import java.util.ArrayList;
-import java.util.List;
-
-public class InsuranceSystem {
-  private List<Profile> database;
-
-  public InsuranceSystem() {
-    this.database = new ArrayList<>();
-  }
-
-  public void printDatabase() {
-    if (database.isEmpty()) {
-      MessageCli.PRINT_DB_POLICY_COUNT.printMessage("0", "s", ".");
-    } else if (database.size() == 1) {
-      printSingleProfileDatabase();
-    } else {
-      printMultiProfileDatabase();
-    }
-  }
-
-  public void createProfile(String userName, String age) {
-    if (isInvalidUsername(userName)) {
-      MessageCli.INVALID_USERNAME_TOO_SHORT.printMessage(userName);
-    } else if (isDuplicateUsername(userName)) {
-      MessageCli.INVALID_USERNAME_NOT_UNIQUE.printMessage(userName);
-    } else if (isInvalidAge(age)) {
-      MessageCli.INVALID_AGE.printMessage(age, toTitleCase(userName));
-    } else {
-      int ageValue = Integer.parseInt(age);
-      Profile newProfile = new Profile(toTitleCase(userName), ageValue);
-      database.add(newProfile);
-      MessageCli.PROFILE_CREATED.printMessage(toTitleCase(userName), String.valueOf(ageValue));
-    }
-  }
-
-  public void printDB() {
-    if (database.isEmpty()) {
-      MessageCli.PRINT_DB_POLICY_COUNT.printMessage("0", "s", ".");
-    } else if (database.size() == 1) {
-      printSingleProfileDB();
-    } else {
-      printMultiProfileDB();
-    }
-  }
-
-  private boolean isInvalidUsername(String userName) {
-    return userName.length() < 3;
-  }
-
-  private boolean isDuplicateUsername(String userName) {
-    return database.stream().anyMatch(profile -> profile.getUserName().equalsIgnoreCase(userName));
-  }
-
-  private boolean isInvalidAge(String age) {
-    try {
-      int ageValue = Integer.parseInt(age);
-      return ageValue <= 0;
-    } catch (NumberFormatException e) {
-      return true;
-    }
-  }
-
-  private String toTitleCase(String text) {
-    String[] words = text.split(" ");
-    StringBuilder result = new StringBuilder();
-    for (String word : words) {
-      result.append(Character.toUpperCase(word.charAt(0))).append(word.substring(1).toLowerCase()).append(" ");
-    }
-    return result.toString().trim();
-  }
-
-  private void printSingleProfileDB() {
-    Profile profile = database.get(0);
-    MessageCli.PRINT_DB_POLICY_COUNT.printMessage("1", "profile", ":");
-    System.out.println(" " + (database.indexOf(profile) + 1) + ": " + profile.getUserName() + ", " + profile.getAge());
-  }
-
-  private void printMultiProfileDB() {
-    int profileCount = database.size();
-    MessageCli.PRINT_DB_POLICY_COUNT.printMessage(String.valueOf(profileCount), "s", ":");
-    for (int i = 0; i < profileCount; i++) {
-      Profile profile = database.get(i);
-      System.out.println(" " + (database.indexOf(profile) + 1) + ": " + profile.getUserName() + ", " + profile.getAge());
-    }
-  }
-
-  private class Profile {
-    private String userName;
-    private int age;
-
-    public Profile(String userName, int age) {
-      this.userName = userName;
-      this.age = age;
-    }
-
-    public String getUserName() {
-      return userName;
-    }
-
-    public int getAge() {
-      return age;
-    }
-  }
-}
 ```

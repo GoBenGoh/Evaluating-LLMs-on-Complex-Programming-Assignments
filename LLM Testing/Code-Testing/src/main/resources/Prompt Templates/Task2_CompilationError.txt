@@ -1,100 +1,65 @@
-The instructions for Task 1 are below marked between a pair of "///":
+The instructions for Task 2 are below marked between a pair of "///":
 ///
-Task 1 will require you to implement (some of) the logic for the CREATE_PROFILE and PRINT_DB commands.
+Now that the system supports creating profiles, it is time to manage those profiles. This will include loading, unloading, and deleting profiles as explained below.
 
-The CREATE_PROFILE command creates a new client profile with the specified username and age (passed as arguments to the CREATE_PROFILE command). The username should be unique across all other usernames currently in the system, and the age should be a positive integer. If the username is not unique, or the age is not a positive integer, an error message should be printed.
+Loading Profiles
+The LOAD_PROFILE command loads a profile into the system. This command requires exactly one argument, representing the username to be loaded. Again, the user might type the username in any case, but the system will always process it in title case.
 
-The PRINT_DB command prints the entire insurance database. If the database is empty, it prints the following:
+A success message occurs when the profile is found and successfully loaded:
 
-Database has 0 profiles.
-If the database has exactly one profile, it prints the following:
+Profile loaded for <USERNAME>.
+If the profile is not found, then the following message gets printed:
 
-Database has 1 profile:
+No profile found for <USERNAME>. Profile not loaded.
+When a profile is successfully loaded, the PRINT_DB command should print an extra *** in front of the currently-loaded profile. For example, if the database has three profiles, and the second profile is successfully loaded, then the PRINT_DB command should print the following:
+
+Database has 3 profiles:
  1: Jordan, 21
-If the database has more than one profile, it prints the following:
+*** 2: Jenny, 25
+ 3: John, 30
 
-Database has 2 profiles:
- 1: Jordan, 21
- 2: John, 22
-Take note of the differences between the 3 cases above:
+Hint: See the MessageCli.PRINT_DB_PROFILE_HEADER_SHORT message template.
 
-In the first example, “profiles” is plural, and the sentence ends with a period (“.”)
-In the second example, “profile” is singular, and the sentence ends with a colon (“:”)
-In the third example, “profiles” is plural, and the sentence ends with a colon (“:”)
-Hint: Have a look at the MessageCli.PRINT_DB_POLICY_COUNT message template:
+While a profile is loaded, the LOAD_PROFILE command could be executed again. The new load will only succeed if the profile is found (as a usual load), otherwise it fails with the usual error when a username cannot be loaded. In this case, the currently-loaded profile remains loaded.
 
-PRINT_DB_POLICY_COUNT("Database has %s profile%s%s")
-This message template has three %s placeholders:
+If the new load succeeds, the system will unload the currently-loaded profile, and load the new profile. For example, if the database has three profiles, and the second profile is successfully loaded, and then the third profile is successfully loaded, then the PRINT_DB command should print the following:
 
-The first %s is for the number of profiles (e.g., “0”, “1”, “2”, etc.)
-The second %s is for the word “profile”, whether you want it to be singular or plural (i.e., “profile” or “profiles”)
-The third %s is for ending the sentence (i.e., “.” or “:”)
-To get the messahe "Database has 2 profiles:", you can do one of the following:
-
-MessageCli.PRINT_DB_POLICY_COUNT.getMessage("2", "s", ":");    // Using the getMessage() method
-MessageCli.PRINT_DB_POLICY_COUNT.printMessage("2", "s", ":");  // Using the printMessage() method
-
-In addition to above header, if there is at least one profile in the database, the PRINT_DB should also print the following for every profile in the database:
-
-<SPACE><RANK><COLON><SPACE><USERNAME><COMMA><SPACE><AGE>
-For example, for the database with two profiles:
-
-Database has 2 profiles:
+Database has 3 profiles:
  1: Jordan, 21
  2: Jenny, 25
+*** 3: John, 30
+While a profile is loaded, the CREATE_PROFILE command should not be allowed. If the user tries to create a profile while a profile is already loaded, then the following message should be printed:
 
-Hint: The <RANK> is the position of the profile in the database, in the order they were added successfully into the system, starting from 1. This is not an “ID” of the profile (so, you should not be trying to implement this using static variables).
+Cannot create a new profile. First unload the profile for <CURRENT_LOADED_PROFILE_USERNAME>.
+Creating a new profile can go ahead, only after the currently-loaded profile is unloaded (see below).
 
-Hint: See the MessageCli.PRINT_DB_PROFILE_HEADER_MINIMAL message template.
+Unloading Profiles
+The UNLOAD_PROFILE command unloads the currently-loaded profile. This command requires no arguments.
 
-When a new profile is created, it should be added to the database. The arguments have the following requirements:
+When a profile is successfully unloaded, the following message should be printed:
 
-<USERNAME> (✭)
-Must be unique across all other usernames currently in the system
-Must be at least 3 characters long
-The username will only be a single word (✱)
-The user may type the username using any case, but your system needs to always process it in title case (i.e., the first letter of each word is capitalised, with the rest of the letters being lowercase)
-<AGE> (✭)
-Should be a positive integer
-✱ You do not need to worry about the user typing in a username that is more than one word. For example, you do not need to worry about the user typing in CREATE_PROFILE John Smith 21. You can assume that the user will always type in a username that is a single word.
+Profile unloaded for <USERNAME>.
+If there is no currently-loaded profile, then the following message should be printed:
 
-✭ You do not need to worry about test cases where there are multiple errors in the same command. For example, you do not need to worry about the user typing in CREATE_PROFILE Jo twenty (i.e., the username is too short, and the age is not a positive integer). You can assume that the user will always type in a command that has only one error.
+No profile is currently loaded.
 
-When a successful profile is created, a success message should be printed.
+Deleting Profiles
+The DELETE_PROFILE command deletes a profile from the database. This command requires exactly one argument, representing the username to be deleted.
 
-New profile created for <USERNAME> with age <AGE>.
-For example:
+When a profile is successfully deleted, the following message should be printed:
 
-insurance system> create-profile joRDaN 21
-New profile created for Jordan with age 21.  // success message
-Take note of how the system printed the name as “Jordan” (i.e., in title case), even though the user typed “joRDaN” (i.e., in weird case).
+Profile deleted for <USERNAME>.
+When a profile is successfully deleted, this means it will no longer exist in the database.
 
-The format of this message is very strict. Make sure you check for an appropriate message template in MessageCli to help you.
+If the profile is not found, then the following message gets printed:
 
-If there was something wrong with the username, then the above success message should not be printed. Instead, one of the following messages gets printed.
+No profile found for <USERNAME>. No profile was deleted.
+If the profile is currently loaded, then the deletion should not go ahead and the following message gets printed:
 
-If the username is too short, then the following message gets printed:
+Cannot delete profile for <USERNAME> while loaded. No profile was deleted.
+The loaded profile must be unloaded before it can be deleted.
 
-'<USERNAME>' is an invalid username, it should be at least 3 characters long. No profile was created.
-Consider the following example, paying attention to how the user types the username versus how the system prints it:
-
-insurance system> create-profile jo 21
-'Jo' is an invalid username, it should be at least 3 characters long. No profile was created.
-The system printed the name as “Jo” (i.e., in title case), even though the user typed “jo”.
-
-If the username already exists, then the following message gets printed:
-
-Usernames must be unique. No profile was created for '<USERNAME>'.
-Consider the following example, paying attention to how the user types the username versus how the system prints it:
-
-insurance system> create-profile jordan 21  // first time adding a Jordan, so this is successful
-New profile created for Jordan with age 21.
-insurance system> create-profile jorDan 35  // second time adding a Jordan, so this is unsuccessful
-Usernames must be unique. No profile was created for 'Jordan'.
-If the age is not a positive integer, then following message gets printed:
-
-'<AGE>' is an invalid age, please provide a positive whole number only. No profile was created for <USERNAME>.
-Again, remember that the system will always print the username in title case, regardless of how the user types it.
+It is however perfectly fine to delete a profile that is not currently loaded, as long as it exists in the database.
 ///
 The following section is the an existing Java class named MessageCli:
 ```
@@ -405,120 +370,136 @@ public class Main {
   }
 }
 ```
-The following Task 1 code does not compile. The compilation error is displayed below.
+The following Task 2 code does not compile. The compilation error is displayed below.
 ```
-java: cannot find symbol
-  symbol:   method printSingleProfileDatabase()
-  location: class nz.ac.auckland.se281.InsuranceSystem
-java: cannot find symbol
-  symbol:   method printMultiProfileDatabase()
-  location: class nz.ac.auckland.se281.InsuranceSystem
 ```
 Please rewrite the code below so that it compiles. Do not assume another class exists! Do not explain the changes made! Only respond with java code!
 ```
+```
+Here are the test cases that must pass:
+```
 package nz.ac.auckland.se281;
+
+import static nz.ac.auckland.se281.Main.Command.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import org.junit.runners.Suite.SuiteClasses;
 
-public class InsuranceSystem {
-  private List<Profile> database;
+@RunWith(Suite.class)
+@SuiteClasses({
+  MainTest.Task2.class, // Uncomment this line when to start Task 2
+})
+public class MainTest {
 
-  public InsuranceSystem() {
-    this.database = new ArrayList<>();
-  }
-
-  public void printDatabase() {
-    if (database.isEmpty()) {
-      MessageCli.PRINT_DB_POLICY_COUNT.printMessage("0", "s", ".");
-    } else if (database.size() == 1) {
-      printSingleProfileDatabase();
-    } else {
-      printMultiProfileDatabase();
-    }
-  }
-
-  public void createProfile(String userName, String age) {
-    if (isInvalidUsername(userName)) {
-      MessageCli.INVALID_USERNAME_TOO_SHORT.printMessage(userName);
-    } else if (isDuplicateUsername(userName)) {
-      MessageCli.INVALID_USERNAME_NOT_UNIQUE.printMessage(userName);
-    } else if (isInvalidAge(age)) {
-      MessageCli.INVALID_AGE.printMessage(age, toTitleCase(userName));
-    } else {
-      int ageValue = Integer.parseInt(age);
-      Profile newProfile = new Profile(toTitleCase(userName), ageValue);
-      database.add(newProfile);
-      MessageCli.PROFILE_CREATED.printMessage(toTitleCase(userName), String.valueOf(ageValue));
-    }
-  }
-
-  public void printDB() {
-    if (database.isEmpty()) {
-      MessageCli.PRINT_DB_POLICY_COUNT.printMessage("0", "s", ".");
-    } else if (database.size() == 1) {
-      printSingleProfileDB();
-    } else {
-      printMultiProfileDB();
-    }
-  }
-
-  private boolean isInvalidUsername(String userName) {
-    return userName.length() < 3;
-  }
-
-  private boolean isDuplicateUsername(String userName) {
-    return database.stream().anyMatch(profile -> profile.getUserName().equalsIgnoreCase(userName));
-  }
-
-  private boolean isInvalidAge(String age) {
-    try {
-      int ageValue = Integer.parseInt(age);
-      return ageValue <= 0;
-    } catch (NumberFormatException e) {
-      return true;
-    }
-  }
-
-  private String toTitleCase(String text) {
-    String[] words = text.split(" ");
-    StringBuilder result = new StringBuilder();
-    for (String word : words) {
-      result.append(Character.toUpperCase(word.charAt(0))).append(word.substring(1).toLowerCase()).append(" ");
-    }
-    return result.toString().trim();
-  }
-
-  private void printSingleProfileDB() {
-    Profile profile = database.get(0);
-    MessageCli.PRINT_DB_POLICY_COUNT.printMessage("1", "profile", ":");
-    System.out.println(" " + (database.indexOf(profile) + 1) + ": " + profile.getUserName() + ", " + profile.getAge());
-  }
-
-  private void printMultiProfileDB() {
-    int profileCount = database.size();
-    MessageCli.PRINT_DB_POLICY_COUNT.printMessage(String.valueOf(profileCount), "s", ":");
-    for (int i = 0; i < profileCount; i++) {
-      Profile profile = database.get(i);
-      System.out.println(" " + (database.indexOf(profile) + 1) + ": " + profile.getUserName() + ", " + profile.getAge());
-    }
-  }
-
-  private class Profile {
-    private String userName;
-    private int age;
-
-    public Profile(String userName, int age) {
-      this.userName = userName;
-      this.age = age;
+  public static class Task2 extends CliTest {
+    public Task2() {
+      super(Main.class);
     }
 
-    public String getUserName() {
-      return userName;
+    @Test
+    public void T2_01_load_profile_found() throws Exception {
+      runCommands(unpack(CREATE_SOME_CLIENTS, LOAD_PROFILE, "Tom"));
+
+      assertContains("Profile loaded for Tom.");
+      assertDoesNotContain("No profile found for Tom. Profile not loaded.", true);
     }
 
-    public int getAge() {
-      return age;
+    @Test
+    public void T2_02_load_profile_not_found() throws Exception {
+      runCommands(unpack(CREATE_SOME_CLIENTS, LOAD_PROFILE, "Alex"));
+
+      assertContains("No profile found for Alex. Profile not loaded.");
+      assertDoesNotContain("Profile loaded for Alex.", true);
+    }
+
+    @Test
+    public void T2_03_load_profile_found_display() throws Exception {
+      runCommands(unpack(CREATE_SOME_CLIENTS, LOAD_PROFILE, "Tom", PRINT_DB));
+
+      assertContains("Profile loaded for Tom.");
+
+      assertContains("Database has 3 profiles:");
+      assertContains("1: Jordan, 21");
+      assertContains("*** 2: Tom, 25");
+      assertContains("3: Jenny, 23");
+    }
+
+    @Test
+    public void T2_04_load_profile_switch_profiles() throws Exception {
+      runCommands(
+          unpack(CREATE_SOME_CLIENTS, LOAD_PROFILE, "tom", LOAD_PROFILE, "jenny", PRINT_DB));
+
+      assertContains("Profile loaded for Tom.");
+      assertContains("Profile loaded for Jenny.");
+
+      assertContains("Database has 3 profiles:");
+      assertContains("1: Jordan, 21");
+      assertContains("2: Tom, 25");
+      assertContains("*** 3: Jenny, 23");
+      assertDoesNotContain("*** 1: Jordan, 21", true);
+      assertDoesNotContain("*** 2: Tom, 25", true);
+    }
+
+    @Test
+    public void T2_05_unload_profile() throws Exception {
+      runCommands(unpack(CREATE_SOME_CLIENTS, LOAD_PROFILE, "Jenny", UNLOAD_PROFILE, PRINT_DB));
+
+      assertContains("Profile loaded for Jenny.");
+      assertContains("Profile unloaded for Jenny.");
+
+      assertContains("1: Jordan, 21");
+      assertContains("2: Tom, 25");
+      assertContains("3: Jenny, 23");
+
+      assertDoesNotContain("*** 1: Jordan, 21", true);
+      assertDoesNotContain("*** 2: Tom, 25", true);
+      assertDoesNotContain("*** 3: Jenny, 23", true);
+    }
+
+    @Test
+    public void T2_06_unload_invalid_profile() throws Exception {
+      runCommands(unpack(CREATE_SOME_CLIENTS, LOAD_PROFILE, "jen", UNLOAD_PROFILE, PRINT_DB));
+
+      assertContains("No profile is currently loaded.");
+
+      assertContains("1: Jordan, 21");
+      assertContains("2: Tom, 25");
+      assertContains("3: Jenny, 23");
+
+      assertDoesNotContain("*** 1: Jordan, 21", true);
+      assertDoesNotContain("*** 2: Tom, 25", true);
+      assertDoesNotContain("*** 3: Jenny, 23", true);
+    }
+
+    @Test
+    public void T2_07_delete_profile_found() throws Exception {
+      runCommands(unpack(CREATE_SOME_CLIENTS, DELETE_PROFILE, "jordan", PRINT_DB));
+
+      assertContains("Profile deleted for Jordan.");
+      assertContains("Database has 2 profiles:");
+      assertContains("1: Tom, 25");
+      assertContains("2: Jenny, 23");
+      assertDoesNotContain("Jordan, 21", true);
+    }
+
+    @Test
+    public void T2_08_delete_profile_while_loaded() throws Exception {
+      runCommands(
+          unpack(CREATE_SOME_CLIENTS, LOAD_PROFILE, "Jenny", DELETE_PROFILE, "jenny", PRINT_DB));
+
+      assertContains("Profile loaded for Jenny.");
+
+      assertContains("Cannot delete profile for Jenny while loaded. No profile was deleted.");
+      assertDoesNotContain("Profile deleted for Jenny", true);
+
+      assertContains("Database has 3 profiles:");
+      assertContains("1: Jordan, 21");
+      assertContains("2: Tom, 25");
+      assertContains("3: Jenny, 23");
     }
   }
 }

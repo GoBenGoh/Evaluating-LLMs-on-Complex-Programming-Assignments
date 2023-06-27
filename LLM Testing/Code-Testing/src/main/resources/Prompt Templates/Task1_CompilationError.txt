@@ -96,7 +96,7 @@ If the age is not a positive integer, then following message gets printed:
 '<AGE>' is an invalid age, please provide a positive whole number only. No profile was created for <USERNAME>.
 Again, remember that the system will always print the username in title case, regardless of how the user types it.
 ///
-The following section is the an existing Java class named MessageCli:
+The following section is an existing Java class named MessageCli:
 ```
 package nz.ac.auckland.se281;
 
@@ -407,118 +407,188 @@ public class Main {
 ```
 The following Task 1 code does not compile. The compilation error is displayed below.
 ```
-java: cannot find symbol
-  symbol:   method printSingleProfileDatabase()
-  location: class nz.ac.auckland.se281.InsuranceSystem
-java: cannot find symbol
-  symbol:   method printMultiProfileDatabase()
-  location: class nz.ac.auckland.se281.InsuranceSystem
 ```
 Please rewrite the code below so that it compiles. Do not assume another class exists! Do not explain the changes made! Only respond with java code!
 ```
+```
+Here are the test cases that must pass:
+```
 package nz.ac.auckland.se281;
 
-import java.util.ArrayList;
-import java.util.List;
+import static nz.ac.auckland.se281.Main.Command.*;
 
-public class InsuranceSystem {
-  private List<Profile> database;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import org.junit.runners.Suite.SuiteClasses;
 
-  public InsuranceSystem() {
-    this.database = new ArrayList<>();
-  }
+@RunWith(Suite.class)
+@SuiteClasses({MainTest.Task1.class})
+public class MainTest {
 
-  public void printDatabase() {
-    if (database.isEmpty()) {
-      MessageCli.PRINT_DB_POLICY_COUNT.printMessage("0", "s", ".");
-    } else if (database.size() == 1) {
-      printSingleProfileDatabase();
-    } else {
-      printMultiProfileDatabase();
-    }
-  }
+  public static class Task1 extends CliTest {
 
-  public void createProfile(String userName, String age) {
-    if (isInvalidUsername(userName)) {
-      MessageCli.INVALID_USERNAME_TOO_SHORT.printMessage(userName);
-    } else if (isDuplicateUsername(userName)) {
-      MessageCli.INVALID_USERNAME_NOT_UNIQUE.printMessage(userName);
-    } else if (isInvalidAge(age)) {
-      MessageCli.INVALID_AGE.printMessage(age, toTitleCase(userName));
-    } else {
-      int ageValue = Integer.parseInt(age);
-      Profile newProfile = new Profile(toTitleCase(userName), ageValue);
-      database.add(newProfile);
-      MessageCli.PROFILE_CREATED.printMessage(toTitleCase(userName), String.valueOf(ageValue));
-    }
-  }
-
-  public void printDB() {
-    if (database.isEmpty()) {
-      MessageCli.PRINT_DB_POLICY_COUNT.printMessage("0", "s", ".");
-    } else if (database.size() == 1) {
-      printSingleProfileDB();
-    } else {
-      printMultiProfileDB();
-    }
-  }
-
-  private boolean isInvalidUsername(String userName) {
-    return userName.length() < 3;
-  }
-
-  private boolean isDuplicateUsername(String userName) {
-    return database.stream().anyMatch(profile -> profile.getUserName().equalsIgnoreCase(userName));
-  }
-
-  private boolean isInvalidAge(String age) {
-    try {
-      int ageValue = Integer.parseInt(age);
-      return ageValue <= 0;
-    } catch (NumberFormatException e) {
-      return true;
-    }
-  }
-
-  private String toTitleCase(String text) {
-    String[] words = text.split(" ");
-    StringBuilder result = new StringBuilder();
-    for (String word : words) {
-      result.append(Character.toUpperCase(word.charAt(0))).append(word.substring(1).toLowerCase()).append(" ");
-    }
-    return result.toString().trim();
-  }
-
-  private void printSingleProfileDB() {
-    Profile profile = database.get(0);
-    MessageCli.PRINT_DB_POLICY_COUNT.printMessage("1", "profile", ":");
-    System.out.println(" " + (database.indexOf(profile) + 1) + ": " + profile.getUserName() + ", " + profile.getAge());
-  }
-
-  private void printMultiProfileDB() {
-    int profileCount = database.size();
-    MessageCli.PRINT_DB_POLICY_COUNT.printMessage(String.valueOf(profileCount), "s", ":");
-    for (int i = 0; i < profileCount; i++) {
-      Profile profile = database.get(i);
-      System.out.println(" " + (database.indexOf(profile) + 1) + ": " + profile.getUserName() + ", " + profile.getAge());
-    }
-  }
-
-  private class Profile {
-    private String userName;
-    private int age;
-
-    public Profile(String userName, int age) {
-      this.userName = userName;
-      this.age = age;
+    public Task1() {
+      super(Main.class);
     }
 
-    public String getUserName() {
-      return userName;
+    @Test
+    public void T1_01_empty_database() throws Exception {
+      runCommands(PRINT_DB);
+      assertContains("Database has 0 profiles.");
     }
 
-    public int getAge() {
-      return age;
+    @Test
+    public void T1_02_add_one_client() throws Exception {
+      runCommands(CREATE_PROFILE, "Jordan", "21", PRINT_DB);
+      assertContains("Database has 1 profile:");
+      assertContains("New profile created for Jordan with age 21.");
+      assertDoesNotContain("Database has 0 profiles", true);
+    }
+
+    @Test
+    public void T1_xx_add_one_client_with_info() throws Exception {
+      runCommands(CREATE_PROFILE, "Jordan", "21", PRINT_DB);
+      assertContains("Database has 1 profile:");
+      assertContains("New profile created for Jordan with age 21.");
+      assertContains("1: Jordan, 21");
+      assertDoesNotContain("Database has 0 profiles", true);
+    }
+
+    @Test
+    public void T1_xx_ignore_short_name() throws Exception {
+      runCommands(CREATE_PROFILE, "Jo", "21", PRINT_DB);
+      assertContains("Database has 0 profiles.");
+      assertContains(
+          "'Jo' is an invalid username, it should be at least 3 characters long. No profile was"
+              + " created.");
+      assertDoesNotContain("Database has 1 profile", true);
+      assertDoesNotContain("New profile created", true);
+      assertDoesNotContain("21");
+    }
+
+    @Test
+    public void T1_xx_ignore_short_name_to_titlecase() throws Exception {
+      runCommands(CREATE_PROFILE, "aL", "21", PRINT_DB);
+      assertContains("Database has 0 profiles.");
+      assertContains(
+          "'Al' is an invalid username, it should be at least 3 characters long. No profile was"
+              + " created.");
+      assertDoesNotContain("Database has 1 profile", true);
+      assertDoesNotContain("New profile created", true);
+      assertDoesNotContain("21");
+    }
+
+    @Test
+    public void T1_xx_add_two_clients() throws Exception {
+      runCommands(CREATE_PROFILE, "Jordan", "21", CREATE_PROFILE, "Tom", "25", PRINT_DB);
+      assertContains("Database has 2 profiles:");
+      assertContains("1: Jordan, 21");
+      assertContains("2: Tom, 25");
+      assertDoesNotContain("Database has 0 profiles", true);
+      assertDoesNotContain("Database has 1 profile", true);
+    }
+
+    @Test
+    public void T1_xx_add_five_clients() throws Exception {
+      runCommands( //
+          CREATE_PROFILE,
+          "Jordan",
+          "21", //
+          CREATE_PROFILE,
+          "Jenny",
+          "22", //
+          CREATE_PROFILE,
+          "TOM",
+          "23", //
+          CREATE_PROFILE,
+          "tOmmY",
+          "24", //
+          CREATE_PROFILE,
+          "aLeX",
+          "25", //
+          PRINT_DB);
+
+      assertContains("Database has 5 profiles:");
+      assertContains("1: Jordan, 21");
+      assertContains("2: Jenny, 22");
+      assertContains("3: Tom, 23");
+      assertContains("4: Tommy, 24");
+      assertContains("5: Alex, 25");
+    }
+
+    @Test
+    public void T1_xx_username_to_titlecase() throws Exception {
+      runCommands(CREATE_PROFILE, "jorDan", "21", CREATE_PROFILE, "TOM", "25", PRINT_DB);
+      assertContains("Database has 2 profiles:");
+      assertContains("1: Jordan, 21");
+      assertContains("2: Tom, 25");
+      assertDoesNotContain("jorDan");
+      assertDoesNotContain("TOM");
+    }
+
+    @Test
+    public void T1_xx_add_ignore_duplicate() throws Exception {
+      runCommands(CREATE_PROFILE, "Jordan", "21", CREATE_PROFILE, "Jordan", "35", PRINT_DB);
+      assertContains("Database has 1 profile:");
+      assertContains("1: Jordan, 21");
+
+      assertContains("Usernames must be unique. No profile was created for 'Jordan'.");
+
+      assertDoesNotContain("Database has 0 profiles", true);
+      assertDoesNotContain("Database has 2 profiles", true);
+      assertDoesNotContain("Jordan, 35", true);
+    }
+
+    @Test
+    public void T1_xx_add_ignore_duplicate_added_later() throws Exception {
+      runCommands(
+          CREATE_PROFILE,
+          "tom",
+          "21", //
+          CREATE_PROFILE,
+          "jordan",
+          "25", //
+          CREATE_PROFILE,
+          "Jenny",
+          "23", //
+          CREATE_PROFILE,
+          "TOM",
+          "32", //
+          PRINT_DB);
+      assertContains("Database has 3 profiles:");
+      assertContains("1: Tom, 21");
+      assertContains("2: Jordan, 25");
+      assertContains("3: Jenny, 23");
+
+      assertContains("Usernames must be unique. No profile was created for 'Tom'.");
+
+      assertDoesNotContain("Database has 4 profiles", true);
+      assertDoesNotContain("Tom, 32", true);
+    }
+
+    @Test
+    public void T1_xx_ignore_invalid_age_negative() throws Exception {
+      runCommands(CREATE_PROFILE, "Jordan", "-1", PRINT_DB);
+      assertContains("Database has 0 profiles.");
+      assertContains(
+          "'-1' is an invalid age, please provide a positive whole number only. No profile was"
+              + " created for Jordan.");
+      assertDoesNotContain("Database has 1 profile", true);
+      assertDoesNotContain("Jordan, -1", true);
+      assertDoesNotContain("New profile created", true);
+    }
+
+    @Test
+    public void T1_xx_add_success_after_invalid_age() throws Exception {
+      runCommands(CREATE_PROFILE, "Jordan", "-1", CREATE_PROFILE, "Jordan", "20", PRINT_DB);
+      assertContains(
+          "'-1' is an invalid age, please provide a positive whole number only. No profile was"
+              + " created for Jordan.");
+      assertContains("Database has 1 profile:");
+      assertContains("1: Jordan, 20");
+      assertDoesNotContain("Database has 0 profiles", true);
+      assertDoesNotContain("Jordan, -1", true);
     }
   }
 }
