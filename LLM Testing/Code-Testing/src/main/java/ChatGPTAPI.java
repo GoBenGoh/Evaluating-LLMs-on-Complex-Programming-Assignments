@@ -89,9 +89,8 @@ public class ChatGPTAPI {
         else {
             throw new RuntimeException("The prompt argument is invalid.");
         }
-        String newPrompt = promptWriter.output();
-        Request newRequest = new Request("gpt-3.5-turbo-16k", newPrompt, "0.7");
-        System.out.println(newRequest.messages[0].content);
+        String newPrompt = promptWriter.output(); // new prompt in string form
+        Request newRequest = new Request("gpt-3.5-turbo-16k", newPrompt, "0.7"); // object for gson to convert
         Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
         JsonElement jsonElement = gson.toJsonTree(newRequest);
         String jsonString = gson.toJson(jsonElement);

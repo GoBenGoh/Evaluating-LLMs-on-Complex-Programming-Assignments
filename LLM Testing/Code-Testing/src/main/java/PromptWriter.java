@@ -1,7 +1,6 @@
 import java.io.File;
 
 public class PromptWriter {
-    private File file;
     private String prompt;
     private String response;
     private String type;
@@ -30,19 +29,19 @@ public class PromptWriter {
             int errorStart = prompt.indexOf("The compilation error is displayed below.") + 46; // Start after the lines above
             String newPrompt = modifyPrompt(prompt, errorStart, extra);
             int codeStart = newPrompt.indexOf("Only respond with java code!") + 33; // Start after the lines above
-            newPrompt = modifyPrompt(newPrompt, codeStart, response);
+            newPrompt = modifyPrompt(newPrompt, codeStart, trimmedResponse);
             return newPrompt;
         }
         else if(type == "f") {
             int codeStart = prompt.indexOf("Only respond with java code!") + 33; // Start after the lines above
-            String newPrompt = modifyPrompt(prompt, codeStart, response);
+            String newPrompt = modifyPrompt(prompt, codeStart, trimmedResponse);
             int testStart = newPrompt.indexOf("Here are the failing test cases:") + 37; // Start after the lines above
             newPrompt = modifyPrompt(newPrompt, testStart, extra);
             return newPrompt;
         }
         else if (type == "t2"){
             int codeStart = prompt.indexOf("Only respond with java code!") + 33; // Start after the lines above
-            String newPrompt = modifyPrompt(prompt, codeStart, response);
+            String newPrompt = modifyPrompt(prompt, codeStart, trimmedResponse);
             return newPrompt;
         }
         else{
