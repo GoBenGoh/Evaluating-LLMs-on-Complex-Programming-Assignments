@@ -73,7 +73,7 @@ public class ChatGPTAPI {
         }
         else if (args[0].equals("2")){
             request = "src/main/java/InitialTask2Request.json";
-            promptTemplate = app.getFileFromResourceAsStream("Prompt Templates/Task2");
+            promptTemplate = app.getFileFromResourceAsStream("Prompt Templates/Task2.txt");
             promptWriter = new PromptWriter(promptTemplate, responseContent, "t2");
         }
         else if (args[0].equals("2c")){
