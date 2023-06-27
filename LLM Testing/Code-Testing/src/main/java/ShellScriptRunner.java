@@ -12,6 +12,15 @@ public class ShellScriptRunner {
         if (isBuildSucceeded) {
             System.out.println("Build Succeeded");
 
+            runCommand(repositoryDirectory, "CLEAR_TESTS");
+            System.out.println("Tests Cleared");
+
+            runCommand(repositoryDirectory, "ADD_PROVIDED_TESTS");
+            System.out.println("Added Provided Tests");
+
+//            runCommand(repositoryDirectory, "ADD_HIDDEN_TESTS");
+//            System.out.println("Added Hidden Tests");
+
             String testResponse = runCommand(repositoryDirectory, "TEST");
             System.out.println(testResponse);
         } else {
@@ -25,7 +34,12 @@ public class ShellScriptRunner {
             ProcessBuilder processBuilder = new ProcessBuilder(scriptCommand);
             processBuilder.redirectErrorStream(true);
             Process process = processBuilder.start();
-            return readOutput(process);
+
+            if (command.equals("CLEAR_TESTS")) {
+                return "";
+            } else {
+                return readOutput(process);
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
