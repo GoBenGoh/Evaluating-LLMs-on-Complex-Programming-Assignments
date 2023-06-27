@@ -53,7 +53,7 @@ public class ChatGPTAPI {
     }
     public static void main(String[] args) throws IOException {
         ChatGPTAPI app = new ChatGPTAPI();
-        String prompt = app.getFileFromResourceAsStream("Prompt Templates/Task1_CompilationError.txt");
+        String prompt = app.getFileFromResourceAsStream("Prompt Templates/Task1_FailedTests.txt");
         PromptWriter promptWriter = new PromptWriter(prompt, "package nz.ac.auckland.se281;\n" +
                 "\n" +
                 "import java.util.ArrayList;\n" +
@@ -159,9 +159,25 @@ public class ChatGPTAPI {
                 "            return age;\n" +
                 "        }\n" +
                 "    }\n" +
-                "}\n", "java: cannot find symbol\n" +
-                "  symbol:   method printSingleProfileDB()\n" +
-                "  location: class nz.ac.auckland.se281.InsuranceSystem", "task1C");
+                "}\n", "    @Test\n" +
+                "    public void T2_02_load_profile_not_found() throws Exception {\n" +
+                "      runCommands(unpack(CREATE_SOME_CLIENTS, LOAD_PROFILE, \"Alex\"));\n" +
+                "\n" +
+                "      assertContains(\"No profile found for Alex. Profile not loaded.\");\n" +
+                "      assertDoesNotContain(\"Profile loaded for Alex.\", true);\n" +
+                "    }\n" +
+                "\n" +
+                "    @Test\n" +
+                "    public void T2_03_load_profile_found_display() throws Exception {\n" +
+                "      runCommands(unpack(CREATE_SOME_CLIENTS, LOAD_PROFILE, \"Tom\", PRINT_DB));\n" +
+                "\n" +
+                "      assertContains(\"Profile loaded for Tom.\");\n" +
+                "\n" +
+                "      assertContains(\"Database has 3 profiles:\");\n" +
+                "      assertContains(\"1: Jordan, 21\");\n" +
+                "      assertContains(\"*** 2: Tom, 25\");\n" +
+                "      assertContains(\"3: Jenny, 23\");\n" +
+                "    }", "task1F");
         String newPrompt = promptWriter.output();
         try(PrintWriter out = new PrintWriter("test.txt")){
             out.println(newPrompt);
