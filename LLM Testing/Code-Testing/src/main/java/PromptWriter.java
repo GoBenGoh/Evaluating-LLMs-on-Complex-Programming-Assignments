@@ -42,9 +42,7 @@ public class PromptWriter {
             return newPrompt;
         }
         else if (type == "task2"){
-            int codeStart = prompt.indexOf("Please fix the following code according to these instructions. Do not" +
-                    " assume another class exists! Do not explain the changes made! Only respond with java code!\n" +
-                    "```") + 164; // Start at after the lines above
+            int codeStart = prompt.indexOf("Only respond with java code!") + 33; // Start after the lines above
             String newPrompt = modifyPrompt(prompt, codeStart, response);
             return newPrompt;
         }

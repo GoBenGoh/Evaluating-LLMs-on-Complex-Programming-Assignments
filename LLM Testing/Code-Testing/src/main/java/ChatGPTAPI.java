@@ -53,131 +53,192 @@ public class ChatGPTAPI {
     }
     public static void main(String[] args) throws IOException {
         ChatGPTAPI app = new ChatGPTAPI();
-        String prompt = app.getFileFromResourceAsStream("Prompt Templates/Task1_FailedTests.txt");
+        String prompt = app.getFileFromResourceAsStream("Prompt Templates/Task2.txt");
         PromptWriter promptWriter = new PromptWriter(prompt, "package nz.ac.auckland.se281;\n" +
+                "\n" +
+                "import nz.ac.auckland.se281.Main.PolicyType;\n" +
                 "\n" +
                 "import java.util.ArrayList;\n" +
                 "import java.util.List;\n" +
                 "\n" +
                 "public class InsuranceSystem {\n" +
-                "    private List<Profile> database;\n" +
+                "    private List<ClientProfile> database;\n" +
+                "    private ClientProfile loadedProfile;\n" +
                 "\n" +
                 "    public InsuranceSystem() {\n" +
-                "        this.database = new ArrayList<>();\n" +
+                "        database = new ArrayList<>();\n" +
+                "        loadedProfile = null;\n" +
                 "    }\n" +
                 "\n" +
                 "    public void printDatabase() {\n" +
                 "        if (database.isEmpty()) {\n" +
                 "            MessageCli.PRINT_DB_POLICY_COUNT.printMessage(\"0\", \"s\", \".\");\n" +
-                "        } else if (database.size() == 1) {\n" +
-                "            printSingleProfileDatabase();\n" +
                 "        } else {\n" +
-                "            printMultiProfileDatabase();\n" +
+                "            int count = database.size();\n" +
+                "            MessageCli.PRINT_DB_POLICY_COUNT.printMessage(String.valueOf(count), count > 1 ? \"s\" : \"\", \":\");\n" +
+                "            for (int i = 0; i < count; i++) {\n" +
+                "                printProfile(database.get(i), i + 1);\n" +
+                "            }\n" +
                 "        }\n" +
                 "    }\n" +
                 "\n" +
-                "    public void createProfile(String userName, String age) {\n" +
-                "        if (isInvalidUsername(userName)) {\n" +
-                "            MessageCli.INVALID_USERNAME_TOO_SHORT.printMessage(userName);\n" +
-                "        } else if (isDuplicateUsername(userName)) {\n" +
-                "            MessageCli.INVALID_USERNAME_NOT_UNIQUE.printMessage(userName);\n" +
-                "        } else if (isInvalidAge(age)) {\n" +
-                "            MessageCli.INVALID_AGE.printMessage(age, toTitleCase(userName));\n" +
+                "    public void createNewProfile(String userName, String age) {\n" +
+                "        if (!isUsernameValid(userName)) {\n" +
+                "            MessageCli.INVALID_USERNAME_TOO_SHORT.printMessage(capitalizeFirstLetter(userName));\n" +
+                "        } else if (!isUsernameUnique(userName)) {\n" +
+                "            MessageCli.INVALID_USERNAME_NOT_UNIQUE.printMessage(capitalizeFirstLetter(userName));\n" +
+                "        } else if (!isAgeValid(age)) {\n" +
+                "            MessageCli.INVALID_AGE.printMessage(age, capitalizeFirstLetter(userName));\n" +
                 "        } else {\n" +
-                "            int ageValue = Integer.parseInt(age);\n" +
-                "            Profile newProfile = new Profile(toTitleCase(userName), ageValue);\n" +
+                "            int parsedAge = Integer.parseInt(age);\n" +
+                "            ClientProfile newProfile = new ClientProfile(capitalizeFirstLetter(userName), parsedAge);\n" +
                 "            database.add(newProfile);\n" +
-                "            MessageCli.PROFILE_CREATED.printMessage(toTitleCase(userName), String.valueOf(ageValue));\n" +
+                "            MessageCli.PROFILE_CREATED.printMessage(capitalizeFirstLetter(userName), age);\n" +
                 "        }\n" +
                 "    }\n" +
                 "\n" +
-                "    public void printDB() {\n" +
-                "        if (database.isEmpty()) {\n" +
-                "            MessageCli.PRINT_DB_POLICY_COUNT.printMessage(\"0\", \"s\", \".\");\n" +
-                "        } else if (database.size() == 1) {\n" +
-                "            printSingleProfileDB();\n" +
+                "    public void loadProfile(String userName) {\n" +
+                "        ClientProfile profile = findProfileByUsername(userName);\n" +
+                "        if (profile != null) {\n" +
+                "            setLoadedProfile(profile);\n" +
+                "            MessageCli.PROFILE_LOADED.printMessage(capitalizeFirstLetter(userName));\n" +
                 "        } else {\n" +
-                "            printMultiProfileDB();\n" +
+                "            MessageCli.NO_PROFILE_FOUND_TO_LOAD.printMessage(capitalizeFirstLetter(userName));\n" +
                 "        }\n" +
                 "    }\n" +
                 "\n" +
-                "    private boolean isInvalidUsername(String userName) {\n" +
-                "        return userName.length() < 3;\n" +
+                "    public void unloadProfile() {\n" +
+                "        if (isProfileLoaded()) {\n" +
+                "            MessageCli.PROFILE_UNLOADED.printMessage(getLoadedProfile().getUsername());\n" +
+                "            setLoadedProfile(null);\n" +
+                "        } else {\n" +
+                "            MessageCli.NO_PROFILE_LOADED.printMessage();\n" +
+                "        }\n" +
                 "    }\n" +
                 "\n" +
-                "    private boolean isDuplicateUsername(String userName) {\n" +
-                "        return database.stream().anyMatch(profile -> profile.getUserName().equalsIgnoreCase(userName));\n" +
+                "    public void deleteProfile(String userName) {\n" +
+                "        ClientProfile profile = findProfileByUsername(userName);\n" +
+                "        if (profile == null) {\n" +
+                "            MessageCli.NO_PROFILE_FOUND_TO_DELETE.printMessage(capitalizeFirstLetter(userName));\n" +
+                "        } else if (isProfileLoaded() && getLoadedProfile().equals(profile)) {\n" +
+                "            MessageCli.CANNOT_DELETE_PROFILE_WHILE_LOADED.printMessage(capitalizeFirstLetter(userName));\n" +
+                "        } else {\n" +
+                "            database.remove(profile);\n" +
+                "            MessageCli.PROFILE_DELETED.printMessage(capitalizeFirstLetter(userName));\n" +
+                "        }\n" +
                 "    }\n" +
                 "\n" +
-                "    private boolean isInvalidAge(String age) {\n" +
+                "    public void createPolicy(PolicyType type, String[] options) {\n" +
+                "        if (!isProfileLoaded()) {\n" +
+                "            MessageCli.NO_PROFILE_FOUND_TO_CREATE_POLICY.printMessage();\n" +
+                "            return;\n" +
+                "        }\n" +
+                "\n" +
+                "        switch (type) {\n" +
+                "            case HOME:\n" +
+                "                createHomePolicy(options);\n" +
+                "                break;\n" +
+                "            case CAR:\n" +
+                "                createCarPolicy(options);\n" +
+                "                break;\n" +
+                "            case LIFE:\n" +
+                "                createLifePolicy(options);\n" +
+                "                break;\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    private boolean isUsernameValid(String username) {\n" +
+                "        return username.length() >= 3;\n" +
+                "    }\n" +
+                "\n" +
+                "    private boolean isUsernameUnique(String username) {\n" +
+                "        for (ClientProfile profile : database) {\n" +
+                "            if (profile.getUsername().equalsIgnoreCase(capitalizeFirstLetter(username))) {\n" +
+                "                return false;\n" +
+                "            }\n" +
+                "        }\n" +
+                "        return true;\n" +
+                "    }\n" +
+                "\n" +
+                "    private boolean isAgeValid(String age) {\n" +
                 "        try {\n" +
-                "            int ageValue = Integer.parseInt(age);\n" +
-                "            return ageValue <= 0;\n" +
+                "            int parsedAge = Integer.parseInt(age);\n" +
+                "            return parsedAge > 0;\n" +
                 "        } catch (NumberFormatException e) {\n" +
-                "            return true;\n" +
+                "            return false;\n" +
                 "        }\n" +
                 "    }\n" +
                 "\n" +
-                "    private String toTitleCase(String text) {\n" +
-                "        String[] words = text.split(\" \");\n" +
-                "        StringBuilder result = new StringBuilder();\n" +
+                "    private String capitalizeFirstLetter(String name) {\n" +
+                "        String[] words = name.split(\" \");\n" +
+                "        StringBuilder capitalized = new StringBuilder();\n" +
                 "        for (String word : words) {\n" +
-                "            result.append(Character.toUpperCase(word.charAt(0))).append(word.substring(1).toLowerCase()).append(\" \");\n" +
+                "            capitalized.append(Character.toUpperCase(word.charAt(0)));\n" +
+                "            capitalized.append(word.substring(1).toLowerCase());\n" +
+                "            capitalized.append(\" \");\n" +
                 "        }\n" +
-                "        return result.toString().trim();\n" +
+                "        return capitalized.toString().trim();\n" +
                 "    }\n" +
                 "\n" +
-                "    private void printSingleProfileDatabase() {\n" +
-                "        Profile profile = database.get(0);\n" +
-                "        MessageCli.PRINT_DB_POLICY_COUNT.printMessage(\"1\", \"profile\", \":\");\n" +
-                "        System.out.println(\" \" + (database.indexOf(profile) + 1) + \": \" + profile.getUserName() + \", \" + profile.getAge());\n" +
+                "    private ClientProfile findProfileByUsername(String username) {\n" +
+                "        for (ClientProfile profile : database) {\n" +
+                "            if (profile.getUsername().equalsIgnoreCase(capitalizeFirstLetter(username))) {\n" +
+                "                return profile;\n" +
+                "            }\n" +
+                "        }\n" +
+                "        return null;\n" +
                 "    }\n" +
                 "\n" +
-                "    private void printMultiProfileDatabase() {\n" +
-                "        int profileCount = database.size();\n" +
-                "        MessageCli.PRINT_DB_POLICY_COUNT.printMessage(String.valueOf(profileCount), \"s\", \":\");\n" +
-                "        for (int i = 0; i < profileCount; i++) {\n" +
-                "            Profile profile = database.get(i);\n" +
-                "            System.out.println(\" \" + (database.indexOf(profile) + 1) + \": \" + profile.getUserName() + \", \" + profile.getAge());\n" +
-                "        }\n" +
+                "    private boolean isProfileLoaded() {\n" +
+                "        return loadedProfile != null;\n" +
                 "    }\n" +
                 "\n" +
-                "    private class Profile {\n" +
-                "        private String userName;\n" +
-                "        private int age;\n" +
-                "\n" +
-                "        public Profile(String userName, int age) {\n" +
-                "            this.userName = userName;\n" +
-                "            this.age = age;\n" +
-                "        }\n" +
-                "\n" +
-                "        public String getUserName() {\n" +
-                "            return userName;\n" +
-                "        }\n" +
-                "\n" +
-                "        public int getAge() {\n" +
-                "            return age;\n" +
-                "        }\n" +
-                "    }\n" +
-                "}\n", "    @Test\n" +
-                "    public void T2_02_load_profile_not_found() throws Exception {\n" +
-                "      runCommands(unpack(CREATE_SOME_CLIENTS, LOAD_PROFILE, \"Alex\"));\n" +
-                "\n" +
-                "      assertContains(\"No profile found for Alex. Profile not loaded.\");\n" +
-                "      assertDoesNotContain(\"Profile loaded for Alex.\", true);\n" +
+                "    private ClientProfile getLoadedProfile() {\n" +
+                "        return loadedProfile;\n" +
                 "    }\n" +
                 "\n" +
-                "    @Test\n" +
-                "    public void T2_03_load_profile_found_display() throws Exception {\n" +
-                "      runCommands(unpack(CREATE_SOME_CLIENTS, LOAD_PROFILE, \"Tom\", PRINT_DB));\n" +
+                "    private void setLoadedProfile(ClientProfile profile) {\n" +
+                "        loadedProfile = profile;\n" +
+                "    }\n" +
                 "\n" +
-                "      assertContains(\"Profile loaded for Tom.\");\n" +
+                "    private void printProfile(ClientProfile profile, int rank) {\n" +
+                "        String prefix = \"\";\n" +
+                "        if (isProfileLoaded() && profile.equals(getLoadedProfile())) {\n" +
+                "            prefix = \"*** \";\n" +
+                "        }\n" +
+                "        System.out.printf(\" %s%d: %s, %d\\n\", prefix, rank, profile.getUsername(), profile.getAge());\n" +
+                "    }\n" +
                 "\n" +
-                "      assertContains(\"Database has 3 profiles:\");\n" +
-                "      assertContains(\"1: Jordan, 21\");\n" +
-                "      assertContains(\"*** 2: Tom, 25\");\n" +
-                "      assertContains(\"3: Jenny, 23\");\n" +
-                "    }", "task1F");
+                "    private void createHomePolicy(String[] options) {\n" +
+                "        // TODO: Implement this method.\n" +
+                "    }\n" +
+                "\n" +
+                "    private void createCarPolicy(String[] options) {\n" +
+                "        // TODO: Implement this method.\n" +
+                "    }\n" +
+                "\n" +
+                "    private void createLifePolicy(String[] options) {\n" +
+                "        // TODO: Implement this method.\n" +
+                "    }\n" +
+                "}\n" +
+                "\n" +
+                "class ClientProfile {\n" +
+                "    private String username;\n" +
+                "    private int age;\n" +
+                "\n" +
+                "    public ClientProfile(String username, int age) {\n" +
+                "        this.username = username;\n" +
+                "        this.age = age;\n" +
+                "    }\n" +
+                "\n" +
+                "    public String getUsername() {\n" +
+                "        return username;\n" +
+                "    }\n" +
+                "\n" +
+                "    public int getAge() {\n" +
+                "        return age;\n" +
+                "    }\n" +
+                "}", "task2");
         String newPrompt = promptWriter.output();
         try(PrintWriter out = new PrintWriter("test.txt")){
             out.println(newPrompt);
