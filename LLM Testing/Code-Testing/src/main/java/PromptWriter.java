@@ -26,44 +26,27 @@ public class PromptWriter {
             trimmedResponse=trimmedResponse.substring(0,trimmedResponse.length()-4); // remove backticks
         }
 
-        if(type == "task1C"){
+        if(type == "c"){
             int errorStart = prompt.indexOf("The compilation error is displayed below.") + 46; // Start after the lines above
-            System.out.println(errorStart);
             String newPrompt = modifyPrompt(prompt, errorStart, extra);
             int codeStart = newPrompt.indexOf("Only respond with java code!") + 33; // Start after the lines above
             newPrompt = modifyPrompt(newPrompt, codeStart, response);
             return newPrompt;
         }
-        else if(type == "task1F") {
+        else if(type == "f") {
             int codeStart = prompt.indexOf("Only respond with java code!") + 33; // Start after the lines above
             String newPrompt = modifyPrompt(prompt, codeStart, response);
             int testStart = newPrompt.indexOf("Here are the failing test cases:") + 37; // Start after the lines above
             newPrompt = modifyPrompt(newPrompt, testStart, extra);
             return newPrompt;
         }
-        else if (type == "task2"){
+        else if (type == "t2"){
             int codeStart = prompt.indexOf("Only respond with java code!") + 33; // Start after the lines above
             String newPrompt = modifyPrompt(prompt, codeStart, response);
             return newPrompt;
         }
-        else if(type == "task2C"){
-            int codeStart = prompt.indexOf("Please rewrite the code below so that it compiles. " +
-                    "Do not assume another class exists! Do not explain the changes made! " +
-                    "Only respond with java code!\n" +
-                    "```") + 152;
-            String newPrompt = modifyPrompt(prompt, codeStart, response);
-            return newPrompt;
-        }
-        else if(type == "task2F"){
-            int codeStart = prompt.indexOf("Please fix the following code according to the instructions and the failing " +
-                    "test cases. Do not assume another class exists! Do not explain the changes made! " +
-                    "Only respond with java code!\n" +
-                    "```") + 189;
-            String newPrompt = modifyPrompt(prompt, codeStart, response);
-            return newPrompt;
-        }
         else{
-            return "Error";
+            throw new RuntimeException("Type must be c, f, or t2");
         }
     }
 

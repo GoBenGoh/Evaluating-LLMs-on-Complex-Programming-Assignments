@@ -61,7 +61,6 @@ The loaded profile must be unloaded before it can be deleted.
 
 It is however perfectly fine to delete a profile that is not currently loaded, as long as it exists in the database.
 ///
-
 The following section is the an existing Java class named MessageCli:
 ```
 package nz.ac.auckland.se281;
@@ -371,192 +370,119 @@ public class Main {
   }
 }
 ```
-Please fix the following code according to these instructions. Do not assume another class exists! Do not explain the changes made! Only respond with java code!
+The following Task 2 code does not compile. The compilation error is displayed below.
+```java: cannot find symbol
+  symbol:   method printSingleProfileDB()
+  location: class nz.ac.auckland.se281.InsuranceSystem
+```
+Please rewrite the code below so that it compiles. Do not assume another class exists! Do not explain the changes made! Only respond with java code!
 ```package nz.ac.auckland.se281;
-
-import nz.ac.auckland.se281.Main.PolicyType;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class InsuranceSystem {
-    private List<ClientProfile> database;
-    private ClientProfile loadedProfile;
+    private List<Profile> database;
 
     public InsuranceSystem() {
-        database = new ArrayList<>();
-        loadedProfile = null;
+        this.database = new ArrayList<>();
     }
 
     public void printDatabase() {
         if (database.isEmpty()) {
             MessageCli.PRINT_DB_POLICY_COUNT.printMessage("0", "s", ".");
+        } else if (database.size() == 1) {
+            printSingleProfileDatabase();
         } else {
-            int count = database.size();
-            MessageCli.PRINT_DB_POLICY_COUNT.printMessage(String.valueOf(count), count > 1 ? "s" : "", ":");
-            for (int i = 0; i < count; i++) {
-                printProfile(database.get(i), i + 1);
-            }
+            printMultiProfileDatabase();
         }
     }
 
-    public void createNewProfile(String userName, String age) {
-        if (!isUsernameValid(userName)) {
-            MessageCli.INVALID_USERNAME_TOO_SHORT.printMessage(capitalizeFirstLetter(userName));
-        } else if (!isUsernameUnique(userName)) {
-            MessageCli.INVALID_USERNAME_NOT_UNIQUE.printMessage(capitalizeFirstLetter(userName));
-        } else if (!isAgeValid(age)) {
-            MessageCli.INVALID_AGE.printMessage(age, capitalizeFirstLetter(userName));
+    public void createProfile(String userName, String age) {
+        if (isInvalidUsername(userName)) {
+            MessageCli.INVALID_USERNAME_TOO_SHORT.printMessage(userName);
+        } else if (isDuplicateUsername(userName)) {
+            MessageCli.INVALID_USERNAME_NOT_UNIQUE.printMessage(userName);
+        } else if (isInvalidAge(age)) {
+            MessageCli.INVALID_AGE.printMessage(age, toTitleCase(userName));
         } else {
-            int parsedAge = Integer.parseInt(age);
-            ClientProfile newProfile = new ClientProfile(capitalizeFirstLetter(userName), parsedAge);
+            int ageValue = Integer.parseInt(age);
+            Profile newProfile = new Profile(toTitleCase(userName), ageValue);
             database.add(newProfile);
-            MessageCli.PROFILE_CREATED.printMessage(capitalizeFirstLetter(userName), age);
+            MessageCli.PROFILE_CREATED.printMessage(toTitleCase(userName), String.valueOf(ageValue));
         }
     }
 
-    public void loadProfile(String userName) {
-        ClientProfile profile = findProfileByUsername(userName);
-        if (profile != null) {
-            setLoadedProfile(profile);
-            MessageCli.PROFILE_LOADED.printMessage(capitalizeFirstLetter(userName));
+    public void printDB() {
+        if (database.isEmpty()) {
+            MessageCli.PRINT_DB_POLICY_COUNT.printMessage("0", "s", ".");
+        } else if (database.size() == 1) {
+            printSingleProfileDB();
         } else {
-            MessageCli.NO_PROFILE_FOUND_TO_LOAD.printMessage(capitalizeFirstLetter(userName));
+            printMultiProfileDB();
         }
     }
 
-    public void unloadProfile() {
-        if (isProfileLoaded()) {
-            MessageCli.PROFILE_UNLOADED.printMessage(getLoadedProfile().getUsername());
-            setLoadedProfile(null);
-        } else {
-            MessageCli.NO_PROFILE_LOADED.printMessage();
-        }
+    private boolean isInvalidUsername(String userName) {
+        return userName.length() < 3;
     }
 
-    public void deleteProfile(String userName) {
-        ClientProfile profile = findProfileByUsername(userName);
-        if (profile == null) {
-            MessageCli.NO_PROFILE_FOUND_TO_DELETE.printMessage(capitalizeFirstLetter(userName));
-        } else if (isProfileLoaded() && getLoadedProfile().equals(profile)) {
-            MessageCli.CANNOT_DELETE_PROFILE_WHILE_LOADED.printMessage(capitalizeFirstLetter(userName));
-        } else {
-            database.remove(profile);
-            MessageCli.PROFILE_DELETED.printMessage(capitalizeFirstLetter(userName));
-        }
+    private boolean isDuplicateUsername(String userName) {
+        return database.stream().anyMatch(profile -> profile.getUserName().equalsIgnoreCase(userName));
     }
 
-    public void createPolicy(PolicyType type, String[] options) {
-        if (!isProfileLoaded()) {
-            MessageCli.NO_PROFILE_FOUND_TO_CREATE_POLICY.printMessage();
-            return;
-        }
-
-        switch (type) {
-            case HOME:
-                createHomePolicy(options);
-                break;
-            case CAR:
-                createCarPolicy(options);
-                break;
-            case LIFE:
-                createLifePolicy(options);
-                break;
-        }
-    }
-
-    private boolean isUsernameValid(String username) {
-        return username.length() >= 3;
-    }
-
-    private boolean isUsernameUnique(String username) {
-        for (ClientProfile profile : database) {
-            if (profile.getUsername().equalsIgnoreCase(capitalizeFirstLetter(username))) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private boolean isAgeValid(String age) {
+    private boolean isInvalidAge(String age) {
         try {
-            int parsedAge = Integer.parseInt(age);
-            return parsedAge > 0;
+            int ageValue = Integer.parseInt(age);
+            return ageValue <= 0;
         } catch (NumberFormatException e) {
-            return false;
+            return true;
         }
     }
 
-    private String capitalizeFirstLetter(String name) {
-        String[] words = name.split(" ");
-        StringBuilder capitalized = new StringBuilder();
+    private String toTitleCase(String text) {
+        String[] words = text.split(" ");
+        StringBuilder result = new StringBuilder();
         for (String word : words) {
-            capitalized.append(Character.toUpperCase(word.charAt(0)));
-            capitalized.append(word.substring(1).toLowerCase());
-            capitalized.append(" ");
+            result.append(Character.toUpperCase(word.charAt(0))).append(word.substring(1).toLowerCase()).append(" ");
         }
-        return capitalized.toString().trim();
+        return result.toString().trim();
     }
 
-    private ClientProfile findProfileByUsername(String username) {
-        for (ClientProfile profile : database) {
-            if (profile.getUsername().equalsIgnoreCase(capitalizeFirstLetter(username))) {
-                return profile;
-            }
+    private void printSingleProfileDatabase() {
+        Profile profile = database.get(0);
+        MessageCli.PRINT_DB_POLICY_COUNT.printMessage("1", "profile", ":");
+        System.out.println(" " + (database.indexOf(profile) + 1) + ": " + profile.getUserName() + ", " + profile.getAge());
+    }
+
+    private void printMultiProfileDatabase() {
+        int profileCount = database.size();
+        MessageCli.PRINT_DB_POLICY_COUNT.printMessage(String.valueOf(profileCount), "s", ":");
+        for (int i = 0; i < profileCount; i++) {
+            Profile profile = database.get(i);
+            System.out.println(" " + (database.indexOf(profile) + 1) + ": " + profile.getUserName() + ", " + profile.getAge());
         }
-        return null;
     }
 
-    private boolean isProfileLoaded() {
-        return loadedProfile != null;
-    }
+    private class Profile {
+        private String userName;
+        private int age;
 
-    private ClientProfile getLoadedProfile() {
-        return loadedProfile;
-    }
-
-    private void setLoadedProfile(ClientProfile profile) {
-        loadedProfile = profile;
-    }
-
-    private void printProfile(ClientProfile profile, int rank) {
-        String prefix = "";
-        if (isProfileLoaded() && profile.equals(getLoadedProfile())) {
-            prefix = "*** ";
+        public Profile(String userName, int age) {
+            this.userName = userName;
+            this.age = age;
         }
-        System.out.printf(" %s%d: %s, %d\n", prefix, rank, profile.getUsername(), profile.getAge());
-    }
 
-    private void createHomePolicy(String[] options) {
-        // TODO: Implement this method.
-    }
+        public String getUserName() {
+            return userName;
+        }
 
-    private void createCarPolicy(String[] options) {
-        // TODO: Implement this method.
-    }
-
-    private void createLifePolicy(String[] options) {
-        // TODO: Implement this method.
+        public int getAge() {
+            return age;
+        }
     }
 }
 
-class ClientProfile {
-    private String username;
-    private int age;
-
-    public ClientProfile(String username, int age) {
-        this.username = username;
-        this.age = age;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public int getAge() {
-        return age;
-    }
-}
 ```
 Here are the test cases that must pass:
 ```
