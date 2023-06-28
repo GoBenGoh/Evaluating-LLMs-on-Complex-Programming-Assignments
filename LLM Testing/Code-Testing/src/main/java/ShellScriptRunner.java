@@ -55,9 +55,7 @@ public class ShellScriptRunner {
             System.out.println("Build Failed");
             ArrayList<String> errorMessages = TestResultAnalyzer.getCompilationErrors(compileResponse);
             testingResults = new TestResultAnalyzer(false, -1, -1, -1, -1, errorMessages);
-            for (String error : TestResultAnalyzer.getCompilationErrors(compileResponse)) {
-                System.out.println(error);
-            }
+            ErrorFileWriter.writeErrorsToFile(errorMessages);
         }
     }
 
