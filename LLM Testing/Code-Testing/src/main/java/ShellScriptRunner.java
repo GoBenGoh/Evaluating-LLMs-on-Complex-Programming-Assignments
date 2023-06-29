@@ -9,7 +9,7 @@ public class ShellScriptRunner {
     public static void main(String[] args) {
         // Hard Coded Student Repo
         String repositoryDirectory = "../repos_output/assignment-1-repository-12";
-        TestResultAnalyzer testingResults = new TestResultAnalyzer(false, -1, -1, -1, -1, new ArrayList<>());
+        TestResultAnalyzer testingResults = new TestResultAnalyzer(false, -1, -1, -1, -1, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 
         String compileResponse = runCommand(repositoryDirectory, "COMPILE");
         boolean isBuildSucceeded = compileResponse.contains("BUILD SUCCESS");
@@ -27,7 +27,7 @@ public class ShellScriptRunner {
 
             if (totalProvided == -1 || failures == -1 || errors == -1 || skipped == -1){
                 System.out.println("Failed to get testing information from provided tests");
-                testingResults = new TestResultAnalyzer(true, 0, 0, 0, 0, new ArrayList<>());
+                testingResults = new TestResultAnalyzer(true, 0, 0, 0, 0, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
                 return;
             }
 
@@ -51,7 +51,7 @@ public class ShellScriptRunner {
 
             if (totalHidden == -1 || failures == -1 || errors == -1 || skipped == -1){
                 System.out.println("Failed to get testing information from hidden tests");
-                testingResults = new TestResultAnalyzer(true, numPassedProvidedTests, 0, totalProvided, 0, new ArrayList<>());
+                testingResults = new TestResultAnalyzer(true, numPassedProvidedTests, 0, totalProvided, 0, new ArrayList<>(), providedTestNames, new ArrayList<>());
                 return;
             }
 
@@ -62,12 +62,12 @@ public class ShellScriptRunner {
             List<String> failedHiddenTests = TestFinder.findTests(hiddenTestNames, "HIDDEN");
             FailureFileWriter.writeFailuresToFile(failedHiddenTests, hiddenAsserts, "HIDDEN");
 
-            testingResults = new TestResultAnalyzer(true, numPassedProvidedTests, numPassedHiddenTests, totalProvided, totalHidden, new ArrayList<>());
+            testingResults = new TestResultAnalyzer(true, numPassedProvidedTests, numPassedHiddenTests, totalProvided, totalHidden, new ArrayList<>(), providedTestNames, hiddenTestNames);
 
         } else {
             System.out.println("Build Failed");
             ArrayList<String> errorMessages = TestResultAnalyzer.getCompilationErrors(compileResponse);
-            testingResults = new TestResultAnalyzer(false, -1, -1, -1, -1, errorMessages);
+            testingResults = new TestResultAnalyzer(false, -1, -1, -1, -1, errorMessages, new ArrayList<>(), new ArrayList<>());
             ErrorFileWriter.writeErrorsToFile(errorMessages);
         }
     }

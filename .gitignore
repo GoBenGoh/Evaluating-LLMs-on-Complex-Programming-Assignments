@@ -25,3 +25,4 @@ LLM Testing/provided_failures.txt
 LLM Testing/hidden_failures.txt
 LLM Testing/Code-Testing/hidden_failures.txt
 LLM Testing/Code-Testing/provided_failures.txt
+LLM Testing/Code-Testing/errors.txt

@@ -11,15 +11,21 @@ public class TestResultAnalyzer {
     private final int numPassedHiddenTests;
     private final int totalProvidedTests;
     private final int totalHiddenTests;
-    private final ArrayList<String> errors;
+    private final List<String> errors;
 
-    public TestResultAnalyzer(boolean isCompiled, int numPassedProvidedTests, int numPassedHiddenTests, int totalProvidedTests, int totalHiddenTests, ArrayList<String> errors){
+    private final List<String> providedTestNames;
+
+    private final List<String> hiddenTestNames;
+
+    public TestResultAnalyzer(boolean isCompiled, int numPassedProvidedTests, int numPassedHiddenTests, int totalProvidedTests, int totalHiddenTests, List<String> errors, List<String> providedTestNames, List<String> hiddenTestNames){
         this.isCompiled = isCompiled;
         this.numPassedProvidedTests = numPassedProvidedTests;
         this.numPassedHiddenTests = numPassedHiddenTests;
         this.totalProvidedTests = totalProvidedTests;
         this.totalHiddenTests = totalHiddenTests;
         this.errors = errors;
+        this.providedTestNames = providedTestNames;
+        this.hiddenTestNames = hiddenTestNames;
     }
 
     public static int getValue(String testingResponse, String valuePattern) {
