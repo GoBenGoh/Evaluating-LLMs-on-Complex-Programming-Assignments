@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class ShellScriptRunner {
     public static void main(String[] args) {
         // Hard Coded Student Repo
-        String repositoryDirectory = "./repos_output/assignment-1-repository-4";
+        String repositoryDirectory = "./repos_output/assignment-1-repository-12";
         TestResultAnalyzer testingResults = new TestResultAnalyzer(false, -1, -1, -1, -1, new ArrayList<>());
 
         String compileResponse = runCommand(repositoryDirectory, "COMPILE");
@@ -34,6 +34,10 @@ public class ShellScriptRunner {
             runCommand(repositoryDirectory, "CLEAR_TESTS");
             runCommand(repositoryDirectory, "ADD_HIDDEN_TESTS");
             testResponse = runCommand(repositoryDirectory, "TEST");
+            for (String failureMessage : TestResultAnalyzer.getFailureMessages(testResponse)){
+                System.out.println(failureMessage);
+            }
+
 
             int totalHidden = TestResultAnalyzer.getValue(testResponse, "Tests run: ");
             failures = TestResultAnalyzer.getValue(testResponse, "Failures: ");
@@ -47,8 +51,8 @@ public class ShellScriptRunner {
                 return;
             }
 
-            System.out.println("Provided Tests: " + numPassedProvidedTests + "/" + totalProvided);
-            System.out.println("Hidden Tests: " + numPassedHiddenTests + "/" + totalHidden);
+//            System.out.println("Provided Tests: " + numPassedProvidedTests + "/" + totalProvided);
+//            System.out.println("Hidden Tests: " + numPassedHiddenTests + "/" + totalHidden);
             testingResults = new TestResultAnalyzer(true, numPassedProvidedTests, numPassedHiddenTests, totalProvided, totalHidden, new ArrayList<>());
 
         } else {

@@ -47,4 +47,18 @@ public class TestResultAnalyzer {
 
         return new ArrayList<>(uniqueErrors);
     }
+
+    public static List<String> getFailureMessages(String testingResponse) {
+        List<String> failureMessages = new ArrayList<>();
+
+        Pattern pattern = Pattern.compile("\\[ERROR\\].*?<<< FAILURE!\\s+java\\.lang\\.AssertionError:[\\s\\S]+?(?=\\n\\[INFO\\]|$)");
+        Matcher matcher = pattern.matcher(testingResponse);
+
+        while (matcher.find()) {
+            String failureMessage = matcher.group(0).trim();
+            failureMessages.add(failureMessage);
+        }
+
+        return failureMessages;
+    }
 }
