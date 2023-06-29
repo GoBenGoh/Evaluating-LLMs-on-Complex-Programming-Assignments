@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ShellScriptRunner {
     public static void main(String[] args) {
@@ -34,8 +35,9 @@ public class ShellScriptRunner {
             runCommand(repositoryDirectory, "CLEAR_TESTS");
             runCommand(repositoryDirectory, "ADD_HIDDEN_TESTS");
             testResponse = runCommand(repositoryDirectory, "TEST");
-            for (String failureMessage : TestResultAnalyzer.getFailureMessages(testResponse)){
-                System.out.println(failureMessage);
+            List<String> failureMessages =  TestResultAnalyzer.getFailureMessages(testResponse);
+            for (String testName : TestResultAnalyzer.extractTestNames(failureMessages)){
+                System.out.println(testName);
             }
 
 

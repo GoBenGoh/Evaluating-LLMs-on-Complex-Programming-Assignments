@@ -61,4 +61,20 @@ public class TestResultAnalyzer {
 
         return failureMessages;
     }
+
+    public static List<String> extractTestNames(List<String> failureMessages) {
+        List<String> testNames = new ArrayList<>();
+
+        Pattern pattern = Pattern.compile("\\[ERROR\\] (.*?)\\(.*?\\)\\s+Time elapsed:");
+
+        for (String failureMessage : failureMessages) {
+            Matcher matcher = pattern.matcher(failureMessage);
+            while (matcher.find()) {
+                String testName = matcher.group(1);
+                testNames.add(testName);
+            }
+        }
+
+        return testNames;
+    }
 }
