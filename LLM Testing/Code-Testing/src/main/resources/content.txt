@@ -1,108 +1,33 @@
-```java
 package nz.ac.auckland.se281;
 
-import java.util.ArrayList;
-import java.util.List;
+import nz.ac.auckland.se281.Main.PolicyType;
 
 public class InsuranceSystem {
-    private List<Profile> database;
+  public InsuranceSystem() {
+    // Only this constructor can be used (if you need to initialise fields).
+  }
 
-    public InsuranceSystem() {
-        this.database = new ArrayList<>();
-    }
+  public void printDatabase() {
+    // TODO: Complete this method.
+  }
 
-    public void printDatabase() {
-        if (database.isEmpty()) {
-            MessageCli.PRINT_DB_POLICY_COUNT.printMessage("0", "s", ".");
-        } else if (database.size() == 1) {
-            printSingleProfileDatabase();
-        } else {
-            printMultiProfileDatabase();
-        }
-    }
+  public void createNewProfile(String userName, String age) {
+    // TODO: Complete this method.
+  }
 
-    public void createProfile(String userName, String age) {
-        if (isInvalidUsername(userName)) {
-            MessageCli.INVALID_USERNAME_TOO_SHORT.printMessage(userName);
-        } else if (isDuplicateUsername(userName)) {
-            MessageCli.INVALID_USERNAME_NOT_UNIQUE.printMessage(userName);
-        } else if (isInvalidAge(age)) {
-            MessageCli.INVALID_AGE.printMessage(age, toTitleCase(userName));
-        } else {
-            int ageValue = Integer.parseInt(age);
-            Profile newProfile = new Profile(toTitleCase(userName), ageValue);
-            database.add(newProfile);
-            MessageCli.PROFILE_CREATED.printMessage(toTitleCase(userName), String.valueOf(ageValue));
-        }
-    }
+  public void loadProfile(String userName) {
+    // TODO: Complete this method.
+  }
 
-    public void printDB() {
-        if (database.isEmpty()) {
-            MessageCli.PRINT_DB_POLICY_COUNT.printMessage("0", "s", ".");
-        } else if (database.size() == 1) {
-            printSingleProfileDB();
-        } else {
-            printMultiProfileDB();
-        }
-    }
+  public void unloadProfile() {
+    // TODO: Complete this method.
+  }
 
-    private boolean isInvalidUsername(String userName) {
-        return userName.length() < 3;
-    }
+  public void deleteProfile(String userName) {
+    // TODO: Complete this method.
+  }
 
-    private boolean isDuplicateUsername(String userName) {
-        return database.stream().anyMatch(profile -> profile.getUserName().equalsIgnoreCase(userName));
-    }
-
-    private boolean isInvalidAge(String age) {
-        try {
-            int ageValue = Integer.parseInt(age);
-            return ageValue <= 0;
-        } catch (NumberFormatException e) {
-            return true;
-        }
-    }
-
-    private String toTitleCase(String text) {
-        String[] words = text.split(" ");
-        StringBuilder result = new StringBuilder();
-        for (String word : words) {
-            result.append(Character.toUpperCase(word.charAt(0))).append(word.substring(1).toLowerCase()).append(" ");
-        }
-        return result.toString().trim();
-    }
-
-    private void printSingleProfileDatabase() {
-        Profile profile = database.get(0);
-        MessageCli.PRINT_DB_POLICY_COUNT.printMessage("1", "profile", ":");
-        System.out.println(" " + (database.indexOf(profile) + 1) + ": " + profile.getUserName() + ", " + profile.getAge());
-    }
-
-    private void printMultiProfileDatabase() {
-        int profileCount = database.size();
-        MessageCli.PRINT_DB_POLICY_COUNT.printMessage(String.valueOf(profileCount), "s", ":");
-        for (int i = 0; i < profileCount; i++) {
-            Profile profile = database.get(i);
-            System.out.println(" " + (database.indexOf(profile) + 1) + ": " + profile.getUserName() + ", " + profile.getAge());
-        }
-    }
-
-    private class Profile {
-        private String userName;
-        private int age;
-
-        public Profile(String userName, int age) {
-            this.userName = userName;
-            this.age = age;
-        }
-
-        public String getUserName() {
-            return userName;
-        }
-
-        public int getAge() {
-            return age;
-        }
-    }
+  public void createPolicy(PolicyType type, String[] options) {
+    // TODO: Complete this method.
+  }
 }
-```

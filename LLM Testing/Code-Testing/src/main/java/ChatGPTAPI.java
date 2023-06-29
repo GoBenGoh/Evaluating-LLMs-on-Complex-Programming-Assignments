@@ -4,6 +4,11 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.LinkedList;
+import java.util.List;
+
 public class ChatGPTAPI {
     public static void sendRequest(String request) {
         try {
@@ -17,7 +22,7 @@ public class ChatGPTAPI {
             //Make sure you put the right API Key saved earlier.
             con.setRequestProperty("Authorization", "Bearer PLACEHOLDER_KEY");
             //Make sure to REPLACE the path of the json file!
-            String jsonInputString = FileHelper.readLinesAsString(new File(request));
+            String jsonInputString = readLinesAsString(new File(request));
             try (OutputStream os = con.getOutputStream()) {
                 byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
                 os.write(input, 0, input.length);
@@ -52,38 +57,38 @@ public class ChatGPTAPI {
     }
     public static void main(String[] args) throws IOException {
         ChatGPTAPI app = new ChatGPTAPI();
-        String responseContent = app.getFileFromResourceAsStream("content.txt");
+        String responseContent = app.getFileFromResource("content.txt");
         String request;
         String promptTemplate;
         PromptWriter promptWriter;
         if (args[0].equals("1")){
             request = "src/main/java/InitialTask1Request.json";
-            sendRequest(request);
-            return;
+            promptTemplate = app.getFileFromResource("Prompt Templates/Task1.txt");
+            promptWriter = new PromptWriter(promptTemplate, responseContent, "t1");
         }
         else if (args[0].equals("1c")){
             request = "src/main/java/Task1CompilationFailureRequest.json";
-            promptTemplate = app.getFileFromResourceAsStream("Prompt Templates/Task1_CompilationError.txt");
+            promptTemplate = app.getFileFromResource("Prompt Templates/Task1_CompilationError.txt");
             promptWriter = new PromptWriter(promptTemplate, responseContent,"PLACEHOLDER_ERROR", "c");
         }
         else if (args[0].equals("1f")){
             request = "src/main/java/Task1FailedTestsRequest.json";
-            promptTemplate = app.getFileFromResourceAsStream("Prompt Templates/Task1_FailedTests.txt");
+            promptTemplate = app.getFileFromResource("Prompt Templates/Task1_FailedTests.txt");
             promptWriter = new PromptWriter(promptTemplate, responseContent,"PLACEHOLDER_FAILURE", "f");
         }
         else if (args[0].equals("2")){
             request = "src/main/java/InitialTask2Request.json";
-            promptTemplate = app.getFileFromResourceAsStream("Prompt Templates/Task2.txt");
+            promptTemplate = app.getFileFromResource("Prompt Templates/Task2.txt");
             promptWriter = new PromptWriter(promptTemplate, responseContent, "t2");
         }
         else if (args[0].equals("2c")){
             request = "src/main/java/Task2CompilationFailureRequest.json";
-            promptTemplate = app.getFileFromResourceAsStream("Prompt Templates/Task2_CompilationError.txt");
+            promptTemplate = app.getFileFromResource("Prompt Templates/Task2_CompilationError.txt");
             promptWriter = new PromptWriter(promptTemplate, responseContent,"PLACEHOLDER_ERROR", "c");
         }
         else if (args[0].equals("2f")){
             request = "src/main/java/Task2FailedTestsRequest.json";
-            promptTemplate = app.getFileFromResourceAsStream("Prompt Templates/Task2_FailedTests.txt");
+            promptTemplate = app.getFileFromResource("Prompt Templates/Task2_FailedTests.txt");
             promptWriter = new PromptWriter(promptTemplate, responseContent,"PLACEHOLDER_FAILURE", "f");
         }
         else {
@@ -102,7 +107,7 @@ public class ChatGPTAPI {
         }
         //sendRequest(request);
     }
-    private String getFileFromResourceAsStream(String fileName) throws IOException {
+    private String getFileFromResource(String fileName) throws IOException {
 
         // The class loader that loaded the class
         ClassLoader classLoader = getClass().getClassLoader();
@@ -115,5 +120,16 @@ public class ChatGPTAPI {
             return inputStream;
         }
 
+    }
+    public static String readLinesAsString(File file) {
+        List<String> returnLines = new LinkedList<String>();
+        String text = "";
+        try {
+            text = new String(Files.readAllBytes(Paths.get(file.getAbsolutePath())),
+                    StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return text;
     }
 }

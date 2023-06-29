@@ -39,13 +39,13 @@ public class PromptWriter {
             newPrompt = modifyPrompt(newPrompt, testStart, extra);
             return newPrompt;
         }
-        else if (type == "t2"){
+        else if (type == "t1" || type == "t2"){
             int codeStart = prompt.indexOf("Only respond with java code!") + 33; // Start after the lines above
             String newPrompt = modifyPrompt(prompt, codeStart, trimmedResponse);
             return newPrompt;
         }
         else{
-            throw new RuntimeException("Type must be c, f, or t2");
+            throw new RuntimeException("Type must be c, f, t1, or t2");
         }
     }
 
