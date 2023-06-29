@@ -31,15 +31,17 @@ public class ShellScriptRunner {
                 return;
             }
 
-            // Running Hidden Tests
-            runCommand(repositoryDirectory, "CLEAR_TESTS");
-            runCommand(repositoryDirectory, "ADD_HIDDEN_TESTS");
-            testResponse = runCommand(repositoryDirectory, "TEST");
+            // Getting failed provided tests
             List<String> failureMessages =  TestResultAnalyzer.getFailureMessages(testResponse);
             for (String testName : TestResultAnalyzer.extractTestNames(failureMessages)){
                 System.out.println(testName);
             }
+            System.out.println(" ");
 
+            // Running Hidden Tests
+            runCommand(repositoryDirectory, "CLEAR_TESTS");
+            runCommand(repositoryDirectory, "ADD_HIDDEN_TESTS");
+            testResponse = runCommand(repositoryDirectory, "TEST");
 
             int totalHidden = TestResultAnalyzer.getValue(testResponse, "Tests run: ");
             failures = TestResultAnalyzer.getValue(testResponse, "Failures: ");
@@ -51,6 +53,12 @@ public class ShellScriptRunner {
                 System.out.println("Failed to get testing information from hidden tests");
                 testingResults = new TestResultAnalyzer(true, numPassedProvidedTests, 0, totalProvided, 0, new ArrayList<>());
                 return;
+            }
+
+            // Getting failed hidden tests
+            failureMessages =  TestResultAnalyzer.getFailureMessages(testResponse);
+            for (String testName : TestResultAnalyzer.extractTestNames(failureMessages)){
+                System.out.println(testName);
             }
 
 //            System.out.println("Provided Tests: " + numPassedProvidedTests + "/" + totalProvided);
