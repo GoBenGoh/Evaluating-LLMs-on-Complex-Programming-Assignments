@@ -77,4 +77,22 @@ public class TestResultAnalyzer {
 
         return testNames;
     }
+
+    public static List<String> extractAssertionMessages(List<String> failureMessages) {
+        List<String> assertionMessages = new ArrayList<>();
+
+        String pattern = "java.lang.AssertionError:(.+?)(?=\\n\\[ERROR\\]|$)";
+        Pattern regex = Pattern.compile(pattern, Pattern.DOTALL);
+
+        for (String failureMessage : failureMessages) {
+            Matcher matcher = regex.matcher(failureMessage);
+            while (matcher.find()) {
+                String assertionMessage = matcher.group(1).trim();
+                assertionMessages.add(assertionMessage);
+            }
+        }
+
+        return assertionMessages;
+    }
+
 }
