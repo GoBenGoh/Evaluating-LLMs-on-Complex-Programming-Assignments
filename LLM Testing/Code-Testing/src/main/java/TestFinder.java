@@ -13,9 +13,9 @@ public class TestFinder {
 
         String filePath = "";
         if (type.equals("PROVIDED")) {
-            filePath = "./Tests/MainTest.java";
+            filePath = "../Tests/MainTest.java";
         } else if (type.equals("HIDDEN")) {
-            filePath = "./Tests/MainTestHidden.java";
+            filePath = "../Tests/MainTestHidden.java";
         }
 
         String fileContent = readFileContent(filePath);

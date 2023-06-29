@@ -8,7 +8,7 @@ import java.util.List;
 public class ShellScriptRunner {
     public static void main(String[] args) {
         // Hard Coded Student Repo
-        String repositoryDirectory = "./repos_output/assignment-1-repository-12";
+        String repositoryDirectory = "../repos_output/assignment-1-repository-12";
         TestResultAnalyzer testingResults = new TestResultAnalyzer(false, -1, -1, -1, -1, new ArrayList<>());
 
         String compileResponse = runCommand(repositoryDirectory, "COMPILE");
@@ -74,7 +74,7 @@ public class ShellScriptRunner {
 
     private static String runCommand(String repositoryDirectory, String command) {
         try {
-            String[] scriptCommand = {"C:\\Program Files\\Git\\bin\\bash.exe", "-c", "./Code-Testing/src/main/java/script.sh " + repositoryDirectory + " " + command};
+            String[] scriptCommand = {"C:\\Program Files\\Git\\bin\\bash.exe", "-c", "./src/main/java/script.sh " + repositoryDirectory + " " + command};
             ProcessBuilder processBuilder = new ProcessBuilder(scriptCommand);
             processBuilder.redirectErrorStream(true);
             Process process = processBuilder.start();
