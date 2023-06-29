@@ -36,6 +36,7 @@ public class ShellScriptRunner {
             List<String> providedTestNames = TestResultAnalyzer.extractTestNames(providedFailureMessages);
             List<String> providedAsserts = TestResultAnalyzer.extractAssertionMessages(providedFailureMessages);
             List<String> failedProvidedTests = TestFinder.findTests(providedTestNames, "PROVIDED");
+            FailureFileWriter.writeFailuresToFile(failedProvidedTests, providedAsserts, "PROVIDED");
 
             // Running Hidden Tests
             runCommand(repositoryDirectory, "CLEAR_TESTS");
@@ -59,6 +60,7 @@ public class ShellScriptRunner {
             List<String> hiddenTestNames = TestResultAnalyzer.extractTestNames(hiddenFailureMessages);
             List<String> hiddenAsserts = TestResultAnalyzer.extractAssertionMessages(hiddenFailureMessages);
             List<String> failedHiddenTests = TestFinder.findTests(hiddenTestNames, "HIDDEN");
+            FailureFileWriter.writeFailuresToFile(failedHiddenTests, hiddenAsserts, "HIDDEN");
 
             testingResults = new TestResultAnalyzer(true, numPassedProvidedTests, numPassedHiddenTests, totalProvided, totalHidden, new ArrayList<>());
 
