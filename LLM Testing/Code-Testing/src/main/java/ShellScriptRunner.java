@@ -32,9 +32,11 @@ public class ShellScriptRunner {
             }
 
             // Getting failed provided tests
-            List<String> failureMessages =  TestResultAnalyzer.getFailureMessages(testResponse);
-            for (String testName : TestResultAnalyzer.extractTestNames(failureMessages)){
-                System.out.println(testName);
+            List<String> providedFailureMessages =  TestResultAnalyzer.getFailureMessages(testResponse);
+            List<String> providedTestNames = TestResultAnalyzer.extractTestNames(providedFailureMessages);
+            List<String> failedProvidedTests = TestFinder.findTests(providedTestNames, "PROVIDED");
+            for (String test : failedProvidedTests) {
+                System.out.println(test);
             }
             System.out.println(" ");
 
@@ -56,13 +58,13 @@ public class ShellScriptRunner {
             }
 
             // Getting failed hidden tests
-            failureMessages =  TestResultAnalyzer.getFailureMessages(testResponse);
-            for (String testName : TestResultAnalyzer.extractTestNames(failureMessages)){
-                System.out.println(testName);
+            List<String> hiddenFailureMessages =  TestResultAnalyzer.getFailureMessages(testResponse);
+            List<String> hiddenTestNames = TestResultAnalyzer.extractTestNames(hiddenFailureMessages);
+            List<String> failedHiddenTests = TestFinder.findTests(hiddenTestNames, "HIDDEN");
+            for (String test : failedHiddenTests) {
+                System.out.println(test);
             }
 
-//            System.out.println("Provided Tests: " + numPassedProvidedTests + "/" + totalProvided);
-//            System.out.println("Hidden Tests: " + numPassedHiddenTests + "/" + totalHidden);
             testingResults = new TestResultAnalyzer(true, numPassedProvidedTests, numPassedHiddenTests, totalProvided, totalHidden, new ArrayList<>());
 
         } else {
