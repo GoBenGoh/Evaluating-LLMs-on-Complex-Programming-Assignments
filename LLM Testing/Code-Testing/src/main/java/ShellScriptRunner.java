@@ -37,7 +37,7 @@ public class ShellScriptRunner {
             Map<String, String> providedFailureMessages = TestResultAnalyzer.extractFailedTestDetails(xmlPath);
             List<String> providedTestNames = new ArrayList<>(providedFailureMessages.keySet());
             List<String> providedAsserts = new ArrayList<>(providedFailureMessages.values());
-            List<String> failedProvidedTests = TestFinder.findTests(providedTestNames, "PROVIDED");
+            List<String> failedProvidedTests = TestFinder.extractTestMethods(providedTestNames, "PROVIDED");
             FailureFileWriter.writeFailuresToFile(failedProvidedTests, providedAsserts, "PROVIDED");
 
             // Running Hidden Tests
@@ -61,7 +61,7 @@ public class ShellScriptRunner {
             Map<String, String> hiddenFailureMessages = TestResultAnalyzer.extractFailedTestDetails(xmlPath);
             List<String> hiddenTestNames = new ArrayList<>(hiddenFailureMessages.keySet());
             List<String> hiddenAsserts = new ArrayList<>(hiddenFailureMessages.values());
-            List<String> failedHiddenTests = TestFinder.findTests(hiddenTestNames, "HIDDEN");
+            List<String> failedHiddenTests = TestFinder.extractTestMethods(hiddenTestNames, "HIDDEN");
             FailureFileWriter.writeFailuresToFile(failedHiddenTests, hiddenAsserts, "HIDDEN");
 
             testingResults = new TestResultAnalyzer(true, numPassedProvidedTests, numPassedHiddenTests, totalProvided, totalHidden, new ArrayList<>(), providedTestNames, hiddenTestNames);

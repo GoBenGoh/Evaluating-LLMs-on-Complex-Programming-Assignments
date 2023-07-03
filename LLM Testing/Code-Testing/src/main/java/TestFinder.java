@@ -1,15 +1,23 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
+import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import com.github.javaparser.printer.DefaultPrettyPrinter;
+import com.github.javaparser.printer.DefaultPrettyPrinterVisitor;
+import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
+import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
+
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class TestFinder {
 
-    public static List<String> findTests(List<String> testNames, String type) {
-        List<String> foundTests = new ArrayList<>();
+    public static List<String> extractTestMethods(List<String> testNames, String type) {
+        List<String> foundTestMethods = new ArrayList<>();
 
         String filePath = "";
         if (type.equals("PROVIDED")) {
@@ -18,35 +26,33 @@ public class TestFinder {
             filePath = "../Tests/MainTestHidden.java";
         }
 
-        String fileContent = readFileContent(filePath);
-
-        for (String testName : testNames) {
-            String pattern = "@Test\\s+public\\s+void\\s+" + testName + "\\(";
-            Matcher matcher = Pattern.compile(pattern).matcher(fileContent);
-            if (matcher.find()) {
-                String testMethod = extractTestMethod(fileContent, matcher.start());
-                foundTests.add(testMethod);
-            }
-        }
-
-        return foundTests;
-    }
-
-    private static String readFileContent(String filePath) {
-        StringBuilder content = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                content.append(line).append("\n");
-            }
+        try {
+            String fileContent = new String(Files.readAllBytes(Paths.get(filePath)));
+            CompilationUnit cu = StaticJavaParser.parse(fileContent);
+            TestMethodVisitor visitor = new TestMethodVisitor(testNames, foundTestMethods);
+            visitor.visit(cu, null);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return content.toString();
+
+        return foundTestMethods;
     }
 
-    private static String extractTestMethod(String fileContent, int startIndex) {
-        int endIndex = fileContent.indexOf("}", startIndex);
-        return fileContent.substring(startIndex, endIndex + 1);
+    private static class TestMethodVisitor extends VoidVisitorAdapter<Void> {
+        private final List<String> testNames;
+        private final List<String> foundTestMethods;
+
+        public TestMethodVisitor(List<String> testNames, List<String> foundTestMethods) {
+            this.testNames = testNames;
+            this.foundTestMethods = foundTestMethods;
+        }
+
+        @Override
+        public void visit(MethodDeclaration md, Void arg) {
+            // Check if the method is a test method with a name in the provided list
+            if (md.getAnnotationByName("Test").isPresent() && testNames.contains(md.getNameAsString())) {
+                foundTestMethods.add(LexicalPreservingPrinter.print(md));
+            }
+        }
     }
 }
