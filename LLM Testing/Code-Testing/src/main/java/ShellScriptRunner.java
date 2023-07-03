@@ -11,7 +11,7 @@ public class ShellScriptRunner {
         // Hard Coded Student Repo
         String repositoryDirectory = "../repos_output/assignment-1-repository-12";
         String xmlPath = "../repos_output/assignment-1-repository-12" + "/target/surefire-reports/TEST-nz.ac.auckland.se281.MainTest.xml";
-        TestResultAnalyzer testingResults = new TestResultAnalyzer(false, -1, -1, -1, -1, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        TestResultAnalyzer testingResults;
 
         String compileResponse = runCommand(repositoryDirectory, "COMPILE");
         boolean isBuildSucceeded = compileResponse.contains("BUILD SUCCESS");
