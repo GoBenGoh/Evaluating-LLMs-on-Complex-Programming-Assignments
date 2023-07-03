@@ -77,16 +77,12 @@ public class ShellScriptRunner {
             String osName = System.getProperty("os.name").toLowerCase();
             String bashExecutablePath;
             if (osName.contains("win")) {
-                // Windows
                 bashExecutablePath = "C:\\Program Files\\Git\\bin\\bash.exe";
             } else if (osName.contains("mac") || osName.contains("nix") || osName.contains("nux")) {
-                // Mac or Unix/Linux
                 bashExecutablePath = "/bin/bash";
             } else {
-                // Unsupported operating system
                 throw new UnsupportedOperationException("Unsupported operating system: " + osName);
             }
-            System.out.println(bashExecutablePath);
 
             String[] scriptCommand = {bashExecutablePath, "-c", "./src/main/java/script.sh " + repositoryDirectory + " " + command};
             ProcessBuilder processBuilder = new ProcessBuilder(scriptCommand);
