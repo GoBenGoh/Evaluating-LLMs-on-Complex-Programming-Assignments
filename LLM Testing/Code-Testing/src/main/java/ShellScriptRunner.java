@@ -4,11 +4,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ShellScriptRunner {
     public static void main(String[] args) {
         // Hard Coded Student Repo
         String repositoryDirectory = "../repos_output/assignment-1-repository-12";
+        String xmlPath = "../repos_output/assignment-1-repository-12" + "/target/surefire-reports/TEST-nz.ac.auckland.se281.MainTest.xml";
         TestResultAnalyzer testingResults = new TestResultAnalyzer(false, -1, -1, -1, -1, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 
         String compileResponse = runCommand(repositoryDirectory, "COMPILE");
@@ -32,9 +34,9 @@ public class ShellScriptRunner {
             }
 
             // Getting failed provided tests
-            List<String> providedFailureMessages = TestResultAnalyzer.getFailureMessages(testResponse);
-            List<String> providedTestNames = TestResultAnalyzer.extractTestNames(providedFailureMessages);
-            List<String> providedAsserts = TestResultAnalyzer.extractAssertionMessages(providedFailureMessages);
+            Map<String, String> providedFailureMessages = TestResultAnalyzer.extractFailedTestDetails(xmlPath);
+            List<String> providedTestNames = new ArrayList<>(providedFailureMessages.keySet());
+            List<String> providedAsserts = new ArrayList<>(providedFailureMessages.values());
             List<String> failedProvidedTests = TestFinder.findTests(providedTestNames, "PROVIDED");
             FailureFileWriter.writeFailuresToFile(failedProvidedTests, providedAsserts, "PROVIDED");
 
@@ -56,9 +58,9 @@ public class ShellScriptRunner {
             }
 
             // Getting failed hidden tests
-            List<String> hiddenFailureMessages =  TestResultAnalyzer.getFailureMessages(testResponse);
-            List<String> hiddenTestNames = TestResultAnalyzer.extractTestNames(hiddenFailureMessages);
-            List<String> hiddenAsserts = TestResultAnalyzer.extractAssertionMessages(hiddenFailureMessages);
+            Map<String, String> hiddenFailureMessages = TestResultAnalyzer.extractFailedTestDetails(xmlPath);
+            List<String> hiddenTestNames = new ArrayList<>(hiddenFailureMessages.keySet());
+            List<String> hiddenAsserts = new ArrayList<>(hiddenFailureMessages.values());
             List<String> failedHiddenTests = TestFinder.findTests(hiddenTestNames, "HIDDEN");
             FailureFileWriter.writeFailuresToFile(failedHiddenTests, hiddenAsserts, "HIDDEN");
 

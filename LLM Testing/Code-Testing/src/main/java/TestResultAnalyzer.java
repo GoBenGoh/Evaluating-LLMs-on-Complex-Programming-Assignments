@@ -1,7 +1,11 @@
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.File;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -54,51 +58,35 @@ public class TestResultAnalyzer {
         return new ArrayList<>(uniqueErrors);
     }
 
-    public static List<String> getFailureMessages(String testingResponse) {
-        List<String> failureMessages = new ArrayList<>();
+    public static Map<String, String> extractFailedTestDetails(String xmlFilePath) {
+        Map<String, String> failedTestDetails = new HashMap<>();
 
-        Pattern pattern = Pattern.compile("\\[ERROR\\].*?<<< FAILURE!\\s+java\\.lang\\.AssertionError:[\\s\\S]+?(?=\\n\\[INFO\\]|$)");
-        Matcher matcher = pattern.matcher(testingResponse);
+        try {
+            File file = new File(xmlFilePath);
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document document = builder.parse(file);
+            document.getDocumentElement().normalize();
 
-        while (matcher.find()) {
-            String failureMessage = matcher.group(0).trim();
-            failureMessages.add(failureMessage);
-        }
+            NodeList failedTests = document.getElementsByTagName("testcase");
 
-        return failureMessages;
-    }
+            for (int i = 0; i < failedTests.getLength(); i++) {
+                Element testElement = (Element) failedTests.item(i);
 
-    public static List<String> extractTestNames(List<String> failureMessages) {
-        List<String> testNames = new ArrayList<>();
+                if (testElement.getElementsByTagName("failure").getLength() > 0) {
+                    String testName = testElement.getAttribute("name");
+                    String assertionMessage = testElement.getElementsByTagName("failure")
+                            .item(0)
+                            .getTextContent();
 
-        Pattern pattern = Pattern.compile("\\[ERROR\\] (.*?)\\(.*?\\)\\s+Time elapsed:");
-
-        for (String failureMessage : failureMessages) {
-            Matcher matcher = pattern.matcher(failureMessage);
-            while (matcher.find()) {
-                String testName = matcher.group(1);
-                testNames.add(testName);
+                    failedTestDetails.put(testName, assertionMessage);
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        return testNames;
-    }
-
-    public static List<String> extractAssertionMessages(List<String> failureMessages) {
-        List<String> assertionMessages = new ArrayList<>();
-
-        String pattern = "java.lang.AssertionError:(.+?)(?=\\n\\[ERROR\\]|$)";
-        Pattern regex = Pattern.compile(pattern, Pattern.DOTALL);
-
-        for (String failureMessage : failureMessages) {
-            Matcher matcher = regex.matcher(failureMessage);
-            while (matcher.find()) {
-                String assertionMessage = matcher.group(1).trim();
-                assertionMessages.add(assertionMessage);
-            }
-        }
-
-        return assertionMessages;
+        return failedTestDetails;
     }
 
 }

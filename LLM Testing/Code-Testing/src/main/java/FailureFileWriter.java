@@ -23,10 +23,7 @@ public class FailureFileWriter {
 
                 writer.write(failedTest);
                 writer.newLine();
-                writer.write("java.lang.AssertionError: ");
-                writer.newLine();
                 writer.write(assertionMessage);
-                writer.newLine();
                 writer.newLine();
 
             }
