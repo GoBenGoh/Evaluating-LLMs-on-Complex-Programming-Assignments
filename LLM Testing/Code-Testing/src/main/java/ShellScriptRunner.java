@@ -21,17 +21,12 @@ public class ShellScriptRunner {
             runCommand(repositoryDirectory, "ADD_PROVIDED_TESTS");
             String testResponse = runCommand(repositoryDirectory, "TEST");
 
-            int totalProvided = TestResultAnalyzer.getValue(testResponse, "Tests run: ");
-            int failures = TestResultAnalyzer.getValue(testResponse, "Failures: ");
-            int errors = TestResultAnalyzer.getValue(testResponse, "Errors: ");
-            int skipped = TestResultAnalyzer.getValue(testResponse, "Skipped: ");
+            List<Integer> providedTestResults = TestResultAnalyzer.extractTestResults(xmlPath);
+            int totalProvided = providedTestResults.get(0);
+            int failures = providedTestResults.get(1);
+            int errors = providedTestResults.get(2);
+            int skipped = providedTestResults.get(3);
             int numPassedProvidedTests = totalProvided - failures - errors - skipped;
-
-            if (totalProvided == -1 || failures == -1 || errors == -1 || skipped == -1){
-                System.out.println("Failed to get testing information from provided tests");
-                testingResults = new TestResultAnalyzer(true, 0, 0, 0, 0, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
-                return;
-            }
 
             // Getting failed provided tests
             Map<String, String> providedFailureMessages = TestResultAnalyzer.extractFailedTestDetails(xmlPath);
@@ -45,17 +40,12 @@ public class ShellScriptRunner {
             runCommand(repositoryDirectory, "ADD_HIDDEN_TESTS");
             testResponse = runCommand(repositoryDirectory, "TEST");
 
-            int totalHidden = TestResultAnalyzer.getValue(testResponse, "Tests run: ");
-            failures = TestResultAnalyzer.getValue(testResponse, "Failures: ");
-            errors = TestResultAnalyzer.getValue(testResponse, "Errors: ");
-            skipped = TestResultAnalyzer.getValue(testResponse, "Skipped: ");
+            List<Integer> hiddenTestResults = TestResultAnalyzer.extractTestResults(xmlPath);
+            int totalHidden = hiddenTestResults.get(0);
+            failures = hiddenTestResults.get(1);
+            errors = hiddenTestResults.get(2);
+            skipped = hiddenTestResults.get(3);
             int numPassedHiddenTests = totalHidden - failures - errors - skipped;
-
-            if (totalHidden == -1 || failures == -1 || errors == -1 || skipped == -1){
-                System.out.println("Failed to get testing information from hidden tests");
-                testingResults = new TestResultAnalyzer(true, numPassedProvidedTests, 0, totalProvided, 0, new ArrayList<>(), providedTestNames, new ArrayList<>());
-                return;
-            }
 
             // Getting failed hidden tests
             Map<String, String> hiddenFailureMessages = TestResultAnalyzer.extractFailedTestDetails(xmlPath);

@@ -32,16 +32,33 @@ public class TestResultAnalyzer {
         this.hiddenTestNames = hiddenTestNames;
     }
 
-    public static int getValue(String testingResponse, String valuePattern) {
-        Pattern pattern = Pattern.compile(valuePattern + "(\\d+)");
-        Matcher matcher = pattern.matcher(testingResponse);
+    public static List<Integer> extractTestResults(String xmlFilePath) {
+        List<Integer> values = new ArrayList<>();
 
-        if (matcher.find()) {
-            String testsRun = matcher.group(1);
-            return Integer.parseInt(testsRun);
-        } else {
-            return -1;
+        try {
+            File file = new File(xmlFilePath);
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document document = builder.parse(file);
+            document.getDocumentElement().normalize();
+
+            Element testsuiteElement = (Element) document.getElementsByTagName("testsuite").item(0);
+            int tests = Integer.parseInt(testsuiteElement.getAttribute("tests"));
+            int errors = Integer.parseInt(testsuiteElement.getAttribute("errors"));
+            int skipped = Integer.parseInt(testsuiteElement.getAttribute("skipped"));
+            int failures = Integer.parseInt(testsuiteElement.getAttribute("failures"));
+
+            values.add(tests);
+            values.add(failures);
+            values.add(errors);
+            values.add(skipped);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
+        return values;
     }
 
     public static ArrayList<String> getCompilationErrors(String compResponse) {
