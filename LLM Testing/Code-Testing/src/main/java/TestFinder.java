@@ -2,22 +2,17 @@ import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
-import com.github.javaparser.printer.DefaultPrettyPrinter;
-import com.github.javaparser.printer.DefaultPrettyPrinterVisitor;
-import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class TestFinder {
 
     public static List<String> extractTestMethods(List<String> testNames, String type) {
-        List<String> foundTestMethods = new ArrayList<>();
+        Map<String, String> foundTestMethods = new LinkedHashMap<>();
 
         String filePath = "";
         if (type.equals("PROVIDED")) {
@@ -35,23 +30,29 @@ public class TestFinder {
             e.printStackTrace();
         }
 
-        return foundTestMethods;
+        List<String> orderedTestMethods = new ArrayList<>();
+        for (String testName : testNames) {
+            if (foundTestMethods.containsKey(testName)) {
+                orderedTestMethods.add(foundTestMethods.get(testName));
+            }
+        }
+        return orderedTestMethods;
     }
 
     private static class TestMethodVisitor extends VoidVisitorAdapter<Void> {
         private final List<String> testNames;
-        private final List<String> foundTestMethods;
+        private final Map<String, String> foundTestMethods;
 
-        public TestMethodVisitor(List<String> testNames, List<String> foundTestMethods) {
+        public TestMethodVisitor(List<String> testNames, Map<String, String> foundTestMethods) {
             this.testNames = testNames;
             this.foundTestMethods = foundTestMethods;
         }
 
         @Override
         public void visit(MethodDeclaration md, Void arg) {
-            // Check if the method is a test method with a name in the provided list
-            if (md.getAnnotationByName("Test").isPresent() && testNames.contains(md.getNameAsString())) {
-                foundTestMethods.add(LexicalPreservingPrinter.print(md));
+            String methodName = md.getNameAsString();
+            if (testNames.contains(methodName) && !foundTestMethods.containsKey(methodName)) {
+                foundTestMethods.put(methodName, LexicalPreservingPrinter.print(md));
             }
         }
     }

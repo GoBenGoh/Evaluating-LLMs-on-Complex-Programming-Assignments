@@ -59,7 +59,7 @@ public class TestResultAnalyzer {
     }
 
     public static Map<String, String> extractFailedTestDetails(String xmlFilePath) {
-        Map<String, String> failedTestDetails = new HashMap<>();
+        Map<String, String> failedTestDetails = new LinkedHashMap<>();
 
         try {
             File file = new File(xmlFilePath);
