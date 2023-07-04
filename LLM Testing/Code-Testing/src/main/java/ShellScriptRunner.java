@@ -9,7 +9,11 @@ import java.util.Map;
 public class ShellScriptRunner {
     public static void main(String[] args) {
         // Hard Coded Student Repo
-        String repositoryDirectory = "../repos_output/assignment-1-repository-4";
+        String repo = "../repos_output/assignment-1-repository-12";
+        runTesting(repo);
+    }
+
+    public static void runTesting(String repositoryDirectory) {
         String xmlPath = repositoryDirectory + "/target/surefire-reports/TEST-nz.ac.auckland.se281.MainTest.xml";
         TestResultAnalyzer testingResults;
 
@@ -19,7 +23,7 @@ public class ShellScriptRunner {
             // Running Provided Tests
             runCommand(repositoryDirectory, "CLEAR_TESTS");
             runCommand(repositoryDirectory, "ADD_PROVIDED_TESTS");
-            String testResponse = runCommand(repositoryDirectory, "TEST");
+            runCommand(repositoryDirectory, "TEST");
 
             List<Integer> providedTestResults = TestResultAnalyzer.extractTestResults(xmlPath);
             int totalProvided = providedTestResults.get(0);
@@ -38,7 +42,7 @@ public class ShellScriptRunner {
             // Running Hidden Tests
             runCommand(repositoryDirectory, "CLEAR_TESTS");
             runCommand(repositoryDirectory, "ADD_HIDDEN_TESTS");
-            testResponse = runCommand(repositoryDirectory, "TEST");
+            runCommand(repositoryDirectory, "TEST");
 
             List<Integer> hiddenTestResults = TestResultAnalyzer.extractTestResults(xmlPath);
             int totalHidden = hiddenTestResults.get(0);
