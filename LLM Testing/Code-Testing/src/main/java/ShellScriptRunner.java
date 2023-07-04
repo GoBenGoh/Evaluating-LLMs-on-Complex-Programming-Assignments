@@ -9,8 +9,8 @@ import java.util.Map;
 public class ShellScriptRunner {
     public static void main(String[] args) {
         // Hard Coded Student Repo
-        String repositoryDirectory = "../repos_output/assignment-1-repository-12";
-        String xmlPath = "../repos_output/assignment-1-repository-12" + "/target/surefire-reports/TEST-nz.ac.auckland.se281.MainTest.xml";
+        String repositoryDirectory = "../repos_output/assignment-1-repository-4";
+        String xmlPath = repositoryDirectory + "/target/surefire-reports/TEST-nz.ac.auckland.se281.MainTest.xml";
         TestResultAnalyzer testingResults;
 
         String compileResponse = runCommand(repositoryDirectory, "COMPILE");
