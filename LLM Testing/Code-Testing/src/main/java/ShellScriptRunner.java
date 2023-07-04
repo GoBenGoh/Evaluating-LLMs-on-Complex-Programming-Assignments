@@ -99,6 +99,8 @@ public class ShellScriptRunner {
         StringBuilder output = new StringBuilder();
         String line;
         while ((line = reader.readLine()) != null) {
+            // Remove ANSI escape sequences from the line
+            line = line.replaceAll("\u001B\\[[;\\d]*m", "");
             output.append(line).append(System.lineSeparator());
         }
         return output.toString();

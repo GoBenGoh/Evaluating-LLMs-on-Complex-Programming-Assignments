@@ -62,7 +62,7 @@ public class TestResultAnalyzer {
     }
 
     public static ArrayList<String> getCompilationErrors(String compResponse) {
-        Set<String> uniqueErrors = new LinkedHashSet<>(); // Use LinkedHashSet to maintain the order of insertion
+        Set<String> uniqueErrors = new LinkedHashSet<>();
 
         Pattern pattern = Pattern.compile("\\[ERROR\\] (.+java:\\[\\d+,\\d+\\] .+)");
         Matcher matcher = pattern.matcher(compResponse);
