@@ -60,6 +60,8 @@ public class ChatGPTAPI {
         String responseContent = app.getFileFromResource("content.txt");
         String request;
         String promptTemplate;
+        String error;
+        String failure;
         PromptWriter promptWriter;
         if (args[0].equals("1")){
             request = "src/main/java/InitialTask1Request.json";
@@ -69,12 +71,14 @@ public class ChatGPTAPI {
         else if (args[0].equals("1c")){
             request = "src/main/java/Task1CompilationFailureRequest.json";
             promptTemplate = app.getFileFromResource("Prompt Templates/Task1_CompilationError.txt");
-            promptWriter = new PromptWriter(promptTemplate, responseContent,"PLACEHOLDER_ERROR", "c");
+            error = app.getFileFromResource("errors.txt");
+            promptWriter = new PromptWriter(promptTemplate, responseContent, error, "c");
         }
         else if (args[0].equals("1f")){
             request = "src/main/java/Task1FailedTestsRequest.json";
             promptTemplate = app.getFileFromResource("Prompt Templates/Task1_FailedTests.txt");
-            promptWriter = new PromptWriter(promptTemplate, responseContent,"PLACEHOLDER_FAILURE", "f");
+            failure = app.getFileFromResource("provided_failures.txt");
+            promptWriter = new PromptWriter(promptTemplate, responseContent, failure, "f");
         }
         else if (args[0].equals("2")){
             request = "src/main/java/InitialTask2Request.json";
@@ -84,12 +88,14 @@ public class ChatGPTAPI {
         else if (args[0].equals("2c")){
             request = "src/main/java/Task2CompilationFailureRequest.json";
             promptTemplate = app.getFileFromResource("Prompt Templates/Task2_CompilationError.txt");
-            promptWriter = new PromptWriter(promptTemplate, responseContent,"PLACEHOLDER_ERROR", "c");
+            error = app.getFileFromResource("errors.txt");
+            promptWriter = new PromptWriter(promptTemplate, responseContent, error, "c");
         }
         else if (args[0].equals("2f")){
             request = "src/main/java/Task2FailedTestsRequest.json";
             promptTemplate = app.getFileFromResource("Prompt Templates/Task2_FailedTests.txt");
-            promptWriter = new PromptWriter(promptTemplate, responseContent,"PLACEHOLDER_FAILURE", "f");
+            failure = app.getFileFromResource("provided_failures.txt");
+            promptWriter = new PromptWriter(promptTemplate, responseContent, failure, "f");
         }
         else {
             throw new RuntimeException("The prompt argument is invalid.");

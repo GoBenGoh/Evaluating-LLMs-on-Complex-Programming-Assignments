@@ -1,0 +1,9 @@
+Profile.java:[11,15] package system does not exist
+Main.java:[175,55] incompatible types: java.lang.String cannot be converted to int
+InsuranceSystem.java:[19,13] package system does not exist
+InsuranceSystem.java:[20,7] break outside switch or loop
+InsuranceSystem.java:[22,13] package system does not exist
+InsuranceSystem.java:[23,7] break outside switch or loop
+Profile.java:[1,8] duplicate class: Profile
+InsuranceSystem.java:[25,11] cannot access nz.ac.auckland.se281.Profile
+InsuranceSystem.java:[26,7] cannot find symbol

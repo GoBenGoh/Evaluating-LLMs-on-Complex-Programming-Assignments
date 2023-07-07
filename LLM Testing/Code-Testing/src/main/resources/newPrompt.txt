@@ -29,7 +29,7 @@ This message template has three %s placeholders:
 The first %s is for the number of profiles (e.g., “0”, “1”, “2”, etc.)
 The second %s is for the word “profile”, whether you want it to be singular or plural (i.e., “profile” or “profiles”)
 The third %s is for ending the sentence (i.e., “.” or “:”)
-To get the message "Database has 2 profiles:", you can do one of the following:
+To get the messahe "Database has 2 profiles:", you can do one of the following:
 
 MessageCli.PRINT_DB_POLICY_COUNT.getMessage("2", "s", ":");    // Using the getMessage() method
 MessageCli.PRINT_DB_POLICY_COUNT.printMessage("2", "s", ":");  // Using the printMessage() method
@@ -405,7 +405,10 @@ public class Main {
   }
 }
 ```
-Please fix the following code according to these instructions. Do not assume another class exists! Do not explain the changes made! Only respond with java code!
+The following Task 1 code does not compile. The compilation error is displayed below.
+```PLACEHOLDER_ERROR
+```
+Please rewrite the code below so that it compiles. Do not assume another class exists! Do not explain the changes made! Only respond with java code!
 ```package nz.ac.auckland.se281;
 
 import nz.ac.auckland.se281.Main.PolicyType;

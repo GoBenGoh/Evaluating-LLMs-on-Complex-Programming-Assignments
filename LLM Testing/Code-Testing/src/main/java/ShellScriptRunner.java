@@ -9,7 +9,7 @@ import java.util.Map;
 public class ShellScriptRunner {
     public static void main(String[] args) {
         // Hard Coded Student Repo
-        String repo = "../repos_output/assignment-1-repository-12";
+        String repo = "../repos_output/assignment-1-repository-4";
         runTesting(repo);
     }
 
@@ -62,6 +62,7 @@ public class ShellScriptRunner {
 
         } else {
             System.out.println("Build Failed");
+            System.out.println(compileResponse);
             ArrayList<String> errorMessages = TestResultAnalyzer.getCompilationErrors(compileResponse);
             testingResults = new TestResultAnalyzer(false, -1, -1, -1, -1, errorMessages, new ArrayList<>(), new ArrayList<>());
             ErrorFileWriter.writeErrorsToFile(errorMessages);
