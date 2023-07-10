@@ -1,8 +1,8 @@
 public class Request {
     public String model;
     public Message[] messages = new Message[1];
-    public String temperature;
-    public Request(String model, String prompt, String temperature){
+    public double temperature;
+    public Request(String model, String prompt, double temperature){
         this.model = model;
         Message message = new Message("user", prompt);
         this.messages[0] = message;
@@ -12,7 +12,7 @@ public class Request {
         this.model = model;
         Message message = new Message("user", prompt);
         this.messages[0] = message;
-        this.temperature = "0.7";
+        this.temperature = 0.7;
     }
     class Message{
         public String role;

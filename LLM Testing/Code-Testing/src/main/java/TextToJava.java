@@ -20,7 +20,15 @@ public class TextToJava {
         int startIndex = text.indexOf("```java");
         int endIndex = text.lastIndexOf("```");
 
-        if (startIndex != -1 && endIndex != -1) {
+        if (startIndex == -1){ // code between a pair of ```
+            startIndex = text.indexOf("```");
+            if (startIndex == 0 && endIndex != startIndex){
+                String codeBlock = text.substring(startIndex + 3, endIndex).trim();
+                return codeBlock;
+            }
+        }
+
+        if (startIndex != -1 && endIndex != -1) { // code between ```java and ```
             String codeBlock = text.substring(startIndex + 7, endIndex).trim();
             return codeBlock;
         }

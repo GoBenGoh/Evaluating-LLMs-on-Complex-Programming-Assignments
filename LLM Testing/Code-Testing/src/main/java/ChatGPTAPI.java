@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ChatGPTAPI {
-    public static void sendRequest(String request) {
+    public static void sendRequest(String request, String key) {
         try {
             URL url = new URL("https://api.openai.com/v1/chat/completions");
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -20,7 +20,7 @@ public class ChatGPTAPI {
             //Make sure you put the right Organization key saved earlier.
             con.setDoOutput(true);
             //Make sure you put the right API Key saved earlier.
-            con.setRequestProperty("Authorization", "Bearer PLACEHOLDER_KEY");
+            con.setRequestProperty("Authorization", "Bearer "+ key);
             //Make sure to REPLACE the path of the json file!
             String jsonInputString = readLinesAsString(new File(request));
             try (OutputStream os = con.getOutputStream()) {
@@ -101,7 +101,13 @@ public class ChatGPTAPI {
             throw new RuntimeException("The prompt argument is invalid.");
         }
         String newPrompt = promptWriter.output(); // new prompt in string form
-        Request newRequest = new Request("gpt-3.5-turbo-16k", newPrompt, "0.7"); // object for gson to convert
+        Request newRequest;
+        if (args[2] == null){ //default 0.7 temperature
+            newRequest = new Request("gpt-3.5-turbo-16k", newPrompt, 0.7); // object for gson to convert
+        }
+        else{
+            newRequest = new Request("gpt-3.5-turbo-16k", newPrompt, Double.valueOf(args[2])); // object for gson to convert
+        }
         Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
         JsonElement jsonElement = gson.toJsonTree(newRequest);
         String jsonString = gson.toJson(jsonElement);
@@ -111,7 +117,7 @@ public class ChatGPTAPI {
         try(PrintWriter out = new PrintWriter("src/main/resources/newPrompt.txt")){
             out.println(newPrompt);
         }
-        //sendRequest(request);
+        //sendRequest(request, args[1]);
         try {
             TextToJava.convertTextToJavaFile();
         } catch (IOException e) {
