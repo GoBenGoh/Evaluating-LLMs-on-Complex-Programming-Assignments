@@ -62,16 +62,14 @@ public class TestResultAnalyzer {
     }
 
     public static String getCompilationErrors(String compResponse) {
-        String pattern = "\\[ERROR\\] COMPILATION ERROR : (.*?)\\n\\[INFO\\] \\d+ errors";
-        Pattern regex = Pattern.compile(pattern, Pattern.DOTALL);
-        Matcher matcher = regex.matcher(compResponse);
-
-        if (matcher.find()) {
-            String errors = matcher.group(1);
-            // Remove the first empty line and [INFO] line
+        int errorsStart = compResponse.indexOf("[ERROR] COMPILATION ERROR : "); // Errors start here in compResponse
+        if (errorsStart != -1){ // If there are errors
+            String errors = compResponse.substring(errorsStart);
             int replaceFrom = errors.indexOf("[INFO] -------------------------------------------------------------");
             if(replaceFrom!=-1) {
-                errors = errors.substring(replaceFrom + 70);
+                errors = errors.substring(replaceFrom + 70); // Removes new line and [INFO]------
+                int replaceTo = errors.indexOf("[INFO]"); // Stop at next [INFO]
+                errors = errors.substring(0, replaceTo);
             }
             return errors;
         }

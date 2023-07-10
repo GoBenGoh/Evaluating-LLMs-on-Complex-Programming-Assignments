@@ -26,6 +26,10 @@ public class TextToJava {
                 String codeBlock = text.substring(startIndex + 3, endIndex).trim();
                 return codeBlock;
             }
+            if (startIndex>0){
+                String codeBlock = text.substring(0, startIndex).trim();
+                return codeBlock;
+            }
         }
 
         if (startIndex != -1 && endIndex != -1) { // code between ```java and ```
