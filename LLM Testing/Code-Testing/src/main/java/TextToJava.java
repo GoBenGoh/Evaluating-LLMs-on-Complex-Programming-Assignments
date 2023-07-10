@@ -6,14 +6,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class TextToJava {
-    public static void main(String[] args) {
-        try {
-            convertTextToJavaFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public static void convertTextToJavaFile() throws IOException {
         String textFilePath = "./src/main/resources/content.txt";
         String javaFilePath = "../assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java";

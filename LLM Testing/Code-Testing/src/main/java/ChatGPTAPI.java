@@ -112,6 +112,13 @@ public class ChatGPTAPI {
             out.println(newPrompt);
         }
         //sendRequest(request);
+        try {
+            TextToJava.convertTextToJavaFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String repo = "../assignment-1";
+        ShellScriptRunner.runTesting(repo);
     }
     private String getFileFromResource(String fileName) throws IOException {
 

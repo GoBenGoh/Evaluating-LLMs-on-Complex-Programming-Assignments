@@ -9,7 +9,7 @@ import java.util.Map;
 public class ShellScriptRunner {
     public static void main(String[] args) {
         // Hard Coded Student Repo
-        String repo = "../repos_output/assignment-1-repository-4";
+        String repo = "../assignment-1";
         runTesting(repo);
     }
 
