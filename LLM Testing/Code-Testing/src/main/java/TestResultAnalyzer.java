@@ -15,13 +15,13 @@ public class TestResultAnalyzer {
     private final int numPassedHiddenTests;
     private final int totalProvidedTests;
     private final int totalHiddenTests;
-    private final List<String> errors;
+    private final String errors;
 
     private final List<String> providedTestNames;
 
     private final List<String> hiddenTestNames;
 
-    public TestResultAnalyzer(boolean isCompiled, int numPassedProvidedTests, int numPassedHiddenTests, int totalProvidedTests, int totalHiddenTests, List<String> errors, List<String> providedTestNames, List<String> hiddenTestNames){
+    public TestResultAnalyzer(boolean isCompiled, int numPassedProvidedTests, int numPassedHiddenTests, int totalProvidedTests, int totalHiddenTests, String errors, List<String> providedTestNames, List<String> hiddenTestNames){
         this.isCompiled = isCompiled;
         this.numPassedProvidedTests = numPassedProvidedTests;
         this.numPassedHiddenTests = numPassedHiddenTests;
@@ -61,19 +61,25 @@ public class TestResultAnalyzer {
         return values;
     }
 
-    public static ArrayList<String> getCompilationErrors(String compResponse) {
-        Set<String> uniqueErrors = new LinkedHashSet<>();
+    public static String getCompilationErrors(String compResponse) {
+        String pattern = "\\[ERROR\\] COMPILATION ERROR : (.*?)\\n\\[INFO\\] \\d+ errors";
+        Pattern regex = Pattern.compile(pattern, Pattern.DOTALL);
+        Matcher matcher = regex.matcher(compResponse);
 
-        Pattern pattern = Pattern.compile("\\[ERROR\\] (.+java:\\[\\d+,\\d+\\] .+)");
-        Matcher matcher = pattern.matcher(compResponse);
+        if (matcher.find()) {
+            String errors = matcher.group(1);
 
-        while (matcher.find()) {
-            String errorLine = matcher.group(1);
-            uniqueErrors.add(errorLine);
+            // Remove the first empty line and [INFO] line
+            errors = errors.replaceFirst("^\\n", "");
+            errors = errors.replaceFirst("\\[INFO\\].*\\n", "");
+
+            return errors;
         }
 
-        return new ArrayList<>(uniqueErrors);
+        // If no match is found, return an empty string
+        return "";
     }
+
 
     public static Map<String, String> extractFailedTestDetails(String xmlFilePath) {
         Map<String, String> failedTestDetails = new LinkedHashMap<>();
