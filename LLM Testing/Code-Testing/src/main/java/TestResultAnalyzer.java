@@ -68,11 +68,11 @@ public class TestResultAnalyzer {
 
         if (matcher.find()) {
             String errors = matcher.group(1);
-
             // Remove the first empty line and [INFO] line
-            errors = errors.replaceFirst("^\\n", "");
-            errors = errors.replaceFirst("\\[INFO\\].*\\n", "");
-
+            int replaceFrom = errors.indexOf("[INFO] -------------------------------------------------------------");
+            if(replaceFrom!=-1) {
+                errors = errors.substring(replaceFrom + 70);
+            }
             return errors;
         }
 
