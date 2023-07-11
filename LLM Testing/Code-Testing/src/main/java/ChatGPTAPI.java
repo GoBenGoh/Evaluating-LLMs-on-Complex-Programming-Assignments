@@ -123,7 +123,7 @@ public class ChatGPTAPI {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String repo = "../assignment-1";
+        String repo = "../assignment_template/assignment-1";
         ShellScriptRunner.runTesting(repo);
     }
     private String getFileFromResource(String fileName) throws IOException {

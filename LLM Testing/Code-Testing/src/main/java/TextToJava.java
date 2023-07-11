@@ -8,7 +8,7 @@ import java.nio.file.Paths;
 public class TextToJava {
     public static void convertTextToJavaFile() throws IOException {
         String textFilePath = "./src/main/resources/content.txt";
-        String javaFilePath = "../assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java";
+        String javaFilePath = "../assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java";
 
         String content = readFile(textFilePath);
         String javaCode = extractJavaCode(content);
