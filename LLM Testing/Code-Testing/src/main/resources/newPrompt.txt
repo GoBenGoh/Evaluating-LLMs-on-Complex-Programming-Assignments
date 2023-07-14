@@ -406,258 +406,242 @@ public class Main {
 }
 ```
 The following Task 1 code does not compile. The compilation error is displayed below.
-```[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[149,53] method getMessage in enum nz.ac.auckland.se281.MessageCli cannot be applied to given types;
-  required: java.lang.String[]
-  found:    nz.ac.auckland.se281.Main.PolicyType,java.lang.String
-  reason: varargs mismatch; nz.ac.auckland.se281.Main.PolicyType cannot be converted to java.lang.String
-[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[221,31] cannot find symbol
-  symbol:   variable PRINT_DB_POLICY_HOME
-  location: class nz.ac.auckland.se281.MessageCli
+```[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[7,18] cannot find symbol
+  symbol:   class ClientProfile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[114,35] cannot find symbol
+  symbol:   class ClientProfile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[118,34] cannot find symbol
+  symbol:   class ClientProfile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[122,35] cannot find symbol
+  symbol:   class ClientProfile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[144,13] cannot find symbol
+  symbol:   class ClientProfile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[153,13] cannot find symbol
+  symbol:   class ClientProfile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[22,18] cannot find symbol
+  symbol:   class ClientProfile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[54,9] cannot find symbol
+  symbol:   class ClientProfile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[54,40] cannot find symbol
+  symbol:   class ClientProfile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[61,9] cannot find symbol
+  symbol:   class ClientProfile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[71,9] cannot find symbol
+  symbol:   class ClientProfile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[81,9] cannot find symbol
+  symbol:   class ClientProfile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[95,9] cannot find symbol
+  symbol:   class ClientProfile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[127,14] cannot find symbol
+  symbol:   class ClientProfile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[145,14] cannot find symbol
+  symbol:   class ClientProfile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[154,14] cannot find symbol
+  symbol:   class ClientProfile
+  location: class nz.ac.auckland.se281.InsuranceSystem
 
 ```
 Please rewrite the code below so that it compiles. Do not assume another class exists! Do not explain the changes made! Only respond with java code!
 ```package nz.ac.auckland.se281;
 
-import nz.ac.auckland.se281.Main.Command;
 import nz.ac.auckland.se281.Main.PolicyType;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class InsuranceSystem {
-  private final Map<String, Profile> database;
-  private Profile loadedProfile;
+    private List<ClientProfile> database;
+    private ClientProfile loadedProfile;
 
-  public InsuranceSystem() {
-    this.database = new HashMap<>();
-    this.loadedProfile = null;
-  }
-
-  public void printDatabase() {
-    // Check if the database is empty
-    if (database.isEmpty()) {
-      System.out.println("Database has 0 profiles.");
-    } else {
-      int count = database.size();
-      String profileText = count == 1 ? "profile" : "profiles";
-
-      System.out.println(MessageCli.PRINT_DB_POLICY_COUNT.getMessage(
-          String.valueOf(count), profileText, getMessageSuffix(count)));
-
-      // Print each profile in the database
-      int rank = 1;
-      for (Profile profile : database.values()) {
-        System.out.println(profile.printData(rank));
-        rank++;
-      }
-    }
-  }
-
-  public void createNewProfile(String userName, String age) {
-    // Check if the username is unique
-    if (database.containsKey(userName)) {
-      System.out.println(MessageCli.INVALID_USERNAME_NOT_UNIQUE.getMessage(userName));
-      return;
+    public InsuranceSystem() {
+        database = new ArrayList<>();
+        loadedProfile = null;
     }
 
-    // Check if the username is at least 3 characters long
-    if (userName.length() < 3) {
-      System.out.println(MessageCli.INVALID_USERNAME_TOO_SHORT.getMessage(userName));
-      return;
+    public void printDatabase() {
+        if (database.isEmpty()) {
+            MessageCli.PRINT_DB_POLICY_COUNT.printMessage("0", "s", ".");
+        } else {
+            int count = database.size();
+            MessageCli.PRINT_DB_POLICY_COUNT.printMessage(String.valueOf(count), count > 1 ? "s" : "", ":");
+            for (int i = 0; i < count; i++) {
+                printProfile(database.get(i), i + 1);
+            }
+        }
     }
 
-    // Check if the age is a positive integer
-    try {
-      int ageInt = Integer.parseInt(age);
-      if (ageInt <= 0) {
-        throw new NumberFormatException();
-      }
-    } catch (NumberFormatException e) {
-      System.out.println(MessageCli.INVALID_AGE.getMessage(age, userName));
-      return;
+    public void createNewProfile(String userName, String age) {
+        if (!isUsernameValid(userName)) {
+            MessageCli.INVALID_USERNAME_TOO_SHORT.printMessage(capitalizeFirstLetter(userName));
+        } else if (!isUsernameUnique(userName)) {
+            MessageCli.INVALID_USERNAME_NOT_UNIQUE.printMessage(capitalizeFirstLetter(userName));
+        } else if (!isAgeValid(age)) {
+            MessageCli.INVALID_AGE.printMessage(age, capitalizeFirstLetter(userName));
+        } else {
+            int parsedAge = Integer.parseInt(age);
+            ClientProfile newProfile = new ClientProfile(capitalizeFirstLetter(userName), parsedAge);
+            database.add(newProfile);
+            MessageCli.PROFILE_CREATED.printMessage(capitalizeFirstLetter(userName), age);
+        }
     }
 
-    // Create the new profile
-    Profile profile = new Profile(userName, age);
-
-    // Add the profile to the database
-    database.put(userName, profile);
-
-    System.out.println(MessageCli.PROFILE_CREATED.getMessage(userName, age));
-  }
-
-  public void loadProfile(String userName) {
-    // Check if a profile is already loaded
-    if (loadedProfile != null) {
-      System.out.println(MessageCli.CANNOT_CREATE_WHILE_LOADED.getMessage(userName));
-      return;
+    public void loadProfile(String userName) {
+        ClientProfile profile = findProfileByUsername(userName);
+        if (profile != null) {
+            setLoadedProfile(profile);
+            MessageCli.PROFILE_LOADED.printMessage(capitalizeFirstLetter(userName));
+        } else {
+            MessageCli.NO_PROFILE_FOUND_TO_LOAD.printMessage(capitalizeFirstLetter(userName));
+        }
     }
 
-    // Check if the profile exists in the database
-    if (!database.containsKey(userName)) {
-      System.out.println(MessageCli.NO_PROFILE_FOUND_TO_LOAD.getMessage(userName));
-      return;
+    public void unloadProfile() {
+        if (isProfileLoaded()) {
+            MessageCli.PROFILE_UNLOADED.printMessage(getLoadedProfile().getUsername());
+            setLoadedProfile(null);
+        } else {
+            MessageCli.NO_PROFILE_LOADED.printMessage();
+        }
     }
 
-    // Load the profile
-    loadedProfile = database.get(userName);
-
-    System.out.println(MessageCli.PROFILE_LOADED.getMessage(userName));
-  }
-
-  public void unloadProfile() {
-    // Check if a profile is loaded
-    if (loadedProfile == null) {
-      System.out.println(MessageCli.NO_PROFILE_LOADED);
-      return;
+    public void deleteProfile(String userName) {
+        ClientProfile profile = findProfileByUsername(userName);
+        if (profile == null) {
+            MessageCli.NO_PROFILE_FOUND_TO_DELETE.printMessage(capitalizeFirstLetter(userName));
+        } else if (isProfileLoaded() && getLoadedProfile().equals(profile)) {
+            MessageCli.CANNOT_DELETE_PROFILE_WHILE_LOADED.printMessage(capitalizeFirstLetter(userName));
+        } else {
+            database.remove(profile);
+            MessageCli.PROFILE_DELETED.printMessage(capitalizeFirstLetter(userName));
+        }
     }
 
-    // Unload the profile
-    loadedProfile = null;
+    public void createPolicy(PolicyType type, String[] options) {
+        if (!isProfileLoaded()) {
+            MessageCli.NO_PROFILE_FOUND_TO_CREATE_POLICY.printMessage();
+            return;
+        }
 
-    System.out.println(MessageCli.PROFILE_UNLOADED.getMessage(loadedProfile.username));
-  }
-
-  public void deleteProfile(String userName) {
-    // Check if a profile is loaded
-    if (loadedProfile != null && loadedProfile.username.equals(userName)) {
-      System.out.println(MessageCli.CANNOT_DELETE_PROFILE_WHILE_LOADED.getMessage(userName));
-      return;
+        switch (type) {
+            case HOME:
+                createHomePolicy(options);
+                break;
+            case CAR:
+                createCarPolicy(options);
+                break;
+            case LIFE:
+                createLifePolicy(options);
+                break;
+        }
     }
 
-    // Check if the profile exists in the database
-    if (!database.containsKey(userName)) {
-      System.out.println(MessageCli.NO_PROFILE_FOUND_TO_DELETE.getMessage(userName));
-      return;
+    private boolean isUsernameValid(String username) {
+        return username.length() >= 3;
     }
 
-    // Delete the profile from the database
-    database.remove(userName);
-
-    System.out.println(MessageCli.PROFILE_DELETED.getMessage(userName));
-  }
-
-  public void createPolicy(PolicyType type, String[] options) {
-    // Check if a profile is loaded
-    if (loadedProfile == null) {
-      System.out.println(MessageCli.NO_PROFILE_FOUND_TO_CREATE_POLICY);
-      return;
+    private boolean isUsernameUnique(String username) {
+        for (ClientProfile profile : database) {
+            if (profile.getUsername().equalsIgnoreCase(capitalizeFirstLetter(username))) {
+                return false;
+            }
+        }
+        return true;
     }
 
-    // Check if the profile already has a life policy
-    if (type == PolicyType.LIFE && loadedProfile.hasLifePolicy()) {
-      System.out.println(MessageCli.ALREADY_HAS_LIFE_POLICY.getMessage(loadedProfile.username));
-      return;
+    private boolean isAgeValid(String age) {
+        try {
+            int parsedAge = Integer.parseInt(age);
+            return parsedAge > 0;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
-    // Check if the profile is over the age limit for life policy
-    if (type == PolicyType.LIFE && loadedProfile.age > loadedProfile.getLifeLimit()) {
-      System.out.println(MessageCli.OVER_AGE_LIMIT_LIFE_POLICY.getMessage(loadedProfile.username));
-      return;
+    private String capitalizeFirstLetter(String name) {
+        String[] words = name.split(" ");
+        StringBuilder capitalized = new StringBuilder();
+        for (String word : words) {
+            capitalized.append(Character.toUpperCase(word.charAt(0)));
+            capitalized.append(word.substring(1).toLowerCase());
+            capitalized.append(" ");
+        }
+        return capitalized.toString().trim();
     }
 
-    // Create the policy
-    Policy policy = new Policy(type, options);
+    private ClientProfile findProfileByUsername(String username) {
+        for (ClientProfile profile : database) {
+            if (profile.getUsername().equalsIgnoreCase(capitalizeFirstLetter(username))) {
+                return profile;
+            }
+        }
+        return null;
+    }
 
-    // Add the policy to the profile
-    loadedProfile.addPolicy(policy);
+    private boolean isProfileLoaded() {
+        return loadedProfile != null;
+    }
 
-    System.out.println(MessageCli.NEW_POLICY_CREATED.getMessage(policy.getType(), loadedProfile.username));
-  }
+    private ClientProfile getLoadedProfile() {
+        return loadedProfile;
+    }
 
-  private static class Profile {
-    private static int nextRank = 1;
-    private final String username;
-    private final int age;
-    private final int rank;
-    private final List<Policy> policies;
+    private void setLoadedProfile(ClientProfile profile) {
+        loadedProfile = profile;
+    }
 
-    public Profile(String username, String age) {
-      this.username = convertToTitleCase(username);
-      this.age = Integer.parseInt(age);
-      this.rank = nextRank++;
-      this.policies = new ArrayList<>();
+    private void printProfile(ClientProfile profile, int rank) {
+        String prefix = "";
+        if (isProfileLoaded() && profile.equals(getLoadedProfile())) {
+            prefix = "*** ";
+        }
+        System.out.printf(" %s%d: %s, %d\n", prefix, rank, profile.getUsername(), profile.getAge());
+    }
+
+    private void createHomePolicy(String[] options) {
+        // TODO: Implement this method.
+    }
+
+    private void createCarPolicy(String[] options) {
+        // TODO: Implement this method.
+    }
+
+    private void createLifePolicy(String[] options) {
+        // TODO: Implement this method.
+    }
+}
+
+class ClientProfile {
+    private String username;
+    private int age;
+
+    public ClientProfile(String username, int age) {
+        this.username = username;
+        this.age = age;
     }
 
     public String getUsername() {
-      return username;
+        return username;
     }
 
     public int getAge() {
-      return age;
+        return age;
     }
-
-    public int getLifeLimit() {
-      return 70;
-    }
-
-    public void addPolicy(Policy policy) {
-      policies.add(policy);
-    }
-
-    public boolean hasLifePolicy() {
-      for (Policy policy : policies) {
-        if (policy.getType() == PolicyType.LIFE) {
-          return true;
-        }
-      }
-      return false;
-    }
-
-    public String printData(int rank) {
-      String profileData =
-          MessageCli.PRINT_DB_PROFILE_HEADER_MINIMAL.getMessage(Integer.toString(rank), username, Integer.toString(age));
-
-      for (int i = 0; i < policies.size(); i++) {
-        Policy policy = policies.get(i);
-        profileData +=
-            "\n\t" + policy.getDetails() + "(" + policy.getType().name() + ")";
-      }
-      return profileData;
-    }
-
-    private String convertToTitleCase(String str) {
-      String[] words = str.toLowerCase().split(" ");
-      StringBuilder sb = new StringBuilder();
-      for (String word : words) {
-        sb.append(Character.toUpperCase(word.charAt(0))).append(word.substring(1)).append(" ");
-      }
-      return sb.toString().trim();
-    }
-  }
-
-  private static class Policy {
-    private final PolicyType type;
-    private final Map<String, String> details;
-
-    public Policy(PolicyType type, String[] options) {
-      this.type = type;
-      this.details = new HashMap<>();
-      for (int i = 0; i < options.length; i++) {
-        details.put(MessageCli.PRINT_DB_POLICY_HOME.getOptionPrompt(i), options[i]);
-      }
-    }
-
-    public PolicyType getType() {
-      return type;
-    }
-
-    public Map<String, String> getDetails() {
-      return details;
-    }
-  }
-
-  private String getMessageSuffix(int count) {
-    if (count == 0) {
-      return "";
-    }
-
-    return count == 1 ? ":" : "s:";
-  }
 }
-
 ```
 Here are the test cases that must pass:
 ```
