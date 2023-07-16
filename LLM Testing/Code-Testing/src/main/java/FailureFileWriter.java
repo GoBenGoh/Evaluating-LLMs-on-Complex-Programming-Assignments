@@ -25,7 +25,7 @@ public class FailureFileWriter {
         List<String> assertionMessages = new ArrayList<>(providedAsserts);
         assertionMessages.addAll(hiddenAsserts);
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("src/main/resources/" + fileName))) {
             for (int i = 0; i < failedTests.size(); i++) {
                 String failedTest = failedTests.get(i);
                 String assertionMessage = assertionMessages.get(i);
