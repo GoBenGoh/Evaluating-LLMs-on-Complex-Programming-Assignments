@@ -79,8 +79,11 @@ public class TestResultAnalyzer {
     }
 
 
-    public static Map<String, String> extractFailedTestDetails(String xmlFilePath) {
-        Map<String, String> failedTestDetails = new LinkedHashMap<>();
+    public static List<Map<String, String>> extractFailedTestDetails(String xmlFilePath) {
+        List<Map<String, String>> taskTestDetails = new ArrayList<>();
+        taskTestDetails.add(new LinkedHashMap<>()); // Task 1 test cases
+        taskTestDetails.add(new LinkedHashMap<>()); // Task 2 test cases
+        taskTestDetails.add(new LinkedHashMap<>()); // Task 3 test cases
 
         try {
             File file = new File(xmlFilePath);
@@ -100,14 +103,20 @@ public class TestResultAnalyzer {
                             .item(0)
                             .getTextContent();
 
-                    failedTestDetails.put(testName, assertionMessage);
+                    if (testName.startsWith("T1")) {
+                        taskTestDetails.get(0).put(testName, assertionMessage);
+                    } else if (testName.startsWith("T2")) {
+                        taskTestDetails.get(1).put(testName, assertionMessage);
+                    } else if (testName.startsWith("T3")) {
+                        taskTestDetails.get(2).put(testName, assertionMessage);
+                    }
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return failedTestDetails;
+        return taskTestDetails;
     }
 
 }
