@@ -1,7 +1,0 @@
-[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[149,53] method getMessage in enum nz.ac.auckland.se281.MessageCli cannot be applied to given types;
-  required: java.lang.String[]
-  found:    nz.ac.auckland.se281.Main.PolicyType,java.lang.String
-  reason: varargs mismatch; nz.ac.auckland.se281.Main.PolicyType cannot be converted to java.lang.String
-[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[221,31] cannot find symbol
-  symbol:   variable PRINT_DB_POLICY_HOME
-  location: class nz.ac.auckland.se281.MessageCli

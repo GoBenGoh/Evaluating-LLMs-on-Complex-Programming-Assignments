@@ -1,241 +1,33 @@
 package nz.ac.auckland.se281;
 
-import nz.ac.auckland.se281.Main.Command;
 import nz.ac.auckland.se281.Main.PolicyType;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 public class InsuranceSystem {
-  private final Map<String, Profile> database;
-  private Profile loadedProfile;
-
-  public InsuranceSystem() {
-    this.database = new HashMap<>();
-    this.loadedProfile = null;
-  }
-
-  public void printDatabase() {
-    // Check if the database is empty
-    if (database.isEmpty()) {
-      System.out.println("Database has 0 profiles.");
-    } else {
-      int count = database.size();
-      String profileText = count == 1 ? "profile" : "profiles";
-
-      System.out.println(MessageCli.PRINT_DB_POLICY_COUNT.getMessage(
-          String.valueOf(count), profileText, getMessageSuffix(count)));
-
-      // Print each profile in the database
-      int rank = 1;
-      for (Profile profile : database.values()) {
-        System.out.println(profile.printData(rank));
-        rank++;
-      }
-    }
-  }
-
-  public void createNewProfile(String userName, String age) {
-    // Check if the username is unique
-    if (database.containsKey(userName)) {
-      System.out.println(MessageCli.INVALID_USERNAME_NOT_UNIQUE.getMessage(userName));
-      return;
+    public InsuranceSystem() {
+        // Only this constructor can be used (if you need to initialise fields).
     }
 
-    // Check if the username is at least 3 characters long
-    if (userName.length() < 3) {
-      System.out.println(MessageCli.INVALID_USERNAME_TOO_SHORT.getMessage(userName));
-      return;
+    public void printDatabase() {
+        // TODO: Complete this method.
     }
 
-    // Check if the age is a positive integer
-    try {
-      int ageInt = Integer.parseInt(age);
-      if (ageInt <= 0) {
-        throw new NumberFormatException();
-      }
-    } catch (NumberFormatException e) {
-      System.out.println(MessageCli.INVALID_AGE.getMessage(age, userName));
-      return;
+    public void createNewProfile(String userName, String age) {
+        // TODO: Complete this method.
     }
 
-    // Create the new profile
-    Profile profile = new Profile(userName, age);
-
-    // Add the profile to the database
-    database.put(userName, profile);
-
-    System.out.println(MessageCli.PROFILE_CREATED.getMessage(userName, age));
-  }
-
-  public void loadProfile(String userName) {
-    // Check if a profile is already loaded
-    if (loadedProfile != null) {
-      System.out.println(MessageCli.CANNOT_CREATE_WHILE_LOADED.getMessage(userName));
-      return;
+    public void loadProfile(String userName) {
+        // TODO: Complete this method.
     }
 
-    // Check if the profile exists in the database
-    if (!database.containsKey(userName)) {
-      System.out.println(MessageCli.NO_PROFILE_FOUND_TO_LOAD.getMessage(userName));
-      return;
+    public void unloadProfile() {
+        // TODO: Complete this method.
     }
 
-    // Load the profile
-    loadedProfile = database.get(userName);
-
-    System.out.println(MessageCli.PROFILE_LOADED.getMessage(userName));
-  }
-
-  public void unloadProfile() {
-    // Check if a profile is loaded
-    if (loadedProfile == null) {
-      System.out.println(MessageCli.NO_PROFILE_LOADED);
-      return;
+    public void deleteProfile(String userName) {
+        // TODO: Complete this method.
     }
 
-    // Unload the profile
-    loadedProfile = null;
-
-    System.out.println(MessageCli.PROFILE_UNLOADED.getMessage(loadedProfile.username));
-  }
-
-  public void deleteProfile(String userName) {
-    // Check if a profile is loaded
-    if (loadedProfile != null && loadedProfile.username.equals(userName)) {
-      System.out.println(MessageCli.CANNOT_DELETE_PROFILE_WHILE_LOADED.getMessage(userName));
-      return;
+    public void createPolicy(PolicyType type, String[] options) {
+        // TODO: Complete this method.
     }
-
-    // Check if the profile exists in the database
-    if (!database.containsKey(userName)) {
-      System.out.println(MessageCli.NO_PROFILE_FOUND_TO_DELETE.getMessage(userName));
-      return;
-    }
-
-    // Delete the profile from the database
-    database.remove(userName);
-
-    System.out.println(MessageCli.PROFILE_DELETED.getMessage(userName));
-  }
-
-  public void createPolicy(PolicyType type, String[] options) {
-    // Check if a profile is loaded
-    if (loadedProfile == null) {
-      System.out.println(MessageCli.NO_PROFILE_FOUND_TO_CREATE_POLICY);
-      return;
-    }
-
-    // Check if the profile already has a life policy
-    if (type == PolicyType.LIFE && loadedProfile.hasLifePolicy()) {
-      System.out.println(MessageCli.ALREADY_HAS_LIFE_POLICY.getMessage(loadedProfile.username));
-      return;
-    }
-
-    // Check if the profile is over the age limit for life policy
-    if (type == PolicyType.LIFE && loadedProfile.age > loadedProfile.getLifeLimit()) {
-      System.out.println(MessageCli.OVER_AGE_LIMIT_LIFE_POLICY.getMessage(loadedProfile.username));
-      return;
-    }
-
-    // Create the policy
-    Policy policy = new Policy(type, options);
-
-    // Add the policy to the profile
-    loadedProfile.addPolicy(policy);
-
-    System.out.println(MessageCli.NEW_POLICY_CREATED.getMessage(policy.getType(), loadedProfile.username));
-  }
-
-  private static class Profile {
-    private static int nextRank = 1;
-    private final String username;
-    private final int age;
-    private final int rank;
-    private final List<Policy> policies;
-
-    public Profile(String username, String age) {
-      this.username = convertToTitleCase(username);
-      this.age = Integer.parseInt(age);
-      this.rank = nextRank++;
-      this.policies = new ArrayList<>();
-    }
-
-    public String getUsername() {
-      return username;
-    }
-
-    public int getAge() {
-      return age;
-    }
-
-    public int getLifeLimit() {
-      return 70;
-    }
-
-    public void addPolicy(Policy policy) {
-      policies.add(policy);
-    }
-
-    public boolean hasLifePolicy() {
-      for (Policy policy : policies) {
-        if (policy.getType() == PolicyType.LIFE) {
-          return true;
-        }
-      }
-      return false;
-    }
-
-    public String printData(int rank) {
-      String profileData =
-          MessageCli.PRINT_DB_PROFILE_HEADER_MINIMAL.getMessage(Integer.toString(rank), username, Integer.toString(age));
-
-      for (int i = 0; i < policies.size(); i++) {
-        Policy policy = policies.get(i);
-        profileData +=
-            "\n\t" + policy.getDetails() + "(" + policy.getType().name() + ")";
-      }
-      return profileData;
-    }
-
-    private String convertToTitleCase(String str) {
-      String[] words = str.toLowerCase().split(" ");
-      StringBuilder sb = new StringBuilder();
-      for (String word : words) {
-        sb.append(Character.toUpperCase(word.charAt(0))).append(word.substring(1)).append(" ");
-      }
-      return sb.toString().trim();
-    }
-  }
-
-  private static class Policy {
-    private final PolicyType type;
-    private final Map<String, String> details;
-
-    public Policy(PolicyType type, String[] options) {
-      this.type = type;
-      this.details = new HashMap<>();
-      for (int i = 0; i < options.length; i++) {
-        details.put(MessageCli.PRINT_DB_POLICY_HOME.getOptionPrompt(i), options[i]);
-      }
-    }
-
-    public PolicyType getType() {
-      return type;
-    }
-
-    public Map<String, String> getDetails() {
-      return details;
-    }
-  }
-
-  private String getMessageSuffix(int count) {
-    if (count == 0) {
-      return "";
-    }
-
-    return count == 1 ? ":" : "s:";
-  }
 }
