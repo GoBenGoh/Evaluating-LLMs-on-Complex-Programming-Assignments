@@ -38,6 +38,7 @@ public class ShellScriptRunner {
             Map<String, String> t2ProvidedFailureMessages = providedFailureMessages.get(1);
             Map<String, String> t3ProvidedFailureMessages = providedFailureMessages.get(2);
 
+            // Collecting provided test names, assertion messages, and test methods for each task
             List<String> t1ProvidedTestNames = new ArrayList<>(t1ProvidedFailureMessages.keySet());
             List<String> t1ProvidedAsserts = new ArrayList<>(t1ProvidedFailureMessages.values());
             List<String> t1FailedProvidedTests = TestFinder.extractTestMethods(t1ProvidedTestNames, "PROVIDED");
@@ -66,6 +67,7 @@ public class ShellScriptRunner {
             Map<String, String> t2HiddenFailureMessages = hiddenFailureMessages.get(1);
             Map<String, String> t3HiddenFailureMessages = hiddenFailureMessages.get(2);
 
+            // Collecting hidden test names, assertion messages, and test methods for each task
             List<String> t1HiddenTestNames = new ArrayList<>(t1HiddenFailureMessages.keySet());
             List<String> t1HiddenAsserts = new ArrayList<>(t1HiddenFailureMessages.values());
             List<String> t1FailedHiddenTests = TestFinder.extractTestMethods(t1HiddenTestNames, "HIDDEN");
@@ -76,17 +78,21 @@ public class ShellScriptRunner {
             List<String> t3HiddenAsserts = new ArrayList<>(t3HiddenFailureMessages.values());
             List<String> t3FailedHiddenTests = TestFinder.extractTestMethods(t3HiddenTestNames, "HIDDEN");
 
-            testingResults = new TestResultAnalyzer(true, numPassedProvidedTests, numPassedHiddenTests, totalProvided, totalHidden, "", new ArrayList<>(), new ArrayList<>());
             FailureFileWriter.writeFailuresToFile(t1FailedProvidedTests, t1FailedHiddenTests, t1ProvidedAsserts, t1HiddenAsserts, "T1");
             FailureFileWriter.writeFailuresToFile(t2FailedProvidedTests, t2FailedHiddenTests, t2ProvidedAsserts, t2HiddenAsserts, "T2");
             FailureFileWriter.writeFailuresToFile(t3FailedProvidedTests, t3FailedHiddenTests, t3ProvidedAsserts, t3HiddenAsserts, "T3");
+
+            // Write results to spreadsheet
+            testingResults = new TestResultAnalyzer(true, numPassedProvidedTests, numPassedHiddenTests, totalProvided, totalHidden, "", new ArrayList<>(), new ArrayList<>());
 
         } else {
             System.out.println("Build Failed");
             System.out.println(compileResponse);
             String errorMessages = TestResultAnalyzer.getCompilationErrors(compileResponse);
-            testingResults = new TestResultAnalyzer(false, -1, -1, -1, -1, errorMessages, new ArrayList<>(), new ArrayList<>());
             ErrorFileWriter.writeErrorsToFile(errorMessages);
+            
+            // Write results to spreadsheet
+            testingResults = new TestResultAnalyzer(false, -1, -1, -1, -1, errorMessages, new ArrayList<>(), new ArrayList<>());
         }
     }
 
