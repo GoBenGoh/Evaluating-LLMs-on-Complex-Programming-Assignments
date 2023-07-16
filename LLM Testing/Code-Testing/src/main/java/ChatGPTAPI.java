@@ -67,7 +67,8 @@ public class ChatGPTAPI {
             }
             else {
                 String error = app.getFileFromResource("errors.txt");
-                if(error != ""){
+                System.out.println(error);
+                if(!error.equals("") || error == null){
                     System.out.println("Compilation errors");
                     if (task1)
                         startTesting(app, "1c", args);
@@ -89,6 +90,7 @@ public class ChatGPTAPI {
                     }
                     else{
                         // All tests pass
+                        System.out.println("All tests passed");
                         return;
                     }
                 }
@@ -148,7 +150,7 @@ public class ChatGPTAPI {
             newRequest = new Request("gpt-3.5-turbo-16k", newPrompt, 0.7); // object for gson to convert
         }
         else{
-            newRequest = new Request("gpt-3.5-turbo-16k", newPrompt, Double.valueOf(args[2])); // object for gson to convert
+            newRequest = new Request("gpt-3.5-turbo-16k", newPrompt, Double.valueOf(args[1])); // object for gson to convert
         }
         Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
         JsonElement jsonElement = gson.toJsonTree(newRequest);
