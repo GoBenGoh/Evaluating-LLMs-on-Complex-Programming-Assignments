@@ -9,7 +9,7 @@ import java.util.Map;
 public class ShellScriptRunner {
     public static void main(String[] args) {
         // Hard Coded Student Repo
-        String repo = "../repos_output/assignment-1-repository-4";
+        String repo = "../repos_output/assignment-1-repository-12";
         runTesting(repo);
     }
 
@@ -33,11 +33,14 @@ public class ShellScriptRunner {
             int numPassedProvidedTests = totalProvided - failures - errors - skipped;
 
             // Getting failed provided tests
-            Map<String, String> providedFailureMessages = TestResultAnalyzer.extractFailedTestDetails(xmlPath);
-            List<String> providedTestNames = new ArrayList<>(providedFailureMessages.keySet());
-            List<String> providedAsserts = new ArrayList<>(providedFailureMessages.values());
-            List<String> failedProvidedTests = TestFinder.extractTestMethods(providedTestNames, "PROVIDED");
-            FailureFileWriter.writeFailuresToFile(failedProvidedTests, providedAsserts, "PROVIDED");
+            List<Map<String, String>> providedFailureMessages = TestResultAnalyzer.extractFailedTestDetails(xmlPath);
+            Map<String, String> t1ProvidedFailureMessages = providedFailureMessages.get(0);
+            Map<String, String> t2ProvidedFailureMessages = providedFailureMessages.get(1);
+            Map<String, String> t3ProvidedFailureMessages = providedFailureMessages.get(2);
+//            List<String> providedTestNames = new ArrayList<>(providedFailureMessages.keySet());
+//            List<String> providedAsserts = new ArrayList<>(providedFailureMessages.values());
+//            List<String> failedProvidedTests = TestFinder.extractTestMethods(providedTestNames, "PROVIDED");
+//            FailureFileWriter.writeFailuresToFile(failedProvidedTests, providedAsserts, "PROVIDED");
 
             // Running Hidden Tests
             runCommand(repositoryDirectory, "CLEAR_TESTS");
@@ -52,13 +55,16 @@ public class ShellScriptRunner {
             int numPassedHiddenTests = totalHidden - failures - errors - skipped;
 
             // Getting failed hidden tests
-            Map<String, String> hiddenFailureMessages = TestResultAnalyzer.extractFailedTestDetails(xmlPath);
-            List<String> hiddenTestNames = new ArrayList<>(hiddenFailureMessages.keySet());
-            List<String> hiddenAsserts = new ArrayList<>(hiddenFailureMessages.values());
-            List<String> failedHiddenTests = TestFinder.extractTestMethods(hiddenTestNames, "HIDDEN");
-            FailureFileWriter.writeFailuresToFile(failedHiddenTests, hiddenAsserts, "HIDDEN");
+            List<Map<String, String>> hiddenFailureMessages = TestResultAnalyzer.extractFailedTestDetails(xmlPath);
+            Map<String, String> t1HiddenFailureMessages = hiddenFailureMessages.get(0);
+            Map<String, String> t2HiddenFailureMessages = hiddenFailureMessages.get(1);
+            Map<String, String> t3HiddenFailureMessages = hiddenFailureMessages.get(2);
+//            List<String> hiddenTestNames = new ArrayList<>(hiddenFailureMessages.keySet());
+//            List<String> hiddenAsserts = new ArrayList<>(hiddenFailureMessages.values());
+//            List<String> failedHiddenTests = TestFinder.extractTestMethods(hiddenTestNames, "HIDDEN");
+//            FailureFileWriter.writeFailuresToFile(failedHiddenTests, hiddenAsserts, "HIDDEN");
 
-            testingResults = new TestResultAnalyzer(true, numPassedProvidedTests, numPassedHiddenTests, totalProvided, totalHidden, "", providedTestNames, hiddenTestNames);
+            testingResults = new TestResultAnalyzer(true, numPassedProvidedTests, numPassedHiddenTests, totalProvided, totalHidden, "", new ArrayList<>(), new ArrayList<>());
 
         } else {
             System.out.println("Build Failed");
