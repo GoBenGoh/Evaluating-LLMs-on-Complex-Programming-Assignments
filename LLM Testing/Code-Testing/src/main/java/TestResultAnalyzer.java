@@ -11,25 +11,25 @@ import java.util.regex.Pattern;
 
 public class TestResultAnalyzer {
     private final boolean isCompiled;
-    private final int numPassedProvidedTests;
-    private final int numPassedHiddenTests;
-    private final int totalProvidedTests;
-    private final int totalHiddenTests;
+    private final List<String> t1ProvidedTestNames;
+    private final List<String> t1HiddenTestNames;
+
+    private final List<String> t2ProvidedTestNames;
+    private final List<String> t2HiddenTestNames;
+
+    private final List<String> t3ProvidedTestNames;
+    private final List<String> t3HiddenTestNames;
     private final String errors;
 
-    private final List<String> providedTestNames;
-
-    private final List<String> hiddenTestNames;
-
-    public TestResultAnalyzer(boolean isCompiled, int numPassedProvidedTests, int numPassedHiddenTests, int totalProvidedTests, int totalHiddenTests, String errors, List<String> providedTestNames, List<String> hiddenTestNames){
+    public TestResultAnalyzer(boolean isCompiled, List<String> t1ProvidedTestNames, List<String> t1HiddenTestNames, List<String> t2ProvidedTestNames, List<String> t2HiddenTestNames, List<String> t3ProvidedTestNames, List<String> t3HiddenTestNames, String errors){
         this.isCompiled = isCompiled;
-        this.numPassedProvidedTests = numPassedProvidedTests;
-        this.numPassedHiddenTests = numPassedHiddenTests;
-        this.totalProvidedTests = totalProvidedTests;
-        this.totalHiddenTests = totalHiddenTests;
+        this.t1ProvidedTestNames = t1ProvidedTestNames;
+        this.t1HiddenTestNames = t1HiddenTestNames;
+        this.t2ProvidedTestNames = t2ProvidedTestNames;
+        this.t2HiddenTestNames = t2HiddenTestNames;
+        this.t3ProvidedTestNames = t3ProvidedTestNames;
+        this.t3HiddenTestNames = t3HiddenTestNames;
         this.errors = errors;
-        this.providedTestNames = providedTestNames;
-        this.hiddenTestNames = hiddenTestNames;
     }
 
     public static List<Integer> extractTestResults(String xmlFilePath) {
