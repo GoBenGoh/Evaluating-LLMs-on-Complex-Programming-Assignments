@@ -32,6 +32,38 @@ public class TestResultAnalyzer {
         this.errors = errors;
     }
 
+    public boolean isCompiled() {
+        return isCompiled;
+    }
+
+    public List<String> getT1ProvidedTestNames() {
+        return t1ProvidedTestNames;
+    }
+
+    public List<String> getT1HiddenTestNames() {
+        return t1HiddenTestNames;
+    }
+
+    public List<String> getT2ProvidedTestNames() {
+        return t2ProvidedTestNames;
+    }
+
+    public List<String> getT2HiddenTestNames() {
+        return t2HiddenTestNames;
+    }
+
+    public List<String> getT3ProvidedTestNames() {
+        return t3ProvidedTestNames;
+    }
+
+    public List<String> getT3HiddenTestNames() {
+        return t3HiddenTestNames;
+    }
+
+    public String getErrors() {
+        return errors;
+    }
+
     public static List<Integer> extractTestResults(String xmlFilePath) {
         List<Integer> values = new ArrayList<>();
 
