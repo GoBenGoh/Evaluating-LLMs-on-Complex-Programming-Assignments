@@ -36,28 +36,15 @@ public class TestResultAnalyzer {
         return isCompiled;
     }
 
-    public List<String> getT1ProvidedTestNames() {
-        return t1ProvidedTestNames;
-    }
-
-    public List<String> getT1HiddenTestNames() {
-        return t1HiddenTestNames;
-    }
-
-    public List<String> getT2ProvidedTestNames() {
-        return t2ProvidedTestNames;
-    }
-
-    public List<String> getT2HiddenTestNames() {
-        return t2HiddenTestNames;
-    }
-
-    public List<String> getT3ProvidedTestNames() {
-        return t3ProvidedTestNames;
-    }
-
-    public List<String> getT3HiddenTestNames() {
-        return t3HiddenTestNames;
+    public Map<String, List<String>> getAllTestNames() {
+        Map<String, List<String>> allTestNames = new HashMap<>();
+        allTestNames.put("Test1Provided", t1ProvidedTestNames);
+        allTestNames.put("Test1Hidden", t1HiddenTestNames);
+        allTestNames.put("Test2Provided", t2ProvidedTestNames);
+        allTestNames.put("Test2Hidden", t2HiddenTestNames);
+        allTestNames.put("Test3Provided", t3ProvidedTestNames);
+        allTestNames.put("Test3Hidden", t3HiddenTestNames);
+        return allTestNames;
     }
 
     public String getErrors() {

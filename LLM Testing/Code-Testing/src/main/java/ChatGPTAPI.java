@@ -177,7 +177,8 @@ public class ChatGPTAPI {
             e.printStackTrace();
         }
 
-        ShellScriptRunner.runTesting(repo);
+        TestResultAnalyzer testingResults = ShellScriptRunner.runTesting(repo);
+
 
     }
     private String getFileFromResource(String fileName) throws IOException {

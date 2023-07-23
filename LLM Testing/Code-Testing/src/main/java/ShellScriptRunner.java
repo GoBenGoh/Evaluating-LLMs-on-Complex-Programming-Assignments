@@ -13,7 +13,7 @@ public class ShellScriptRunner {
         runTesting(repo);
     }
 
-    public static void runTesting(String repositoryDirectory) {
+    public static TestResultAnalyzer runTesting(String repositoryDirectory) {
         String xmlPath = repositoryDirectory + "/target/surefire-reports/TEST-nz.ac.auckland.se281.MainTest.xml";
         TestResultAnalyzer testingResults;
 
@@ -81,8 +81,9 @@ public class ShellScriptRunner {
             FailureFileWriter.writeFailuresToFile(t1FailedProvidedTests, t1FailedHiddenTests, t1ProvidedAsserts, t1HiddenAsserts, "T1");
             FailureFileWriter.writeFailuresToFile(t2FailedProvidedTests, t2FailedHiddenTests, t2ProvidedAsserts, t2HiddenAsserts, "T2");
             FailureFileWriter.writeFailuresToFile(t3FailedProvidedTests, t3FailedHiddenTests, t3ProvidedAsserts, t3HiddenAsserts, "T3");
-            
+
             testingResults = new TestResultAnalyzer(true, t1ProvidedTestNames, t1HiddenTestNames, t2ProvidedTestNames, t2HiddenTestNames, t3ProvidedTestNames, t3FailedHiddenTests, "");
+            return testingResults;
 
         } else {
             System.out.println("Build Failed");
@@ -91,6 +92,7 @@ public class ShellScriptRunner {
             ErrorFileWriter.writeErrorsToFile(errorMessages);
 
             testingResults = new TestResultAnalyzer(false, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), errorMessages);
+            return testingResults;
         }
     }
 
