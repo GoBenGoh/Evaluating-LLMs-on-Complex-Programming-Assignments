@@ -15,13 +15,13 @@ public class TestResultAnalyzer {
     private final int numPassedHiddenTests;
     private final int totalProvidedTests;
     private final int totalHiddenTests;
-    private final List<String> errors;
+    private final String errors;
 
     private final List<String> providedTestNames;
 
     private final List<String> hiddenTestNames;
 
-    public TestResultAnalyzer(boolean isCompiled, int numPassedProvidedTests, int numPassedHiddenTests, int totalProvidedTests, int totalHiddenTests, List<String> errors, List<String> providedTestNames, List<String> hiddenTestNames){
+    public TestResultAnalyzer(boolean isCompiled, int numPassedProvidedTests, int numPassedHiddenTests, int totalProvidedTests, int totalHiddenTests, String errors, List<String> providedTestNames, List<String> hiddenTestNames){
         this.isCompiled = isCompiled;
         this.numPassedProvidedTests = numPassedProvidedTests;
         this.numPassedHiddenTests = numPassedHiddenTests;
@@ -61,22 +61,29 @@ public class TestResultAnalyzer {
         return values;
     }
 
-    public static ArrayList<String> getCompilationErrors(String compResponse) {
-        Set<String> uniqueErrors = new LinkedHashSet<>();
-
-        Pattern pattern = Pattern.compile("\\[ERROR\\] (.+java:\\[\\d+,\\d+\\] .+)");
-        Matcher matcher = pattern.matcher(compResponse);
-
-        while (matcher.find()) {
-            String errorLine = matcher.group(1);
-            uniqueErrors.add(errorLine);
+    public static String getCompilationErrors(String compResponse) {
+        int errorsStart = compResponse.indexOf("[ERROR] COMPILATION ERROR : "); // Errors start here in compResponse
+        if (errorsStart != -1){ // If there are errors
+            String errors = compResponse.substring(errorsStart);
+            int replaceFrom = errors.indexOf("[INFO] -------------------------------------------------------------");
+            if(replaceFrom!=-1) {
+                errors = errors.substring(replaceFrom + 70); // Removes new line and [INFO]------
+                int replaceTo = errors.indexOf("[INFO]"); // Stop at next [INFO]
+                errors = errors.substring(0, replaceTo);
+            }
+            return errors;
         }
 
-        return new ArrayList<>(uniqueErrors);
+        // If no match is found, return an empty string
+        return "";
     }
 
-    public static Map<String, String> extractFailedTestDetails(String xmlFilePath) {
-        Map<String, String> failedTestDetails = new LinkedHashMap<>();
+
+    public static List<Map<String, String>> extractFailedTestDetails(String xmlFilePath) {
+        List<Map<String, String>> taskTestDetails = new ArrayList<>();
+        taskTestDetails.add(new LinkedHashMap<>()); // Task 1 test cases
+        taskTestDetails.add(new LinkedHashMap<>()); // Task 2 test cases
+        taskTestDetails.add(new LinkedHashMap<>()); // Task 3 test cases
 
         try {
             File file = new File(xmlFilePath);
@@ -96,14 +103,20 @@ public class TestResultAnalyzer {
                             .item(0)
                             .getTextContent();
 
-                    failedTestDetails.put(testName, assertionMessage);
+                    if (testName.startsWith("T1")) {
+                        taskTestDetails.get(0).put(testName, assertionMessage);
+                    } else if (testName.startsWith("T2")) {
+                        taskTestDetails.get(1).put(testName, assertionMessage);
+                    } else if (testName.startsWith("T3")) {
+                        taskTestDetails.get(2).put(testName, assertionMessage);
+                    }
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return failedTestDetails;
+        return taskTestDetails;
     }
 
 }

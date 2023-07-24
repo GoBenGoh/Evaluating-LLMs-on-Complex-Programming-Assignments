@@ -4,12 +4,9 @@ import java.io.IOException;
 import java.util.List;
 
 public class ErrorFileWriter {
-    public static void writeErrorsToFile(List<String> errorList) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("errors.txt"))) {
-            for (String error : errorList) {
-                writer.write(error);
-                writer.newLine();
-            }
+    public static void writeErrorsToFile(String errors) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("src/main/resources/errors.txt"))) {
+            writer.write(errors);
         } catch (IOException e) {
             e.printStackTrace();
         }

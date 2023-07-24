@@ -1,0 +1,625 @@
+The instructions for Task 2 are below marked between a pair of "///":
+///
+Now that the system supports creating profiles, it is time to manage those profiles. This will include loading, unloading, and deleting profiles as explained below.
+
+Loading Profiles
+The LOAD_PROFILE command loads a profile into the system. This command requires exactly one argument, representing the username to be loaded. Again, the user might type the username in any case, but the system will always process it in title case.
+
+A success message occurs when the profile is found and successfully loaded:
+
+Profile loaded for <USERNAME>.
+If the profile is not found, then the following message gets printed:
+
+No profile found for <USERNAME>. Profile not loaded.
+When a profile is successfully loaded, the PRINT_DB command should print an extra *** in front of the currently-loaded profile. For example, if the database has three profiles, and the second profile is successfully loaded, then the PRINT_DB command should print the following:
+
+Database has 3 profiles:
+ 1: Jordan, 21
+*** 2: Jenny, 25
+ 3: John, 30
+
+Hint: See the MessageCli.PRINT_DB_PROFILE_HEADER_SHORT message template.
+
+While a profile is loaded, the LOAD_PROFILE command could be executed again. The new load will only succeed if the profile is found (as a usual load), otherwise it fails with the usual error when a username cannot be loaded. In this case, the currently-loaded profile remains loaded.
+
+If the new load succeeds, the system will unload the currently-loaded profile, and load the new profile. For example, if the database has three profiles, and the second profile is successfully loaded, and then the third profile is successfully loaded, then the PRINT_DB command should print the following:
+
+Database has 3 profiles:
+ 1: Jordan, 21
+ 2: Jenny, 25
+*** 3: John, 30
+While a profile is loaded, the CREATE_PROFILE command should not be allowed. If the user tries to create a profile while a profile is already loaded, then the following message should be printed:
+
+Cannot create a new profile. First unload the profile for <CURRENT_LOADED_PROFILE_USERNAME>.
+Creating a new profile can go ahead, only after the currently-loaded profile is unloaded (see below).
+
+Unloading Profiles
+The UNLOAD_PROFILE command unloads the currently-loaded profile. This command requires no arguments.
+
+When a profile is successfully unloaded, the following message should be printed:
+
+Profile unloaded for <USERNAME>.
+If there is no currently-loaded profile, then the following message should be printed:
+
+No profile is currently loaded.
+
+Deleting Profiles
+The DELETE_PROFILE command deletes a profile from the database. This command requires exactly one argument, representing the username to be deleted.
+
+When a profile is successfully deleted, the following message should be printed:
+
+Profile deleted for <USERNAME>.
+When a profile is successfully deleted, this means it will no longer exist in the database.
+
+If the profile is not found, then the following message gets printed:
+
+No profile found for <USERNAME>. No profile was deleted.
+If the profile is currently loaded, then the deletion should not go ahead and the following message gets printed:
+
+Cannot delete profile for <USERNAME> while loaded. No profile was deleted.
+The loaded profile must be unloaded before it can be deleted.
+
+It is however perfectly fine to delete a profile that is not currently loaded, as long as it exists in the database.
+///
+The following section is the an existing Java class named MessageCli:
+```
+package nz.ac.auckland.se281;
+
+/** You cannot modify this class! */
+public enum MessageCli {
+  COMMAND_NOT_FOUND(
+      "Error! Command not found! (run 'help' for the list of available commands): \"%s\""),
+  WRONG_ARGUMENT_COUNT(
+      "Error! Incorrect number of arguments provided. Expected %s argument%s for the \"%s\""
+          + " command"),
+
+  PRINT_DB_POLICY_COUNT("Database has %s profile%s%s"),
+  PRINT_DB_PROFILE_HEADER_MINIMAL(" %s: %s, %s"),
+  PRINT_DB_PROFILE_HEADER_SHORT(" %s%s: %s, %s"),
+  PRINT_DB_PROFILE_HEADER_MEDIUM(" %s%s: %s, %s, %s polic%s"),
+  PRINT_DB_PROFILE_HEADER_LONG(" %s%s: %s, %s, %s polic%s for a total of $%s"),
+
+  PRINT_DB_CAR_POLICY("\tCar Policy (%s, Sum Insured: $%s, Premium: $%s -> $%s)"),
+  PRINT_DB_HOME_POLICY("\tHome Policy (%s, Sum Insured: $%s, Premium: $%s -> $%s)"),
+  PRINT_DB_LIFE_POLICY("\tLife Policy (Sum Insured: $%s, Premium: $%s -> $%s)"),
+
+  INVALID_USERNAME_TOO_SHORT(
+      "'%s' is an invalid username, it should be at least 3 characters long. No profile was"
+          + " created."),
+  INVALID_USERNAME_NOT_UNIQUE("Usernames must be unique. No profile was created for '%s'."),
+  INVALID_AGE(
+      "'%s' is an invalid age, please provide a positive whole number only. No profile was created"
+          + " for %s."),
+
+  CANNOT_CREATE_WHILE_LOADED("Cannot create a new profile. First unload the profile for %s."),
+
+  PROFILE_CREATED("New profile created for %s with age %s."),
+  PROFILE_DELETED("Profile deleted for %s."),
+  PROFILE_LOADED("Profile loaded for %s."),
+  PROFILE_UNLOADED("Profile unloaded for %s."),
+
+  NO_PROFILE_FOUND_TO_LOAD("No profile found for %s. Profile not loaded."),
+  NO_PROFILE_FOUND_TO_DELETE("No profile found for %s. No profile was deleted."),
+  NO_PROFILE_FOUND_TO_CREATE_POLICY("Need to load a profile in order to create a policy."),
+
+  NO_PROFILE_LOADED("No profile is currently loaded."),
+  CANNOT_DELETE_PROFILE_WHILE_LOADED(
+      "Cannot delete profile for %s while loaded. No profile was deleted."),
+
+  NEW_POLICY_CREATED("New %s policy created for %s."),
+  ALREADY_HAS_LIFE_POLICY("%s already has a life policy. No new policy was created."),
+  OVER_AGE_LIMIT_LIFE_POLICY("%s is over the age limit. No policy was created."),
+
+  DISCOUNT_TWO("Two policies are in place, client will get 10% discount"),
+  DISCOUNT_MULTIPLE("Multiple policies are in place, client will get 20% discount"),
+
+  END("You closed the terminal. Goodbye.");
+
+  private final String msg;
+
+  private MessageCli(final String msg) {
+    this.msg = msg;
+  }
+
+  public String getMessage(final String... args) {
+    String tmpMessage = msg;
+
+    for (final String arg : args) {
+      tmpMessage = tmpMessage.replaceFirst("%s", arg);
+    }
+
+    return tmpMessage;
+  }
+
+  public void printMessage(final String... args) {
+    System.out.println(getMessage(args));
+  }
+
+  @Override
+  public String toString() {
+    return msg;
+  }
+}
+```
+The following section shows the Main Java class:
+```
+package nz.ac.auckland.se281;
+
+import java.util.Scanner;
+
+/** You cannot modify this class! */
+public class Main {
+  public enum PolicyType {
+    HOME,
+    CAR,
+    LIFE,
+  }
+
+  public enum Command {
+    PRINT_DB(0, "Print the entire insurance database"),
+
+    CREATE_PROFILE(2, "Create a new client profile <USERNAME> <AGE>"),
+    LOAD_PROFILE(1, "Load the specified profile <USERNAME>"),
+    UNLOAD_PROFILE(0, "Unload the currently-loaded profile"),
+    DELETE_PROFILE(1, "Delete the specified profile <USERNAME> from the database"),
+
+    POLICY_HOME(
+        0,
+        "Create a new home policy for the currently-loaded profile",
+        "Sum to insure",
+        "Property address",
+        "Rental? (y/n)"),
+    POLICY_CAR(
+        0,
+        "Create a new car policy for the currently-loaded profile",
+        "Sum to insure",
+        "Make and model",
+        "License plate",
+        "Mechanical warranty? (y/n)"),
+    POLICY_LIFE(0, "Create a new life policy for the currently-loaded profile", "Sum to insure"),
+
+    HELP(0, "Print usage"),
+    EXIT(0, "Exit the application");
+
+    private final int numArgs;
+    private final String message;
+    private final String[] optionPrompts;
+
+    private Command(final int numArgs, final String message) {
+      this(numArgs, message, new String[] {});
+    }
+
+    private Command(final int numArgs, final String message, final String... optionPrompts) {
+      this.numArgs = numArgs;
+      this.message = message;
+      this.optionPrompts = optionPrompts;
+    }
+
+    public boolean hasArguments() {
+      return numArgs > 0;
+    }
+
+    public int getNumArgs() {
+      return numArgs;
+    }
+
+    public boolean hasOptions() {
+      return optionPrompts.length > 0;
+    }
+
+    public int getNumOptions() {
+      return optionPrompts.length;
+    }
+
+    public String getOptionPrompt(final int index) {
+      return optionPrompts[index];
+    }
+  }
+
+  private static final String COMMAND_PREFIX = "insurance system> ";
+
+  public static void main(final String[] args) {
+    new Main(new Scanner(System.in), new InsuranceSystem()).start();
+  }
+
+  public static String help() {
+    final StringBuilder sb = new StringBuilder();
+
+    for (final Command command : Command.values()) {
+      sb.append(command).append("\t");
+
+      // Add extra padding to align the argument counts
+      // if the command name is less than the tab width.
+      if (command.toString().length() < 8) {
+        sb.append("\t");
+      }
+
+      if (command.numArgs > 0) {
+        sb.append("[").append(command.numArgs).append(" arguments]");
+      } else {
+        sb.append("[no args]");
+      }
+
+      sb.append("\t").append(command.message).append(System.lineSeparator());
+    }
+
+    return sb.toString();
+  }
+
+  private static void printBanner() {
+    // https://patorjk.com/software/taag/
+    // https://www.freeformatter.com/java-dotnet-escape.html#before-output
+
+    System.out.println(
+        "\r\n"
+            + " $$$$$$\\   $$$$$$\\    $$\\         $$$$$$\\\r\n"
+            + "$$  __$$\\ $$  __$$\\ $$$$ |        \\_$$  _|\r\n"
+            + "\\__/  $$ |$$ /  $$ |\\_$$ |          $$ |  $$$$$$$\\   $$$$$$$\\ $$\\   $$\\ "
+            + " $$$$$$\\  $$$$$$\\  $$$$$$$\\   $$$$$$$\\  $$$$$$\\\r\n"
+            + " $$$$$$  | $$$$$$  |  $$ |          $$ |  $$  __$$\\ $$  _____|$$ |  $$ |$$  __$$\\"
+            + " \\____$$\\ $$  __$$\\ $$  _____|$$  __$$\\\r\n"
+            + "$$  ____/ $$  __$$<   $$ |          $$ |  $$ |  $$ |\\$$$$$$\\  $$ |  $$ |$$ | "
+            + " \\__|$$$$$$$ |$$ |  $$ |$$ /      $$$$$$$$ |\r\n"
+            + "$$ |      $$ /  $$ |  $$ |          $$ |  $$ |  $$ | \\____$$\\ $$ |  $$ |$$ |    "
+            + " $$  __$$ |$$ |  $$ |$$ |      $$   ____|\r\n"
+            + "$$$$$$$$\\ \\$$$$$$  |$$$$$$\\       $$$$$$\\ $$ |  $$ |$$$$$$$  |\\$$$$$$  |$$ |   "
+            + "  \\$$$$$$$ |$$ |  $$ |\\$$$$$$$\\ \\$$$$$$$\\\r\n"
+            + "\\________| \\______/ \\______|      \\______|\\__|  \\__|\\_______/  \\______/"
+            + " \\__|      \\_______|\\__|  \\__| \\_______| \\_______|\r\n");
+  }
+
+  private final Scanner scanner;
+
+  private final InsuranceSystem insuranceSystem;
+
+  public Main(final Scanner scanner, final InsuranceSystem insuranceSystem) {
+    this.scanner = scanner;
+    this.insuranceSystem = insuranceSystem;
+  }
+
+  public void start() {
+    printBanner();
+    System.out.println(help());
+
+    String command;
+
+    // Prompt and process commands until the exit command.
+    do {
+      System.out.print(COMMAND_PREFIX);
+      command = scanner.nextLine().trim();
+    } while (processCommand(command));
+  }
+
+  private boolean processCommand(String input) {
+    // Remove whitespace at the beginning and end of the input.
+    input = input.trim();
+
+    final String[] args = input.split(" ");
+
+    // Allow any case, and dashes to be used instead of underscores.
+    final String commandStr = args[0].toUpperCase().replaceAll("-", "_");
+
+    final Command command;
+
+    try {
+      // Command names correspond to the enum names.
+      command = Command.valueOf(commandStr);
+    } catch (final Exception e) {
+      MessageCli.COMMAND_NOT_FOUND.printMessage(commandStr);
+      return true;
+    }
+
+    if (!checkArgs(command, args)) {
+      MessageCli.WRONG_ARGUMENT_COUNT.printMessage(
+          String.valueOf(command.getNumArgs()), command.getNumArgs() > 1 ? "s" : "", commandStr);
+      return true;
+    }
+
+    switch (command) {
+      case CREATE_PROFILE:
+        insuranceSystem.createNewProfile(args[1], args[2]);
+        break;
+      case LOAD_PROFILE:
+        insuranceSystem.loadProfile(args[1]);
+        break;
+      case UNLOAD_PROFILE:
+        insuranceSystem.unloadProfile();
+        break;
+      case DELETE_PROFILE:
+        insuranceSystem.deleteProfile(args[1]);
+        break;
+      case PRINT_DB:
+        insuranceSystem.printDatabase();
+        break;
+      case POLICY_HOME:
+        insuranceSystem.createPolicy(PolicyType.HOME, processOptions(command));
+        break;
+      case POLICY_CAR:
+        insuranceSystem.createPolicy(PolicyType.CAR, processOptions(command));
+        break;
+      case POLICY_LIFE:
+        insuranceSystem.createPolicy(PolicyType.LIFE, processOptions(command));
+        break;
+      case EXIT:
+        MessageCli.END.printMessage();
+
+        // Signal that the program should exit.
+        return false;
+      case HELP:
+        System.out.println(help());
+        break;
+    }
+
+    // Signal that another command is expected.
+    return true;
+  }
+
+  private String[] processOptions(final Command command) {
+    final String[] options = new String[command.getNumOptions()];
+
+    for (int i = 0; i < command.getNumOptions(); i++) {
+      System.out.print("\t" + command.getOptionPrompt(i) + ": ");
+      options[i] = scanner.nextLine().trim();
+    }
+
+    return options;
+  }
+
+  private boolean checkArgs(final Command command, final String[] args) {
+    return command.getNumArgs() == args.length - 1;
+  }
+}
+```
+Please fix the following code according to the instructions and the failing test cases. Do not assume another class exists! Do not explain the changes made! Only respond with java code!
+```package nz.ac.auckland.se281;
+
+import nz.ac.auckland.se281.Main.PolicyType;
+
+public class InsuranceSystem {
+    public InsuranceSystem() {
+        // Only this constructor can be used (if you need to initialise fields).
+    }
+
+    public void printDatabase() {
+        // TODO: Complete this method.
+    }
+
+    public void createNewProfile(String userName, String age) {
+        // TODO: Complete this method.
+    }
+
+    public void loadProfile(String userName) {
+        // TODO: Complete this method.
+    }
+
+    public void unloadProfile() {
+        // TODO: Complete this method.
+    }
+
+    public void deleteProfile(String userName) {
+        // TODO: Complete this method.
+    }
+
+    public void createPolicy(PolicyType type, String[] options) {
+        // TODO: Complete this method.
+    }
+}
+
+```
+Here are the failing test cases:
+```@Test
+public void T2_05_unload_profile() throws Exception {
+    runCommands(unpack(CREATE_SOME_CLIENTS, LOAD_PROFILE, "Jenny", UNLOAD_PROFILE, PRINT_DB));
+    assertContains("Profile loaded for Jenny.");
+    assertContains("Profile unloaded for Jenny.");
+    assertContains("1: Jordan, 21");
+    assertContains("2: Tom, 25");
+    assertContains("3: Jenny, 23");
+    assertDoesNotContain("*** 1: Jordan, 21", true);
+    assertDoesNotContain("*** 2: Tom, 25", true);
+    assertDoesNotContain("*** 3: Jenny, 23", true);
+}
+java.lang.AssertionError: 
+The test is expecting the following output in the console, but it was not there: 
+	"Profile unloaded for Jenny."
+	at nz.ac.auckland.se281.MainTest$Task2.T2_05_unload_profile(MainTest.java:135)
+
+@Test
+public void T2_06_unload_invalid_profile() throws Exception {
+    runCommands(unpack(CREATE_SOME_CLIENTS, LOAD_PROFILE, "jen", UNLOAD_PROFILE, PRINT_DB));
+    assertContains("No profile is currently loaded.");
+    assertContains("1: Jordan, 21");
+    assertContains("2: Tom, 25");
+    assertContains("3: Jenny, 23");
+    assertDoesNotContain("*** 1: Jordan, 21", true);
+    assertDoesNotContain("*** 2: Tom, 25", true);
+    assertDoesNotContain("*** 3: Jenny, 23", true);
+}
+java.lang.AssertionError: 
+The test is expecting the following output in the console, but it was not there: 
+	"No profile is currently loaded."
+	at nz.ac.auckland.se281.MainTest$Task2.T2_06_unload_invalid_profile(MainTest.java:150)
+
+@Test
+public void T2_04_load_profile_switch_profiles() throws Exception {
+    runCommands(unpack(CREATE_SOME_CLIENTS, LOAD_PROFILE, "tom", LOAD_PROFILE, "jenny", PRINT_DB));
+    assertContains("Profile loaded for Tom.");
+    assertContains("Profile loaded for Jenny.");
+    assertContains("Database has 3 profiles:");
+    assertContains("1: Jordan, 21");
+    assertContains("2: Tom, 25");
+    assertContains("*** 3: Jenny, 23");
+    assertDoesNotContain("*** 1: Jordan, 21", true);
+    assertDoesNotContain("*** 2: Tom, 25", true);
+}
+java.lang.AssertionError: 
+The test is expecting the following output in the console, but it was not there: 
+	"Profile loaded for Tom."
+	at nz.ac.auckland.se281.MainTest$Task2.T2_04_load_profile_switch_profiles(MainTest.java:119)
+
+@Test
+public void T2_07_delete_profile_found() throws Exception {
+    runCommands(unpack(CREATE_SOME_CLIENTS, DELETE_PROFILE, "jordan", PRINT_DB));
+    assertContains("Profile deleted for Jordan.");
+    assertContains("Database has 2 profiles:");
+    assertContains("1: Tom, 25");
+    assertContains("2: Jenny, 23");
+    assertDoesNotContain("Jordan, 21", true);
+}
+java.lang.AssertionError: 
+The test is expecting the following output in the console, but it was not there: 
+	"Profile deleted for Jordan."
+	at nz.ac.auckland.se281.MainTest$Task2.T2_07_delete_profile_found(MainTest.java:165)
+
+@Test
+public void T2_02_load_profile_not_found() throws Exception {
+    runCommands(unpack(CREATE_SOME_CLIENTS, LOAD_PROFILE, "Alex"));
+    assertContains("No profile found for Alex. Profile not loaded.");
+    assertDoesNotContain("Profile loaded for Alex.", true);
+}
+java.lang.AssertionError: 
+The test is expecting the following output in the console, but it was not there: 
+	"No profile found for Alex. Profile not loaded."
+	at nz.ac.auckland.se281.MainTest$Task2.T2_02_load_profile_not_found(MainTest.java:98)
+
+@Test
+public void T2_08_delete_profile_while_loaded() throws Exception {
+    runCommands(unpack(CREATE_SOME_CLIENTS, LOAD_PROFILE, "Jenny", DELETE_PROFILE, "jenny", PRINT_DB));
+    assertContains("Profile loaded for Jenny.");
+    assertContains("Cannot delete profile for Jenny while loaded. No profile was deleted.");
+    assertDoesNotContain("Profile deleted for Jenny", true);
+    assertContains("Database has 3 profiles:");
+    assertContains("1: Jordan, 21");
+    assertContains("2: Tom, 25");
+    assertContains("3: Jenny, 23");
+}
+java.lang.AssertionError: 
+The test is expecting the following output in the console, but it was not there: 
+	"Cannot delete profile for Jenny while loaded. No profile was deleted."
+	at nz.ac.auckland.se281.MainTest$Task2.T2_08_delete_profile_while_loaded(MainTest.java:179)
+
+@Test
+public void T2_03_load_profile_found_display() throws Exception {
+    runCommands(unpack(CREATE_SOME_CLIENTS, LOAD_PROFILE, "Tom", PRINT_DB));
+    assertContains("Profile loaded for Tom.");
+    assertContains("Database has 3 profiles:");
+    assertContains("1: Jordan, 21");
+    assertContains("*** 2: Tom, 25");
+    assertContains("3: Jenny, 23");
+}
+java.lang.AssertionError: 
+The test is expecting the following output in the console, but it was not there: 
+	"*** 2: Tom, 25"
+	at nz.ac.auckland.se281.MainTest$Task2.T2_03_load_profile_found_display(MainTest.java:110)
+
+@Test
+public void T3_02_add_home_policy_loaded_profile() throws Exception {
+    runCommands(unpack(CREATE_SOME_CLIENTS, LOAD_PROFILE, "Jenny", POLICY_HOME, options("1000000", "20 Symonds Street", "yes"), PRINT_DB));
+    assertContains("Profile loaded for Jenny.");
+    assertContains("Database has 3 profiles:");
+    assertContains("1: Jordan, 21, 0 policies");
+    assertContains("2: Tom, 25, 0 policies");
+    assertContains("*** 3: Jenny, 23, 1 policy");
+    assertContains("New home policy created for Jenny.");
+    assertContains("Home Policy (20 Symonds Street, Sum Insured: $1000000, Premium: $20000 -> $20000)");
+}
+java.lang.AssertionError: 
+The test is expecting the following output in the console, but it was not there: 
+	"1: Jordan, 21, 0 policies"
+	at nz.ac.auckland.se281.MainTest$Task3.T3_02_add_home_policy_loaded_profile(MainTest.java:217)
+
+@Test
+public void T3_07_two_policies_one_profile_ignore_zero_policy_total_costs() throws Exception {
+    runCommands(unpack(CREATE_SOME_CLIENTS, LOAD_PROFILE, "Tom", POLICY_HOME, options("1000000", "20 Symonds Street", "yes"), POLICY_CAR, options("55000", "Subaru Impreza", "SUB123", "no"), UNLOAD_PROFILE, LOAD_PROFILE, "Jenny", POLICY_CAR, options("55000", "Subaru Impreza", "SUB123", "no"), UNLOAD_PROFILE, PRINT_DB));
+    assertContains("2: Tom, 25, 2 policies for a total of $22950");
+    assertContains("3: Jenny, 23, 1 policy for a total of $8250");
+    assertContains("Home Policy (20 Symonds Street, Sum Insured: $1000000, Premium: $20000 -> $18000)");
+    assertContains("Car Policy (Subaru Impreza, Sum Insured: $55000, Premium: $5500 -> $4950)");
+    assertContains("Car Policy (Subaru Impreza, Sum Insured: $55000, Premium: $8250 -> $8250)");
+}
+java.lang.AssertionError: 
+The test is expecting the following output in the console, but it was not there: 
+	"2: Tom, 25, 2 policies for a total of $22950"
+	at nz.ac.auckland.se281.MainTest$Task3.T3_07_two_policies_one_profile_ignore_zero_policy_total_costs(MainTest.java:349)
+
+@Test
+public void T3_05_three_policies_one_profile() throws Exception {
+    runCommands(unpack(CREATE_SOME_CLIENTS, LOAD_PROFILE, "Jenny", POLICY_HOME, options("1000000", "20 Symonds Street", "yes"), POLICY_HOME, options("1000000", "20 Queen Street", "no"), POLICY_LIFE, options("1000000"), PRINT_DB));
+    assertContains("Profile loaded for Jenny.");
+    assertContains("New home policy created for Jenny.");
+    assertContains("New life policy created for Jenny.");
+    assertContains("Database has 3 profiles:");
+    assertContains("1: Jordan, 21, 0 policies");
+    assertContains("2: Tom, 25, 0 policies");
+    assertContains("*** 3: Jenny, 23, 3 policies");
+    assertContains("Home Policy (20 Symonds Street, Sum Insured: $1000000, Premium: $20000 -> $16000)");
+    assertContains("Home Policy (20 Queen Street, Sum Insured: $1000000, Premium: $10000 -> $8000)");
+    assertContains("Life Policy (Sum Insured: $1000000, Premium: $12300 -> $9840)");
+}
+java.lang.AssertionError: 
+The test is expecting the following output in the console, but it was not there: 
+	"New home policy created for Jenny."
+	at nz.ac.auckland.se281.MainTest$Task3.T3_05_three_policies_one_profile(MainTest.java:292)
+
+@Test
+public void T3_03_add_car_policy_loaded_profile() throws Exception {
+    runCommands(unpack(CREATE_SOME_CLIENTS, LOAD_PROFILE, "Tom", POLICY_CAR, options("55000", "Subaru Impreza", "SUB123", "yes"), PRINT_DB));
+    assertContains("Profile loaded for Tom.");
+    assertContains("New car policy created for Tom.");
+    assertContains("Database has 3 profiles:");
+    assertContains("1: Jordan, 21, 0 policies");
+    assertContains("*** 2: Tom, 25, 1 policy");
+    assertContains("3: Jenny, 23, 0 policies");
+    assertContains("Car Policy (Subaru Impreza, Sum Insured: $55000, Premium: $5580 -> $5580)");
+}
+java.lang.AssertionError: 
+The test is expecting the following output in the console, but it was not there: 
+	"New car policy created for Tom."
+	at nz.ac.auckland.se281.MainTest$Task3.T3_03_add_car_policy_loaded_profile(MainTest.java:239)
+
+@Test
+public void T3_01_cannot_add_policy_without_loaded_profile() throws Exception {
+    runCommands(unpack(CREATE_SOME_CLIENTS, POLICY_HOME, options("1000000", "20 Symonds Street", "yes")));
+    assertContains("Need to load a profile in order to create a policy.");
+    assertDoesNotContain("New home policy created", true);
+}
+java.lang.AssertionError: 
+The test is expecting the following output in the console, but it was not there: 
+	"Need to load a profile in order to create a policy."
+	at nz.ac.auckland.se281.MainTest$Task3.T3_01_cannot_add_policy_without_loaded_profile(MainTest.java:199)
+
+@Test
+public void T3_06_life_policy_over_age_limit() throws Exception {
+    runCommands(CREATE_PROFILE, "Jenny", 101, LOAD_PROFILE, "Jenny", POLICY_LIFE, options("100000"), UNLOAD_PROFILE, PRINT_DB);
+    assertContains("Profile loaded for Jenny.");
+    assertContains("Jenny is over the age limit. No policy was created.");
+    assertContains("Database has 1 profile:");
+    assertContains("1: Jenny, 101, 0 policies");
+    assertDoesNotContain("New life policy created for Jenny.", true);
+    assertDoesNotContain("Life Policy (Sum Insured", true);
+}
+java.lang.AssertionError: 
+The test is expecting the following output in the console, but it was not there: 
+	"Jenny is over the age limit. No policy was created."
+	at nz.ac.auckland.se281.MainTest$Task3.T3_06_life_policy_over_age_limit(MainTest.java:321)
+
+@Test
+public void T3_04_two_different_policies_home_life_one_profile() throws Exception {
+    runCommands(unpack(CREATE_SOME_CLIENTS, LOAD_PROFILE, "Jenny", POLICY_HOME, options("1000000", "20 Symonds Street", "yes"), POLICY_LIFE, options("1000000"), PRINT_DB));
+    assertContains("Profile loaded for Jenny.");
+    assertContains("New home policy created for Jenny.");
+    assertContains("New life policy created for Jenny.");
+    assertContains("Database has 3 profiles:");
+    assertContains("1: Jordan, 21, 0 policies");
+    assertContains("2: Tom, 25, 0 policies");
+    assertContains("*** 3: Jenny, 23, 2 policies");
+    assertContains("Home Policy (20 Symonds Street, Sum Insured: $1000000, Premium: $20000 -> $18000)");
+    assertContains("Life Policy (Sum Insured: $1000000, Premium: $12300 -> $11070)");
+}
+java.lang.AssertionError: 
+The test is expecting the following output in the console, but it was not there: 
+	"New home policy created for Jenny."
+	at nz.ac.auckland.se281.MainTest$Task3.T3_04_two_different_policies_home_life_one_profile(MainTest.java:263)
+
+
+```
