@@ -61,8 +61,8 @@ public class ChatGPTAPI {
         boolean isStart = true;
 
         String repo = "../assignment_template/assignment-1";
-        String commit = "Initial Commit";
-        String workflow = "Own Progress";
+        String commit = "Initial-Commit";
+        String workflow = "Own-Progress";
         String temperature = "0.7";
         CSVCreator CSVCreator = new CSVCreator(repo, commit, workflow, temperature);
         CSVCreator.createRepoHeader();

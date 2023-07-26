@@ -9,7 +9,6 @@ import java.util.Map;
 
 public class CSVCreator {
     private CSVWriter csvWriter;
-    private int currentRow;
     private String repository;
     private String commit;
     private String workflow;
@@ -21,13 +20,25 @@ public class CSVCreator {
         this.workflow = workflow;
         this.temperature = temperature;
 
+        createRepoTestingDirectory();
         try {
-            csvWriter = new CSVWriter(new FileWriter(this.repository + "_" + this.commit + ".csv"));
+            csvWriter = new CSVWriter(new FileWriter("../" + this.repository + "_" + this.workflow + "/" + this.repository + "_" + this.commit + ".csv"));
         } catch (IOException e) {
             System.out.println("An error occurred while initializing the CSVWriter.");
             e.printStackTrace();
         }
-        currentRow = 0;
+    }
+
+    private void createRepoTestingDirectory() {
+        String folderPath = "../" + this.repository + "_" + this.workflow;
+        File folder = new File(folderPath);
+        if (!folder.exists()) {
+            if (folder.mkdirs()) {
+                System.out.println("Folder created: " + folderPath);
+            } else {
+                System.out.println("Failed to create folder: " + folderPath);
+            }
+        }
     }
 
     // Testing CSV creation
