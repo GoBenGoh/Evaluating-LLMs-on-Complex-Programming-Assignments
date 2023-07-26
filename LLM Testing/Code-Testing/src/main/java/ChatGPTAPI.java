@@ -60,13 +60,12 @@ public class ChatGPTAPI {
         boolean task1 = true;
         boolean isStart = true;
 
-        CSVCreator CSVCreator = new CSVCreator();
-
         String repo = "../assignment_template/assignment-1";
         String commit = "Initial Commit";
         String workflow = "Own Progress";
         String temperature = "0.7";
-        CSVCreator.createRepoHeader(repo, commit, workflow, temperature);
+        CSVCreator CSVCreator = new CSVCreator(repo, commit, workflow, temperature);
+        CSVCreator.createRepoHeader();
 
         for(int i = 0; i < 10; i++){
             int attempt = i + 1;

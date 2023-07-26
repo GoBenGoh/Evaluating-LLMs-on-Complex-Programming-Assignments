@@ -7,10 +7,19 @@ import java.io.IOException;
 public class CSVCreator {
     private CSVWriter csvWriter;
     private int currentRow;
+    private String repository;
+    private String commit;
+    private String workflow;
+    private String temperature;
 
-    public CSVCreator() {
+    public CSVCreator(String repo, String commit, String workflow, String temperature) {
+        this.repository = getRepoNameFromDirectory(repo);
+        this.commit = commit;
+        this.workflow = workflow;
+        this.temperature = temperature;
+
         try {
-            csvWriter = new CSVWriter(new FileWriter("data.csv"));
+            csvWriter = new CSVWriter(new FileWriter(this.repository + "_" + this.commit + ".csv"));
         } catch (IOException e) {
             System.out.println("An error occurred while initializing the CSVWriter.");
             e.printStackTrace();
@@ -20,8 +29,8 @@ public class CSVCreator {
 
     // Testing CSV creation
     public static void main(String[] args) {
-        CSVCreator csvCreator = new CSVCreator();
-        csvCreator.createRepoHeader("../assignment_template/assignment-1", "CommitHash", "WorkflowName", "0.5");
+        CSVCreator csvCreator = new CSVCreator("../assignment_template/assignment-1", "CommitHash", "WorkflowName", "0.5");
+        csvCreator.createRepoHeader();
 
         try {
             csvCreator.save();
@@ -32,15 +41,10 @@ public class CSVCreator {
         }
     }
 
-    public void createRepoHeader(String repo, String commit, String workflow, String temperature) {
-        String[] initialHeader = {getRepoNameFromDirectory(repo) + " " + commit + " " + workflow + " Temperature = " + temperature};
+    public void createRepoHeader() {
+        String[] initialHeader = {"Repo = " + repository + ", " + "Commit = " + commit + ", " + "Workflow = " + workflow + ", " + "Temperature = " + temperature};
         csvWriter.writeNext(initialHeader);
-
-        createAttemptHeader();
-    }
-
-    private void createAttemptHeader() {
-        String[] headers = {"Attempt", "Task 1", "Task 2", "Task 3", "Reason for Failure"};
+        String[] headers = {"Attempt","Task 1 (Provided and Hidden)","Failed Tests","Task 2 (Provided and Hidden)","Failed Tests","Task 3 (Provided and Hidden)","Failed Tests","Compilation Errors"};
         csvWriter.writeNext(headers);
     }
 
