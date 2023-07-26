@@ -177,7 +177,7 @@ public class ChatGPTAPI {
         }
 
         TestResultAnalyzer testingResults = ShellScriptRunner.runTesting(repo);
-
+        CSVCreator.addAttemptInfo(attempt, testingResults);
 
     }
     private String getFileFromResource(String fileName) throws IOException {

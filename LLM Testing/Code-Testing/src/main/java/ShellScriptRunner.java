@@ -82,7 +82,7 @@ public class ShellScriptRunner {
             FailureFileWriter.writeFailuresToFile(t2FailedProvidedTests, t2FailedHiddenTests, t2ProvidedAsserts, t2HiddenAsserts, "T2");
             FailureFileWriter.writeFailuresToFile(t3FailedProvidedTests, t3FailedHiddenTests, t3ProvidedAsserts, t3HiddenAsserts, "T3");
 
-            testingResults = new TestResultAnalyzer(true, t1ProvidedTestNames, t1HiddenTestNames, t2ProvidedTestNames, t2HiddenTestNames, t3ProvidedTestNames, t3FailedHiddenTests, "");
+            testingResults = new TestResultAnalyzer(true, t1ProvidedTestNames, t1HiddenTestNames, t2ProvidedTestNames, t2HiddenTestNames, t3ProvidedTestNames, t3HiddenTestNames, "");
             return testingResults;
 
         } else {
