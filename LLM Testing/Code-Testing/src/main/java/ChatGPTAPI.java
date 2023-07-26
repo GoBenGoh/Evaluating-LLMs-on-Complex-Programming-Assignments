@@ -99,12 +99,14 @@ public class ChatGPTAPI {
                     else{
                         // All tests pass
                         System.out.println("All tests passed");
+                        CSVCreator.save();
                         return;
                     }
                 }
             }
         }
         System.out.println("10 iterations reached");
+        CSVCreator.save();
         return;
     }
 
