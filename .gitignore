@@ -1,4 +1,4 @@
-## IntelliJ ###
+### IntelliJ ###
 *.idea
 *.iml
 *.class
@@ -15,3 +15,16 @@ local.properties
 .settings/
 .loadpath
 .recommenders
+
+### Maven ###
+target/
+LLM Testing/repos_output/
+LLM Testing/errors.txt
+LLM Testing/failures.txt
+LLM Testing/provided_failures.txt
+LLM Testing/hidden_failures.txt
+LLM Testing/Code-Testing/hidden_failures.txt
+LLM Testing/Code-Testing/provided_failures.txt
+LLM Testing/Code-Testing/errors.txt
+.DS_Store
+LLM Testing/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java
