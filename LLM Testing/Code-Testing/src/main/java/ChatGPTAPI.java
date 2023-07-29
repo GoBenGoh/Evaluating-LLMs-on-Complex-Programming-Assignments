@@ -60,9 +60,17 @@ public class ChatGPTAPI {
         boolean task1 = true;
         boolean isStart = true;
 
+        String repo = "../assignment_template/assignment-1";
+        String commit = "Initial-Commit";
+        String workflow = "Own-Progress";
+        String temperature = "0.7";
+        CSVCreator CSVCreator = new CSVCreator(repo, commit, workflow, temperature);
+        CSVCreator.createRepoHeader();
+
         for(int i = 0; i < 10; i++){
+            int attempt = i + 1;
             if (isStart){
-                startTesting(app, "1", args);
+                startTesting(app, "1", args, repo, attempt, CSVCreator);
                 isStart = false;
             }
             else {
@@ -71,9 +79,9 @@ public class ChatGPTAPI {
                 if(!error.equals("") || error == null){
                     System.out.println("Compilation errors");
                     if (task1)
-                        startTesting(app, "1c", args);
+                        startTesting(app, "1c", args, repo, attempt, CSVCreator);
                     else
-                        startTesting(app, "2c", args);
+                        startTesting(app, "2c", args, repo, attempt, CSVCreator);
                 }
                 else{
                     System.out.println("No compilation errors");
@@ -81,26 +89,28 @@ public class ChatGPTAPI {
                     String task2Failures = app.getFileFromResource("t2_failures.txt");
                     if (!task1Failures.equals("")) {
                         System.out.println("Task 1 test failures");
-                        startTesting(app, "1f", args);
+                        startTesting(app, "1f", args, repo, attempt, CSVCreator);
                     }
                     else if (task1Failures.equals("") && !task2Failures.equals("")) {
                         System.out.println("Task 2 test failures");
                         task1 = false;
-                        startTesting(app, "2f", args);
+                        startTesting(app, "2f", args, repo, attempt, CSVCreator);
                     }
                     else{
                         // All tests pass
                         System.out.println("All tests passed");
+                        CSVCreator.save();
                         return;
                     }
                 }
             }
         }
         System.out.println("10 iterations reached");
+        CSVCreator.save();
         return;
     }
 
-    private static void startTesting(ChatGPTAPI app, String mode, String[] args) throws IOException{
+    private static void startTesting(ChatGPTAPI app, String mode, String[] args, String repo, int attempt, CSVCreator CSVCreator) throws IOException{
         String responseContent = app.getFileFromResource("content.txt");
         String request;
         String promptTemplate;
@@ -167,8 +177,10 @@ public class ChatGPTAPI {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String repo = "../assignment_template/assignment-1";
-        ShellScriptRunner.runTesting(repo);
+
+        TestResultAnalyzer testingResults = ShellScriptRunner.runTesting(repo);
+        CSVCreator.addAttemptInfo(attempt, testingResults);
+
     }
     private String getFileFromResource(String fileName) throws IOException {
 
