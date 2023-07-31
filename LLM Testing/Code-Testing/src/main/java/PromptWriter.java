@@ -1,5 +1,3 @@
-import java.io.File;
-
 public class PromptWriter {
     private String prompt;
     private String response;

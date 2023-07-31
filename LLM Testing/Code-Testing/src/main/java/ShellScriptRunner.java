@@ -6,12 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 public class ShellScriptRunner {
-//    public static void main(String[] args) {
-//        // Hard Coded Student Repo
-//        String repo = "../repos_output/assignment-1-repository-12";
-//        runTesting(repo);
-//    }
-
     public static TestResultAnalyzer runTesting(String repositoryDirectory, String key) {
         String xmlPath = repositoryDirectory + "/target/surefire-reports/TEST-nz.ac.auckland.se281.MainTest.xml";
         TestResultAnalyzer testingResults;

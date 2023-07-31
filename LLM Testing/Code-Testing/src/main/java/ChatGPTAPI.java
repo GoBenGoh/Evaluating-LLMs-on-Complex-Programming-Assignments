@@ -125,7 +125,7 @@ public class ChatGPTAPI {
         else if (mode.equals("1c")){
             request = "src/main/java/Task1CompilationFailureRequest.json";
             promptTemplate = app.getFileFromResource("Prompt Templates/Task1_CompilationError.txt");
-            error = app.getFileFromResource("errors.txt");
+            error = app.getFileFromResource("NaturalLanguageContent.txt");
             promptWriter = new PromptWriter(promptTemplate, responseContent, error, "c");
         }
         else if (mode.equals("1f")){
