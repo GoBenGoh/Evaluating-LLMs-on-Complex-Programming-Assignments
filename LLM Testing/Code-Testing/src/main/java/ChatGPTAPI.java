@@ -67,7 +67,7 @@ public class ChatGPTAPI {
         CSVCreator CSVCreator = new CSVCreator(repo, commit, workflow, temperature);
         CSVCreator.createRepoHeader();
 
-        for(int i = 0; i < 1; i++){
+        for(int i = 0; i < 10; i++){
             int attempt = i + 1;
             if (isStart){
                 startTesting(app, "1", args, repo, attempt, CSVCreator);
@@ -171,7 +171,7 @@ public class ChatGPTAPI {
         try(PrintWriter out = new PrintWriter("src/main/resources/newPrompt.txt")){
             out.println(newPrompt);
         }
-        //sendMainRequest(request, args[0]);
+        sendMainRequest(request, args[0]);
         try {
             TextToJava.convertTextToJavaFile();
         } catch (IOException e) {
