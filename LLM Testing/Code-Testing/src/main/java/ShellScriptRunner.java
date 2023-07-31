@@ -108,7 +108,7 @@ public class ShellScriptRunner {
                 catch (IOException e){
                     System.out.println(e);
                 }
-                // ChatGPTAPI.sendNaturalLanguageErrorRequest(key);
+                ChatGPTAPI.sendNaturalLanguageErrorRequest(key);
             }
             catch (IOException e){
                 System.out.println(e);

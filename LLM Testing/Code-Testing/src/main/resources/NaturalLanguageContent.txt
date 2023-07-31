@@ -1,0 +1,3 @@
+The compilation error messages indicate that the compiler cannot find the symbol "Profile" in the class "nz.ac.auckland.se281.InsuranceSystem". This means that the class "Profile" is not imported or not defined in the current package. 
+
+To fix these compilation errors, you need to make sure that the class "Profile" is imported or defined in the same package as the class "InsuranceSystem".

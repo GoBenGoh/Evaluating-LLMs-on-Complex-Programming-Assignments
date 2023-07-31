@@ -194,7 +194,7 @@ public class ChatGPTAPI {
             con.setDoOutput(true);
             //Make sure you put the right API Key saved earlier.
             con.setRequestProperty("Authorization", "Bearer "+ key);
-            String jsonInputString = readLinesAsString(new File("/src/main/java/NaturalLanguageRequest.json"));
+            String jsonInputString = readLinesAsString(new File("src/main/java/NaturalLanguageRequest.json"));
             try (OutputStream os = con.getOutputStream()) {
                 byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
                 os.write(input, 0, input.length);
