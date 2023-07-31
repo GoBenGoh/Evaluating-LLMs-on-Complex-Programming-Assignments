@@ -54,12 +54,12 @@ public class ShellScriptRunner {
             runCommand(repositoryDirectory, "ADD_HIDDEN_TESTS");
             runCommand(repositoryDirectory, "TEST");
 
-            List<Integer> hiddenTestResults = TestResultAnalyzer.extractTestResults(xmlPath);
-            int totalHidden = hiddenTestResults.get(0);
-            failures = hiddenTestResults.get(1);
-            errors = hiddenTestResults.get(2);
-            skipped = hiddenTestResults.get(3);
-            int numPassedHiddenTests = totalHidden - failures - errors - skipped;
+//            List<Integer> hiddenTestResults = TestResultAnalyzer.extractTestResults(xmlPath);
+//            int totalHidden = hiddenTestResults.get(0);
+//            failures = hiddenTestResults.get(1);
+//            errors = hiddenTestResults.get(2);
+//            skipped = hiddenTestResults.get(3);
+//            int numPassedHiddenTests = totalHidden - failures - errors - skipped;
 
             // Getting failed hidden tests
             List<Map<String, String>> hiddenFailureMessages = TestResultAnalyzer.extractFailedTestDetails(xmlPath);

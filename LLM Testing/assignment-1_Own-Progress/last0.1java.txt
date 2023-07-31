@@ -1,0 +1,151 @@
+package nz.ac.auckland.se281;
+
+import nz.ac.auckland.se281.Main.PolicyType;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class InsuranceSystem {
+    private List<Profile> database;
+
+    public InsuranceSystem() {
+        this.database = new ArrayList<>();
+    }
+
+    public void printDatabase() {
+        if (database.isEmpty()) {
+            System.out.println("Database has 0 profiles.");
+        } else if (database.size() == 1) {
+            System.out.println("Database has 1 profile:");
+            System.out.println(" 1: " + database.get(0).toString());
+        } else {
+            System.out.println("Database has " + database.size() + " profiles:");
+            for (int i = 0; i < database.size(); i++) {
+                System.out.println(" " + (i + 1) + ": " + database.get(i).toString());
+            }
+        }
+    }
+
+    public void createNewProfile(String userName, String age) {
+        if (userName.length() < 3) {
+            System.out.println("'" + userName + "' is an invalid username, it should be at least 3 characters long. No profile was created.");
+        } else if (!isUniqueUsername(userName)) {
+            System.out.println("Usernames must be unique. No profile was created for '" + userName + "'.");
+        } else if (!isPositiveInteger(age)) {
+            System.out.println("'" + age + "' is an invalid age, please provide a positive whole number only. No profile was created for " + userName + ".");
+        } else {
+            String titleCaseUsername = toTitleCase(userName);
+            int parsedAge = Integer.parseInt(age);
+            Profile newProfile = new Profile(titleCaseUsername, parsedAge);
+            database.add(newProfile);
+            System.out.println("New profile created for " + titleCaseUsername + " with age " + parsedAge + ".");
+        }
+    }
+
+    public void loadProfile(String userName) {
+        Profile profile = findProfile(userName);
+        if (profile != null) {
+            profile.setLoaded(true);
+            System.out.println("Profile loaded for " + profile.getUsername() + ".");
+        } else {
+            System.out.println("No profile found for " + userName + ". Profile not loaded.");
+        }
+    }
+
+    public void unloadProfile() {
+        Profile loadedProfile = findLoadedProfile();
+        if (loadedProfile != null) {
+            loadedProfile.setLoaded(false);
+            System.out.println("Profile unloaded for " + loadedProfile.getUsername() + ".");
+        } else {
+            System.out.println("No profile is currently loaded.");
+        }
+    }
+
+    public void deleteProfile(String userName) {
+        Profile profile = findProfile(userName);
+        if (profile != null) {
+            if (profile.isLoaded()) {
+                System.out.println("Cannot delete profile for " + profile.getUsername() + " while loaded. No profile was deleted.");
+            } else {
+                database.remove(profile);
+                System.out.println("Profile deleted for " + profile.getUsername() + ".");
+            }
+        } else {
+            System.out.println("No profile found for " + userName + ". No profile was deleted.");
+        }
+    }
+
+    public void createPolicy(PolicyType type, String[] options) {
+        Profile loadedProfile = findLoadedProfile();
+        if (loadedProfile != null) {
+            if (loadedProfile.hasLifePolicy() && type == PolicyType.LIFE) {
+                System.out.println(loadedProfile.getUsername() + " already has a life policy. No new policy was created.");
+            } else if (loadedProfile.getAge() > 60 && type == PolicyType.LIFE) {
+                System.out.println(loadedProfile.getUsername() + " is over the age limit. No policy was created.");
+            } else {
+                Policy newPolicy = null;
+                switch (type) {
+                    case HOME:
+                        newPolicy = new HomePolicy(options[0], options[1], options[2].equalsIgnoreCase("y"));
+                        break;
+                    case CAR:
+                        newPolicy = new CarPolicy(options[0], options[1], options[2], options[3].equalsIgnoreCase("y"));
+                        break;
+                    case LIFE:
+                        newPolicy = new LifePolicy(options[0], options[1]);
+                        break;
+                }
+                loadedProfile.addPolicy(newPolicy);
+                System.out.println("New " + type.toString().toLowerCase() + " policy created for " + loadedProfile.getUsername() + ".");
+            }
+        } else {
+            System.out.println("Need to load a profile in order to create a policy.");
+        }
+    }
+
+    private boolean isUniqueUsername(String userName) {
+        for (Profile profile : database) {
+            if (profile.getUsername().equalsIgnoreCase(userName)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean isPositiveInteger(String age) {
+        try {
+            int parsedAge = Integer.parseInt(age);
+            return parsedAge > 0;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    private String toTitleCase(String userName) {
+        String[] words = userName.split(" ");
+        StringBuilder titleCaseUsername = new StringBuilder();
+        for (String word : words) {
+            titleCaseUsername.append(Character.toUpperCase(word.charAt(0))).append(word.substring(1).toLowerCase()).append(" ");
+        }
+        return titleCaseUsername.toString().trim();
+    }
+
+    private Profile findProfile(String userName) {
+        for (Profile profile : database) {
+            if (profile.getUsername().equalsIgnoreCase(userName)) {
+                return profile;
+            }
+        }
+        return null;
+    }
+
+    private Profile findLoadedProfile() {
+        for (Profile profile : database) {
+            if (profile.isLoaded()) {
+                return profile;
+            }
+        }
+        return null;
+    }
+}

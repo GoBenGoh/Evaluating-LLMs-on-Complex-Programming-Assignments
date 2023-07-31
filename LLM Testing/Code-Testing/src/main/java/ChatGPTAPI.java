@@ -171,7 +171,7 @@ public class ChatGPTAPI {
         try(PrintWriter out = new PrintWriter("src/main/resources/newPrompt.txt")){
             out.println(newPrompt);
         }
-        //sendRequest(request, args[0]);
+        sendRequest(request, args[0]);
         try {
             TextToJava.convertTextToJavaFile();
         } catch (IOException e) {
