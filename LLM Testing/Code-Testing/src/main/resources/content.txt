@@ -1,286 +1,178 @@
-```
+package nz.ac.auckland.se281;
+
 import nz.ac.auckland.se281.Main.PolicyType;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class InsuranceSystem {
-    private final List<Profile> profiles;
-    private Profile loadedProfile;
+    private List<Profile> database;
 
     public InsuranceSystem() {
-        this.profiles = new ArrayList<>();
-        this.loadedProfile = null;
+        // Only this constructor can be used (if you need to initialise fields).
+        this.database = new ArrayList<>();
     }
-    public void printDatabase (){
-        String summaryHeader = "Database has "+profiles.size()+" profile";
 
-        if(profiles.size()>1){
-            summaryHeader += "s:";
-        }else if (profiles.size()==1){
-           summaryHeader += ":";
-        }else {
-            System.out.println(summaryHeader + "s");
-            return;
+    public void printDatabase() {
+        // Print the entire insurance database.
+        int size = database.size();
+
+        if (size == 0) {
+            MessageCli.PRINT_DB_POLICY_COUNT.printMessage("0", "s", ".");
+        } else if (size == 1) {
+            MessageCli.PRINT_DB_POLICY_COUNT.printMessage("1", "", ":");
+            printProfile(database.get(0), 1);
+        } else {
+            MessageCli.PRINT_DB_POLICY_COUNT.printMessage(String.valueOf(size), "s", ":");
+            for (int i = 0; i < size; i++) {
+                printProfile(database.get(i), i + 1);
+            }
         }
+    }
 
-        System.out.println();
-        System.out.println(summaryHeader);
-        
-        int rank = 1;
+    private void printProfile(Profile profile, int rank) {
+        String userName = profile.getUserName();
+        int age = profile.getAge();
 
-        for (Profile profile:profiles){
-            System.out.println(" "+(rank++)+": "+profile.getUsername()+", "+profile.getAge());
-        }
+        String profileHeader = MessageCli.PRINT_DB_PROFILE_HEADER_MINIMAL.getMessage(String.valueOf(rank), userName, String.valueOf(age));
+        System.out.println(profileHeader);
     }
 
     public void createNewProfile(String userName, String age) {
-
-        int userID= 0;
-        for (Profile profile:profiles)
-        {
-            String lowerCaseProfileUserName = profile.getUsername().toLowerCase();
-            if (lowerCaseProfileUserName.equals(userName.toLowerCase())){
-                System.out.println("Usernames must be unique. No profile was created for '" + profile.getUsername() +"'.")
-                return:   
-            }
-            userID++;
+        // Create a new client profile with the specified username and age (passed as arguments to the CREATE_PROFILE command).
+        // The username should be unique across all other usernames currently in the system,
+        // and the age should be a positive integer.
+        if (!isUniqueUsername(userName)) {
+            MessageCli.INVALID_USERNAME_NOT_UNIQUE.printMessage(userName);
+            return;
         }
 
-        if (!isUnique(userName) && !isValidName(userName)){
-            System.out.println("Invalid User Name")
-             System.out.println("No profile was created.");  
-             return;
-        }else if (!isValidUserNameName(userName)) {
-              System.out.println("username was not valied please ensure username meet the required lenght of 3.")
-              System.out.println("No profile was created.");  
-              return;
-        } 
-           else if (isValidAge(age)) {
-              int profileAge = Integer.ParseInt(age);
-              System.out.println("Profile Created");  
-              return;
-        } else {
-            System.out.println("No profile was created for ' "+ userName +" '");// error message 2
-             return;
+        int parsedAge = parseAge(age);
+        if (parsedAge <= 0) {
+            MessageCli.INVALID_AGE.printMessage(age, userName);
+            return;
         }
 
-        public void loadProfile(String userName) {
-            this.unloadProfile();
+        Profile newProfile = new Profile(userName, parsedAge);
+        database.add(newProfile);
+        MessageCli.PROFILE_CREATED.printMessage(userName, age);
+    }
 
-            int profileId = findByUserName(userName);
-            
-            if (!isUnique(userName)){
-               System.out.println("Already has a life policy");
-                return ;
-            }
-            Profile profileObject = this.profiles.get(profileId);// Loop through and load profiles.
-
-            if (isValidUseryName(username)) {// remove sp
-                this.loadedProfile = profileObject;// pass current profile to loadedProfile
-                 System.out.println("Profile loaded. ." +username);//message line 1
-            } else {
-                ErrorTypeProfile(21,username);// Concat ' and username, concets and comma, 
-                return;//If the command had multiple errors juse return else print the appropriate message.
+    private boolean isUniqueUsername(String username) {
+        for (Profile profile : database) {
+            if (profile.getUserName().equalsIgnoreCase(username)) {
+                return false;
             }
         }
+        return true;
+    }
 
-        public void unloadProfile(){
-            this.loadedProfile = null;
+    private int parseAge(String age) {
+        try {
+            return Integer.parseInt(age);
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
+
+    public void loadProfile(String userName) {
+        // Load the specified profile <USERNAME>
+        Profile profile = getProfileByUsername(userName);
+        if (profile == null) {
+            MessageCli.NO_PROFILE_FOUND_TO_LOAD.printMessage(userName);
+            return;
         }
 
+        profile.setLoaded(true);
+        MessageCli.PROFILE_LOADED.printMessage(userName);
+    }
 
-        public void deleteProfile(String userName) {
-            //  this.loadProfile(); Implement the further logic ie to load the profile first .
-            int userId = this.findByUserName(userName)
-            Profile profileObject = this.profiles.get(userId);
-            
-            if (isUnique(username)) {// 
-               //
-              System.out.println("invalid username");//However if no valid username pass in the storedProfilesList.Print erreason
-              return;
-            } else if (profileObject == this.loadedProfile){
-              System.out.println("Cannot delete profile for ' " + username + " ' while profile is already loaded.ToString?");//Some of the constructs might be added too.
-              return;
-            }
-
-            // However You can choose to omit the square brackets
-            this.profiles.remove(profileId);
-            System.out.println(MessageCli.PROFILE_DELETED.getMessage(profile.getusername()));
-
-        }
-
-        public void createPolicy(PolicyType type, String[] options) {
-  
-            // You maight consider that this should be passed then.
-
-            Profile loadedProfile = this.loadedProfile;// This is if any special checking required on loadedProfile but any action called then we can assume that this profile was loaded already .
-            String username= loadedProfile.getUsername()
-
-            switch (type) {
-                case home:
-
-                    if (loadedProfile.getNoOfHOMEPolicies ()==0) {//This is were you verify You want to check existing policies belong to this user other than Homepolicy.....
-
-                        if(options.length != 2 || options[0].isEmpty() || options[1].isEmpty()) {
-                            System.out.println(MessageCli.WRONG_ARGUMENT_COUNT.getMessage("2", "", POLICY_HOME) )
-                            return;
-                        }
-                         
-                        String sumToInsure = options[0];
-                        
-                        if (!numbercheck) {
-                            System.out.println("sum to Insure provided must be of positive integer. Provided value expects " + sumToInsure);// is not a pure digit print message where it says must be a postive ONE AFTER a prompt.
-                            return;
-                        }
-
-                        
-                         
-                        //ERROR second case: Duplicate CarPolicy.
-                      // Third Short message could : Multiple policy discount(Each time new policy created Check how many policies where 1.Multiple i.e 20% 2.ASecond Case: 2 policies currntly 10%discount(Two policies currently instnatiate)
-
-
-                       
-                       System.out.println("Type : CarPolicy , SumToInsure :"+ sumToInsure); 
-                       this.loadedProfile.incrementNoOfHOMEPolicies();// update getCarPolicies with policycounter as well.
-                       return ;
-
-                    } else {
-
-                      System.out.println(MessageCli.ALREADY_HAS_HOME_POLICY.getMessage(username))//
-                    }
-                    break;
-                case Car:
-                    if (loadedProfile.getNoOfCARPOlicies () == 0) {//Second Case: Duplicate CarPolicy....Just create an error First we do that then.The prompt now should actually contrain Make.....or The selection does not have CarPolicy duplicates allowed, Try Again.
-
-                        if(options.length != 3 || options[0].isEmpty() || options[1].isEmpty()|| options[2].isEmpty()) {
-                            System.out.println(MessageCli.WRONG_ARGUMENT_COUNT.getMessage("3", "", POLICY_CAR) )//
-                            return;
-                        }
-
-                      
-                        
-                      //boolean check = ...(Sum Value) .....Calculate the SumIntegerNumber and then check the number....catch check and print the value exptects .
-                      
-                     
-                      
-                      
-                      //
-                      
-                       //....
-                       
-                       // this.timeoutDT= System.currentTimeMillis()
-
-                      this.loadedProfile.incrementNoOfCARPolicies();// Now we need to get and assign the data above to the procedure parameters
-                      System.out.println("Type : CarPolicy , SumToInsure :"+ sumToInsure); 
-                        
-
-
-                            /* ERROR second case: Duplicate CarPolicy.
-                            Third Short message could : Multiple policy discount(Each time new policy created Check how many policies where 1.Multiple i.e 20% 2.ASecond Case: 2 policies currntly 10%discount(Two policies currently instnatiate) */
-                      
-                        
-                        // Array.push  to policys select all the type, objects as the....like Home:SumIsuored,Premium 
-                      System.out.println(loadedProfile+MessageCli.NEW_POLICY_CREATED.getMessage(type,username) )//
-
-                     } else {
-
-                    System.out.println(MessageCli.ALREADY_HAS_car(i.e POLICY.getMessage.upperc(locale))+ username)//
-                      
-                    }
-
-                        break;
-                case life:
-                    //...
-                    System.out.println(username+ MessageCli.LIFE_POLICY_CREATED.getMessage + options))//
-                    break;
-                default:
-                    throw new IllegalArgumentException("Invalid policy type");
+    private Profile getProfileByUsername(String username) {
+        for (Profile profile : database) {
+            if (profile.getUserName().equalsIgnoreCase(username)) {
+                return profile;
             }
         }
+        return null;
+    }
 
-        private boolean isUnique(String userName) {
+    public void unloadProfile() {
+        // Unload the currently-loaded profile
+        Profile loadedProfile = getLoadedProfile();
+        if (loadedProfile == null) {
+            MessageCli.NO_PROFILE_LOADED.printMessage();
+            return;
+        }
 
-            for(Profile profile:profiles){
-                if(profile.getUserName().equalsIgnoreCase(userName)){
-                    return false;
-                }
+        loadedProfile.setLoaded(false);
+        MessageCli.PROFILE_UNLOADED.printMessage(loadedProfile.getUserName());
+    }
+
+    private Profile getLoadedProfile() {
+        for (Profile profile : database) {
+            if (profile.isLoaded()) {
+                return profile;
             }
+        }
+        return null;
+    }
 
-            return true;
+    public void deleteProfile(String userName) {
+        // Delete the specified profile <USERNAME> from the database
+        Profile profile = getProfileByUsername(userName);
+        if (profile == null) {
+            MessageCli.NO_PROFILE_FOUND_TO_DELETE.printMessage(userName);
+            return;
         }
 
-        
-        // Correct the checking grammer methodNameIsUniqeUserName 
-        // For alphabet titleCaseing firstNameString and secondNameString is more appropriate where username might rep the third postion. .
-        //
-        private boolean isValidName(String userName) {
- 				  // Returns true if the string contains nothing i.e if blank or empty. Strings can't be empty like userName
-                    if (username.isEmpty() && (!firstNameString.isEmpty() && secondNameString.isEmpty())) { 
-                        return false;
-                    }
-            return true;
+        boolean isLoaded = profile.isLoaded();
+        if (isLoaded) {
+            MessageCli.CANNOT_DELETE_PROFILE_WHILE_LOADED.printMessage(userName);
+            return;
         }
 
-		private boolean isValidAge(String age)
-		{
-            int ageint = -1;
-             try{
-                    ageint  = parseAge(age);
-                      if (ageint < 0) 
-                      return false;
-                 }
-                 catch (NumberFormatException ex){
-                       return false;
+        database.remove(profile);
+        MessageCli.PROFILE_DELETED.printMessage(userName);
+    }
 
-                    }
-                        //
-                       
-                        return true;
-
+    public void createPolicy(PolicyType type, String[] options) {
+        // Create a new policy for the currently-loaded profile
+        Profile loadedProfile = getLoadedProfile();
+        if (loadedProfile == null) {
+            MessageCli.NO_PROFILE_FOUND_TO_CREATE_POLICY.printMessage();
+            return;
         }
-        
 
-  private static int checkIsAllDigit(String arr[])
-  {
+        if (loadedProfile.hasLifePolicy() && type == PolicyType.LIFE) {
+            MessageCli.ALREADY_HAS_LIFE_POLICY.printMessage(loadedProfile.getUserName());
+            return;
+        }
 
-             for (int i = 0; i < str.length(); i++) {
-                 char ch = str.charAt(i);
-  
-                // check character is digit or not
-               if (Character.isDigit(ch) == false)
-                   return false;
-            }
-  
-            return true;
- }
+        switch (type) {
+            case HOME:
+                createHomePolicy(loadedProfile, options);
+                break;
+            case CAR:
+                createCarPolicy(loadedProfile, options);
+                break;
+            case LIFE:
+                createLifePolicy(loadedProfile, options);
+                break;
+        }
+    }
 
-   private static int int parseAge(String age){
-   	 
-             if (checkIsAllDigit(age)){
-                System.out.println(age);       
-                }
-                  else{
-                   return -1
-           			 }//   return has been placed here not below age, and initial = -1.
+    private void createHomePolicy(Profile profile, String[] options) {
+        // Create a new home policy
+    }
 
-          	return Integer.parseInt(age);
- }
+    private void createCarPolicy(Profile profile, String[] options) {
+        // Create a new car policy
+    }
 
-   public static void main(String[] args){
-          // Start point actual point where generatedoutput should print values on output.
-
-   	       InsuranceSystem genrate = new InsuranceSystem();
-
-           genrate.createNewProfile("csdctrkfjl","Defalt");
-
-           genrate.loadProfile("jhgfg");
-           genrate.loadProfile("jh")
-           genrate.loadProfile("WIE")
-
-
-		   genrate.printDatabase();
-           
-         //  genrate.totalImpFulfil();
-
+    private void createLifePolicy(Profile profile, String[] options) {
+        // Create a new life policy
     }
 }
+

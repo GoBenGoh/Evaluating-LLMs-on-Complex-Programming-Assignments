@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ChatGPTAPI {
-    public static void sendRequest(String request, String key) {
+    public static void sendMainRequest(String request, String key) {
         try {
             URL url = new URL("https://api.openai.com/v1/chat/completions");
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -67,7 +67,7 @@ public class ChatGPTAPI {
         CSVCreator CSVCreator = new CSVCreator(repo, commit, workflow, temperature);
         CSVCreator.createRepoHeader();
 
-        for(int i = 0; i < 10; i++){
+        for(int i = 0; i < 1; i++){
             int attempt = i + 1;
             if (isStart){
                 startTesting(app, "1", args, repo, attempt, CSVCreator);
@@ -171,18 +171,65 @@ public class ChatGPTAPI {
         try(PrintWriter out = new PrintWriter("src/main/resources/newPrompt.txt")){
             out.println(newPrompt);
         }
-        sendRequest(request, args[0]);
+        //sendMainRequest(request, args[0]);
         try {
             TextToJava.convertTextToJavaFile();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        TestResultAnalyzer testingResults = ShellScriptRunner.runTesting(repo);
+        TestResultAnalyzer testingResults = ShellScriptRunner.runTesting(repo, args[0]);
         CSVCreator.addAttemptInfo(attempt, testingResults);
 
     }
-    private String getFileFromResource(String fileName) throws IOException {
+
+    public static void sendNaturalLanguageErrorRequest(String key) {
+        try {
+            URL url = new URL("https://api.openai.com/v1/chat/completions");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Content-Type", "application/json");
+            con.setRequestProperty("Accept", "application/json");
+            //Make sure you put the right Organization key saved earlier.
+            con.setDoOutput(true);
+            //Make sure you put the right API Key saved earlier.
+            con.setRequestProperty("Authorization", "Bearer "+ key);
+            String jsonInputString = readLinesAsString(new File("/src/main/java/NaturalLanguageRequest.json"));
+            try (OutputStream os = con.getOutputStream()) {
+                byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+            int responseCode = con.getResponseCode();
+            System.out.println("Response Code : " + responseCode);
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            JsonObject jsonObject = JsonParser.parseString(String.valueOf(response)).getAsJsonObject();
+            JsonElement choices =  jsonObject.get("choices");
+            JsonElement message = choices.getAsJsonArray().get(0).getAsJsonObject().get("message");
+            JsonElement content = message.getAsJsonObject().get("content");
+            System.out.println(content);
+            try(PrintWriter out = new PrintWriter("src/main/resources/NaturalLanguageResponse.txt")){
+                out.println(response);
+            }
+            try(PrintWriter out = new PrintWriter("src/main/resources/NaturalLanguageContent.txt")){
+                out.println(content.getAsString());
+            }
+            catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+            in.close();
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public String getFileFromResource(String fileName) throws IOException {
 
         // The class loader that loaded the class
         ClassLoader classLoader = getClass().getClassLoader();

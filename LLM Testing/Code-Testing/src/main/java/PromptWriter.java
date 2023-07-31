@@ -49,6 +49,22 @@ public class PromptWriter {
         }
     }
 
+    public String createNaturalLanguageErrorPrompt(){
+        int responseStart = response.indexOf("package nz.ac.auckland.se281");
+        String trimmedResponse = response.substring(responseStart);
+        if (trimmedResponse.charAt(trimmedResponse.length()-1)=='`'){
+            trimmedResponse=trimmedResponse.substring(0,trimmedResponse.length()-4); // remove backticks
+        }
+        int start = 61;
+        System.out.println("Prompt template:"+prompt);
+        String newPrompt = modifyPrompt(prompt, start, extra);
+        System.out.println("New prompt1:"+newPrompt);
+        int codeStart =  newPrompt.indexOf("The next section contains the code that is throwing the compilation errors:") + 80;
+        newPrompt = modifyPrompt(newPrompt, codeStart, trimmedResponse);
+        System.out.println("New prompt2:"+newPrompt);
+        return newPrompt;
+    }
+
     private String modifyPrompt(String prompt, int index, String message){
         String newString = new String();
         for (int i = 0; i < prompt.length(); i++) {
