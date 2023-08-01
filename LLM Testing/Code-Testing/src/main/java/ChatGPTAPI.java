@@ -63,7 +63,7 @@ public class ChatGPTAPI {
         String repo = "../assignment_template/assignment-1";
         String commit = "Initial-Commit";
         String workflow = "Own-Progress";
-        String temperature = "0.7";
+        String temperature = String.valueOf(args[1]);
         CSVCreator CSVCreator = new CSVCreator(repo, commit, workflow, temperature);
         CSVCreator.createRepoHeader();
 
@@ -75,7 +75,6 @@ public class ChatGPTAPI {
             }
             else {
                 String error = app.getFileFromResource("errors.txt");
-                System.out.println(error);
                 if(!error.equals("") || error == null){
                     System.out.println("Compilation errors");
                     if (task1)
@@ -212,7 +211,6 @@ public class ChatGPTAPI {
             JsonElement choices =  jsonObject.get("choices");
             JsonElement message = choices.getAsJsonArray().get(0).getAsJsonObject().get("message");
             JsonElement content = message.getAsJsonObject().get("content");
-            System.out.println(content);
             try(PrintWriter out = new PrintWriter("src/main/resources/NaturalLanguageResponse.txt")){
                 out.println(response);
             }

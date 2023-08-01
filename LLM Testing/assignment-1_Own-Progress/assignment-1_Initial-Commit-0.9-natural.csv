@@ -1,0 +1,453 @@
+"Repo = assignment-1, Commit = Initial-Commit, Workflow = Own-Progress, Temperature = 0.9"
+"Attempt","Task 1 (Provided)","Failed Tests","Task 1 (Hidden)","Failed Tests","Task 2 (Provided)","Failed Tests","Task 2 (Hidden)","Failed Tests","Task 3 (Provided)","Failed Tests","Task 3 (Hidden)","Failed Tests","Compilation Errors"
+"1","-","-","-","-","-","-","-","-","-","-","-","-","[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[9,25] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[10,13] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[25,14] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[58,9] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[58,34] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[91,9] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[130,9] cannot find symbol
+  symbol:   class HomePolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[130,37] cannot find symbol
+  symbol:   class HomePolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[141,9] cannot find symbol
+  symbol:   class CarPolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[141,35] cannot find symbol
+  symbol:   class CarPolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[154,13] cannot find symbol
+  symbol:   class LifePolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[154,41] cannot find symbol
+  symbol:   class LifePolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+"
+"2","-","-","-","-","-","-","-","-","-","-","-","-","[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[9,18] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[10,13] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[150,31] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[189,13] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[47,9] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[47,34] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[53,9] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[85,9] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[117,17] cannot find symbol
+  symbol:   class HomePolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[117,45] cannot find symbol
+  symbol:   class HomePolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[131,17] cannot find symbol
+  symbol:   class CarPolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[131,43] cannot find symbol
+  symbol:   class CarPolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[141,17] cannot find symbol
+  symbol:   class LifePolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[141,45] cannot find symbol
+  symbol:   class LifePolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[160,14] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[190,14] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+"
+"3","-","-","-","-","-","-","-","-","-","-","-","-","[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[6,18] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[7,13] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[23,17] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[52,14] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[59,9] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[59,34] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[70,14] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[98,13] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[145,9] cannot find symbol
+  symbol:   class HomePolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[145,33] cannot find symbol
+  symbol:   class HomePolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[168,9] cannot find symbol
+  symbol:   class CarPolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[168,32] cannot find symbol
+  symbol:   class CarPolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[189,9] cannot find symbol
+  symbol:   class LifePolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[189,33] cannot find symbol
+  symbol:   class LifePolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+"
+"4","-","-","-","-","-","-","-","-","-","-","-","-","[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[10,18] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[136,13] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[145,13] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[24,17] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[47,13] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[47,35] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[55,9] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[65,9] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[76,9] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[91,9] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[103,17] cannot find symbol
+  symbol:   class HomePolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[103,45] cannot find symbol
+  symbol:   class HomePolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[111,17] cannot find symbol
+  symbol:   class CarPolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[111,43] cannot find symbol
+  symbol:   class CarPolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[119,17] cannot find symbol
+  symbol:   class LifePolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[119,45] cannot find symbol
+  symbol:   class LifePolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[128,14] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[137,14] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[146,14] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+"
+"5","-","-","-","-","-","-","-","-","-","-","-","-","[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[9,18] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[10,13] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[150,13] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[24,17] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[52,9] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[52,31] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[65,9] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[96,9] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[142,14] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[151,14] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+"
+"6","-","-","-","-","-","-","-","-","-","-","-","-","[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[7,18] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[8,13] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[21,17] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[46,14] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[53,9] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[53,34] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[64,14] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[91,13] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[120,21] cannot find symbol
+  symbol:   class HomePolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[120,49] cannot find symbol
+  symbol:   class HomePolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[138,21] cannot find symbol
+  symbol:   class CarPolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[138,47] cannot find symbol
+  symbol:   class CarPolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[152,21] cannot find symbol
+  symbol:   class LifePolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[152,49] cannot find symbol
+  symbol:   class LifePolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+"
+"7","-","-","-","-","-","-","-","-","-","-","-","-","[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[9,18] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[10,13] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[141,17] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[145,12] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[162,13] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[56,9] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[56,34] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[65,13] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[91,9] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[118,17] cannot find symbol
+  symbol:   class HomePolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[118,45] cannot find symbol
+  symbol:   class HomePolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[128,17] cannot find symbol
+  symbol:   class CarPolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[128,43] cannot find symbol
+  symbol:   class CarPolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[134,17] cannot find symbol
+  symbol:   class LifePolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[134,45] cannot find symbol
+  symbol:   class LifePolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[154,14] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[163,14] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+"
+"8","-","-","-","-","-","-","-","-","-","-","-","-","[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[9,18] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[106,35] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[116,34] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[127,35] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[145,31] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[166,13] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[180,13] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[41,13] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[41,35] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[50,9] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[60,9] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[85,9] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[111,9] cannot find symbol
+  symbol:   class HomePolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[111,33] cannot find symbol
+  symbol:   class HomePolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[122,9] cannot find symbol
+  symbol:   class CarPolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[122,32] cannot find symbol
+  symbol:   class CarPolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[140,9] cannot find symbol
+  symbol:   class LifePolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[140,33] cannot find symbol
+  symbol:   class LifePolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[167,14] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[176,9] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[181,14] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+"
+"9","-","-","-","-","-","-","-","-","-","-","-","-","[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[7,18] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[8,13] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[139,13] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[148,13] cannot find symbol
+  symbol:   class HomePolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[155,13] cannot find symbol
+  symbol:   class CarPolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[163,13] cannot find symbol
+  symbol:   class LifePolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[22,17] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[39,13] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[39,35] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[50,13] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[74,13] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[88,13] cannot find symbol
+  symbol:   class Policy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[122,14] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[140,14] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[152,20] cannot find symbol
+  symbol:   class HomePolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[160,20] cannot find symbol
+  symbol:   class CarPolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[165,20] cannot find symbol
+  symbol:   class LifePolicy
+  location: class nz.ac.auckland.se281.InsuranceSystem
+"
+"10","-","-","-","-","-","-","-","-","-","-","-","-","[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[10,18] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[105,31] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[42,17] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[42,42] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[53,14] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[68,14] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[97,14] cannot find symbol
+  symbol:   class Profile
+  location: class nz.ac.auckland.se281.InsuranceSystem
+"

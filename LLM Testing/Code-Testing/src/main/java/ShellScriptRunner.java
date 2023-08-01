@@ -73,7 +73,6 @@ public class ShellScriptRunner {
 
         } else {
             System.out.println("Build Failed");
-            System.out.println(compileResponse);
             String errorMessages = TestResultAnalyzer.getCompilationErrors(compileResponse);
             ChatGPTAPI app = new ChatGPTAPI();
             try{

@@ -54,12 +54,9 @@ public class PromptWriter {
             trimmedResponse=trimmedResponse.substring(0,trimmedResponse.length()-4); // remove backticks
         }
         int start = 61;
-        System.out.println("Prompt template:"+prompt);
         String newPrompt = modifyPrompt(prompt, start, extra);
-        System.out.println("New prompt1:"+newPrompt);
         int codeStart =  newPrompt.indexOf("The next section contains the code that is throwing the compilation errors:") + 80;
         newPrompt = modifyPrompt(newPrompt, codeStart, trimmedResponse);
-        System.out.println("New prompt2:"+newPrompt);
         return newPrompt;
     }
 

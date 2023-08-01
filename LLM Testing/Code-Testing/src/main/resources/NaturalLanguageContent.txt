@@ -1,3 +1,13 @@
-The compilation error messages indicate that the compiler cannot find the symbol "Profile" in the class "nz.ac.auckland.se281.InsuranceSystem". This means that the class "Profile" is not imported or not defined in the current package. 
+The compilation error messages indicate that the compiler cannot find the symbol "Profile" in the class "InsuranceSystem". This means that the class "Profile" is either missing or not imported correctly in the code.
 
-To fix these compilation errors, you need to make sure that the class "Profile" is imported or defined in the same package as the class "InsuranceSystem".
+The specific lines where the error occurs are:
+
+- Line 10: The class "Profile" is referenced as a type in the class "InsuranceSystem".
+- Line 105: The class "Profile" is referenced as a type in the class "InsuranceSystem".
+- Line 42: The class "Profile" is referenced as a type in the class "InsuranceSystem".
+- Line 42: The class "Profile" is referenced as a type in the class "InsuranceSystem".
+- Line 53: The class "Profile" is referenced as a type in the class "InsuranceSystem".
+- Line 68: The class "Profile" is referenced as a type in the class "InsuranceSystem".
+- Line 97: The class "Profile" is referenced as a type in the class "InsuranceSystem".
+
+To resolve this compilation error, you need to make sure that the class "Profile" is defined and accessible in the code. This could involve creating the "Profile" class or checking if it is imported correctly from another package.
