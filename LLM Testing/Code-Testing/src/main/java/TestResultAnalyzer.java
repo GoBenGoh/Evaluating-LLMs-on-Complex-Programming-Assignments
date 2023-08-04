@@ -51,34 +51,34 @@ public class TestResultAnalyzer {
         return errors;
     }
 
-    public static List<Integer> extractTestResults(String xmlFilePath) {
-        List<Integer> values = new ArrayList<>();
-
-        try {
-            File file = new File(xmlFilePath);
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            Document document = builder.parse(file);
-            document.getDocumentElement().normalize();
-
-            Element testsuiteElement = (Element) document.getElementsByTagName("testsuite").item(0);
-            int tests = Integer.parseInt(testsuiteElement.getAttribute("tests"));
-            int errors = Integer.parseInt(testsuiteElement.getAttribute("errors"));
-            int skipped = Integer.parseInt(testsuiteElement.getAttribute("skipped"));
-            int failures = Integer.parseInt(testsuiteElement.getAttribute("failures"));
-
-            values.add(tests);
-            values.add(failures);
-            values.add(errors);
-            values.add(skipped);
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return values;
-    }
+//    public static List<Integer> extractTestResults(String xmlFilePath) {
+//        List<Integer> values = new ArrayList<>();
+//
+//        try {
+//            File file = new File(xmlFilePath);
+//            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+//            DocumentBuilder builder = factory.newDocumentBuilder();
+//            Document document = builder.parse(file);
+//            document.getDocumentElement().normalize();
+//
+//            Element testsuiteElement = (Element) document.getElementsByTagName("testsuite").item(0);
+//            int tests = Integer.parseInt(testsuiteElement.getAttribute("tests"));
+//            int errors = Integer.parseInt(testsuiteElement.getAttribute("errors"));
+//            int skipped = Integer.parseInt(testsuiteElement.getAttribute("skipped"));
+//            int failures = Integer.parseInt(testsuiteElement.getAttribute("failures"));
+//
+//            values.add(tests);
+//            values.add(failures);
+//            values.add(errors);
+//            values.add(skipped);
+//
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        return values;
+//    }
 
     public static String getCompilationErrors(String compResponse) {
         int errorsStart = compResponse.indexOf("[ERROR] COMPILATION ERROR : "); // Errors start here in compResponse
@@ -105,10 +105,13 @@ public class TestResultAnalyzer {
         taskTestDetails.add(new LinkedHashMap<>()); // Task 3 test cases
 
         try {
-            File file = new File(xmlFilePath);
+            // Create the XmlReportPoller with the desired maxAttempts and pollingInterval
+            XmlReportPoller reportPoller = new XmlReportPoller(10, 1000); // 10 attempts with 1 second interval
+            // Use the XmlReportPoller to get the report file
+            File xmlReportFile = reportPoller.waitForReport(xmlFilePath);
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
-            Document document = builder.parse(file);
+            Document document = builder.parse(xmlReportFile);
             document.getDocumentElement().normalize();
 
             NodeList failedTests = document.getElementsByTagName("testcase");
