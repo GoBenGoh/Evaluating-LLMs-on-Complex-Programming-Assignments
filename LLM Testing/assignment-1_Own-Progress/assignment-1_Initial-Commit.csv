@@ -1,4 +1,6 @@
-[ERROR] /C:/Users/benja/OneDrive/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[9,18] cannot find symbol
+"Repo = assignment-1, Commit = Initial-Commit, Workflow = Own-Progress, Temperature = 0.7"
+"Attempt","Task 1 (Provided)","Failed Tests","Task 1 (Hidden)","Failed Tests","Task 2 (Provided)","Failed Tests","Task 2 (Hidden)","Failed Tests","Task 3 (Provided)","Failed Tests","Task 3 (Hidden)","Failed Tests","Compilation Errors"
+"1","-","-","-","-","-","-","-","-","-","-","-","-","[ERROR] /C:/Users/benja/OneDrive/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[9,18] cannot find symbol
   symbol:   class ClientProfile
   location: class nz.ac.auckland.se281.InsuranceSystem
 [ERROR] /C:/Users/benja/OneDrive/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[10,13] cannot find symbol
@@ -34,3 +36,4 @@
 [ERROR] /C:/Users/benja/OneDrive/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java:[128,14] cannot find symbol
   symbol:   class ClientProfile
   location: class nz.ac.auckland.se281.InsuranceSystem
+"

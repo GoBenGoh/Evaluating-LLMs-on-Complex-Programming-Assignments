@@ -18,13 +18,6 @@ public class ShellScriptRunner {
             runCommand(repositoryDirectory, "ADD_PROVIDED_TESTS");
             runCommand(repositoryDirectory, "TEST");
 
-            List<Integer> providedTestResults = TestResultAnalyzer.extractTestResults(xmlPath);
-            int totalProvided = providedTestResults.get(0);
-            int failures = providedTestResults.get(1);
-            int errors = providedTestResults.get(2);
-            int skipped = providedTestResults.get(3);
-            int numPassedProvidedTests = totalProvided - failures - errors - skipped;
-
             // Getting failed provided tests
             List<Map<String, String>> providedFailureMessages = TestResultAnalyzer.extractFailedTestDetails(xmlPath);
             Map<String, String> t1ProvidedFailureMessages = providedFailureMessages.get(0);
@@ -74,31 +67,7 @@ public class ShellScriptRunner {
         } else {
             System.out.println("Build Failed");
             String errorMessages = TestResultAnalyzer.getCompilationErrors(compileResponse);
-            ChatGPTAPI app = new ChatGPTAPI();
-            try{
-                String promptTemplate = app.getFileFromResource("Prompt Templates/NaturalLanguageError.txt");
-                String responseContent = app.getFileFromResource("content.txt");
-                String newPrompt = new PromptWriter(promptTemplate, responseContent, errorMessages, "naturalLanguage")
-                        .createNaturalLanguageErrorPrompt();
-                String request = "src/main/java/NaturalLanguageRequest.json";
-                Request newRequest = new Request("gpt-3.5-turbo", newPrompt); // object for gson to convert
-                Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-                JsonElement jsonElement = gson.toJsonTree(newRequest);
-                String jsonString = gson.toJson(jsonElement);
-                try(PrintWriter out = new PrintWriter(request)){
-                    out.println(jsonString);
-                }
-                try(PrintWriter out = new PrintWriter("src/main/resources/newNaturalLanguageErrorPrompt.txt")){
-                    out.println(newPrompt);
-                }
-                catch (IOException e){
-                    System.out.println(e);
-                }
-                ChatGPTAPI.sendNaturalLanguageErrorRequest(key);
-            }
-            catch (IOException e){
-                System.out.println(e);
-            }
+            ChatGPTAPI.sendNaturalLanguageErrorRequest(key, errorMessages);
             ErrorFileWriter.writeErrorsToFile(errorMessages);
             testingResults = new TestResultAnalyzer(false, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), errorMessages);
             return testingResults;

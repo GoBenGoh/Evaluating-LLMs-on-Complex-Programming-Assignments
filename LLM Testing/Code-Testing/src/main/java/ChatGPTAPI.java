@@ -182,7 +182,33 @@ public class ChatGPTAPI {
 
     }
 
-    public static void sendNaturalLanguageErrorRequest(String key) {
+    public static void sendNaturalLanguageErrorRequest(String key, String errorMessages) {
+        ChatGPTAPI app = new ChatGPTAPI();
+        try{
+            String promptTemplate = app.getFileFromResource("Prompt Templates/NaturalLanguageError.txt");
+            String responseContent = app.getFileFromResource("content.txt");
+            String newPrompt = new PromptWriter(promptTemplate, responseContent, errorMessages, "naturalLanguage")
+                    .createNaturalLanguageErrorPrompt();
+            String request = "src/main/java/NaturalLanguageRequest.json";
+            Request newRequest = new Request("gpt-3.5-turbo", newPrompt); // object for gson to convert
+            Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+            JsonElement jsonElement = gson.toJsonTree(newRequest);
+            String jsonString = gson.toJson(jsonElement);
+            try(PrintWriter out = new PrintWriter(request)){
+                out.println(jsonString);
+            }
+            try(PrintWriter out = new PrintWriter("src/main/resources/newNaturalLanguageErrorPrompt.txt")){
+                out.println(newPrompt);
+            }
+            catch (IOException e){
+                System.out.println(e);
+            }
+        }
+        catch (IOException e){
+            System.out.println(e);
+        }
+
+        System.out.println("Sending compilation error request");
         try {
             URL url = new URL("https://api.openai.com/v1/chat/completions");
             HttpURLConnection con = (HttpURLConnection) url.openConnection();

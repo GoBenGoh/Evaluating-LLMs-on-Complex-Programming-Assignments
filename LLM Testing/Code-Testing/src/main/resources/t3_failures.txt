@@ -44,8 +44,8 @@ public void T3_05_three_policies_one_profile() throws Exception {
 }
 java.lang.AssertionError: 
 The test is expecting the following output in the console, but it was not there: 
-	"1: Jordan, 21, 0 policies"
-	at nz.ac.auckland.se281.MainTest$Task3.T3_05_three_policies_one_profile(MainTest.java:296)
+	"New home policy created for Jenny."
+	at nz.ac.auckland.se281.MainTest$Task3.T3_05_three_policies_one_profile(MainTest.java:292)
 
 @Test
 public void T3_03_add_car_policy_loaded_profile() throws Exception {
@@ -60,8 +60,8 @@ public void T3_03_add_car_policy_loaded_profile() throws Exception {
 }
 java.lang.AssertionError: 
 The test is expecting the following output in the console, but it was not there: 
-	"1: Jordan, 21, 0 policies"
-	at nz.ac.auckland.se281.MainTest$Task3.T3_03_add_car_policy_loaded_profile(MainTest.java:242)
+	"New car policy created for Tom."
+	at nz.ac.auckland.se281.MainTest$Task3.T3_03_add_car_policy_loaded_profile(MainTest.java:239)
 
 @Test
 public void T3_06_life_policy_over_age_limit() throws Exception {
@@ -93,8 +93,8 @@ public void T3_04_two_different_policies_home_life_one_profile() throws Exceptio
 }
 java.lang.AssertionError: 
 The test is expecting the following output in the console, but it was not there: 
-	"1: Jordan, 21, 0 policies"
-	at nz.ac.auckland.se281.MainTest$Task3.T3_04_two_different_policies_home_life_one_profile(MainTest.java:267)
+	"New home policy created for Jenny."
+	at nz.ac.auckland.se281.MainTest$Task3.T3_04_two_different_policies_home_life_one_profile(MainTest.java:263)
 
 @Test
 public void T3_xx_two_life_policies_two_profiles() throws Exception {
@@ -113,8 +113,8 @@ public void T3_xx_two_life_policies_two_profiles() throws Exception {
 }
 java.lang.AssertionError: 
 The test is expecting the following output in the console, but it was not there: 
-	"1: Jordan, 21, 0 policies"
-	at nz.ac.auckland.se281.MainTest$Task3.T3_xx_two_life_policies_two_profiles(MainTest.java:762)
+	"New life policy created for Jenny."
+	at nz.ac.auckland.se281.MainTest$Task3.T3_xx_two_life_policies_two_profiles(MainTest.java:755)
 
 @Test
 public void T3_xx_three_policies_one_profile() throws Exception {
@@ -132,8 +132,8 @@ public void T3_xx_three_policies_one_profile() throws Exception {
 }
 java.lang.AssertionError: 
 The test is expecting the following output in the console, but it was not there: 
-	"1: Jordan, 21, 0 policies"
-	at nz.ac.auckland.se281.MainTest$Task3.T3_xx_three_policies_one_profile(MainTest.java:667)
+	"New home policy created for Jenny."
+	at nz.ac.auckland.se281.MainTest$Task3.T3_xx_three_policies_one_profile(MainTest.java:663)
 
 @Test
 public void T3_xx_two_different_policies_home_life_one_profile() throws Exception {
@@ -150,8 +150,8 @@ public void T3_xx_two_different_policies_home_life_one_profile() throws Exceptio
 }
 java.lang.AssertionError: 
 The test is expecting the following output in the console, but it was not there: 
-	"1: Jordan, 21, 0 policies"
-	at nz.ac.auckland.se281.MainTest$Task3.T3_xx_two_different_policies_home_life_one_profile(MainTest.java:638)
+	"New home policy created for Jenny."
+	at nz.ac.auckland.se281.MainTest$Task3.T3_xx_two_different_policies_home_life_one_profile(MainTest.java:634)
 
 @Test
 public void T3_xx_two_policies_two_profiles() throws Exception {
@@ -169,8 +169,8 @@ public void T3_xx_two_policies_two_profiles() throws Exception {
 }
 java.lang.AssertionError: 
 The test is expecting the following output in the console, but it was not there: 
-	"1: Jordan, 21, 0 policies"
-	at nz.ac.auckland.se281.MainTest$Task3.T3_xx_two_policies_two_profiles(MainTest.java:701)
+	"New home policy created for Tom."
+	at nz.ac.auckland.se281.MainTest$Task3.T3_xx_two_policies_two_profiles(MainTest.java:697)
 
 @Test
 public void T3_xx_add_car_policy_loaded_profile() throws Exception {
@@ -185,8 +185,8 @@ public void T3_xx_add_car_policy_loaded_profile() throws Exception {
 }
 java.lang.AssertionError: 
 The test is expecting the following output in the console, but it was not there: 
-	"1: Jordan, 21, 0 policies"
-	at nz.ac.auckland.se281.MainTest$Task3.T3_xx_add_car_policy_loaded_profile(MainTest.java:564)
+	"New car policy created for Tom."
+	at nz.ac.auckland.se281.MainTest$Task3.T3_xx_add_car_policy_loaded_profile(MainTest.java:561)
 
 @Test
 public void T3_xx_life_policy_over_age_limit() throws Exception {
@@ -263,8 +263,8 @@ public void T3_xx_add_life_policy_loaded_profile() throws Exception {
 }
 java.lang.AssertionError: 
 The test is expecting the following output in the console, but it was not there: 
-	"*** 1: Jordan, 21, 1 policy"
-	at nz.ac.auckland.se281.MainTest$Task3.T3_xx_add_life_policy_loaded_profile(MainTest.java:586)
+	"New life policy created for Jordan."
+	at nz.ac.auckland.se281.MainTest$Task3.T3_xx_add_life_policy_loaded_profile(MainTest.java:583)
 
 @Test
 public void T3_xx_two_different_policies_one_profile() throws Exception {
@@ -281,8 +281,8 @@ public void T3_xx_two_different_policies_one_profile() throws Exception {
 }
 java.lang.AssertionError: 
 The test is expecting the following output in the console, but it was not there: 
-	"1: Jordan, 21, 0 policies"
-	at nz.ac.auckland.se281.MainTest$Task3.T3_xx_two_different_policies_one_profile(MainTest.java:611)
+	"New home policy created for Jenny."
+	at nz.ac.auckland.se281.MainTest$Task3.T3_xx_two_different_policies_one_profile(MainTest.java:607)
 
 @Test
 public void T3_xx_two_life_policies_one_profile() throws Exception {
@@ -299,8 +299,8 @@ public void T3_xx_two_life_policies_one_profile() throws Exception {
 }
 java.lang.AssertionError: 
 The test is expecting the following output in the console, but it was not there: 
-	"1: Jordan, 21, 0 policies"
-	at nz.ac.auckland.se281.MainTest$Task3.T3_xx_two_life_policies_one_profile(MainTest.java:729)
+	"New life policy created for Jenny."
+	at nz.ac.auckland.se281.MainTest$Task3.T3_xx_two_life_policies_one_profile(MainTest.java:725)
 
 @Test
 public void T3_xx_two_policies_two_profiles_deleted_profile_total_costs() throws Exception {

@@ -6,104 +6,162 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InsuranceSystem {
-    
-    private List<Profile> database;
-    
+    private List<ClientProfile> database;
+    private ClientProfile loadedProfile;
+
     public InsuranceSystem() {
         database = new ArrayList<>();
+        loadedProfile = null;
     }
 
     public void printDatabase() {
         if (database.isEmpty()) {
             MessageCli.PRINT_DB_POLICY_COUNT.printMessage("0", "s", ".");
-        } else if (database.size() == 1) {
-            MessageCli.PRINT_DB_POLICY_COUNT.printMessage("1", "", ":");
-            printProfile(database.get(0), 1);
         } else {
-            MessageCli.PRINT_DB_POLICY_COUNT.printMessage(Integer.toString(database.size()), "s", ":");
-            for (int i = 0; i < database.size(); i++) {
+            int count = database.size();
+            MessageCli.PRINT_DB_POLICY_COUNT.printMessage(String.valueOf(count), count > 1 ? "s" : "", ":");
+            for (int i = 0; i < count; i++) {
                 printProfile(database.get(i), i + 1);
             }
         }
     }
 
     public void createNewProfile(String userName, String age) {
-        userName = toTitleCase(userName);
-        int ageInt;
-        try {
-            ageInt = Integer.parseInt(age);
-            if (userName.length() < 3) {
-                MessageCli.INVALID_USERNAME_TOO_SHORT.printMessage(userName);
-            } else if (!isUnique(userName)) {
-                MessageCli.INVALID_USERNAME_NOT_UNIQUE.printMessage(userName);
-            } else if (ageInt < 1) {
-                MessageCli.INVALID_AGE.printMessage(age, userName);
-            } else {
-                Profile newProfile = new Profile(userName, ageInt);
-                database.add(newProfile);
-                MessageCli.PROFILE_CREATED.printMessage(userName, age);
-            }
-        } catch (NumberFormatException e) {
-            MessageCli.INVALID_AGE.printMessage(age, userName);
+        if (!isUsernameValid(userName)) {
+            MessageCli.INVALID_USERNAME_TOO_SHORT.printMessage(capitalizeFirstLetter(userName));
+        } else if (!isUsernameUnique(userName)) {
+            MessageCli.INVALID_USERNAME_NOT_UNIQUE.printMessage(capitalizeFirstLetter(userName));
+        } else if (!isAgeValid(age)) {
+            MessageCli.INVALID_AGE.printMessage(age, capitalizeFirstLetter(userName));
+        } else {
+            int parsedAge = Integer.parseInt(age);
+            ClientProfile newProfile = new ClientProfile(capitalizeFirstLetter(userName), parsedAge);
+            database.add(newProfile);
+            MessageCli.PROFILE_CREATED.printMessage(capitalizeFirstLetter(userName), age);
         }
     }
 
     public void loadProfile(String userName) {
-        userName = toTitleCase(userName);
-        for (Profile profile : database) {
-            if (profile.getUserName().equals(userName)) {
-                MessageCli.PROFILE_LOADED.printMessage(userName);
-                return;
-            }
+        ClientProfile profile = findProfileByUsername(userName);
+        if (profile != null) {
+            setLoadedProfile(profile);
+            MessageCli.PROFILE_LOADED.printMessage(capitalizeFirstLetter(userName));
+        } else {
+            MessageCli.NO_PROFILE_FOUND_TO_LOAD.printMessage(capitalizeFirstLetter(userName));
         }
-        MessageCli.NO_PROFILE_FOUND_TO_LOAD.printMessage(userName);
     }
 
     public void unloadProfile() {
-        MessageCli.PROFILE_UNLOADED.printMessage("");
+        if (isProfileLoaded()) {
+            MessageCli.PROFILE_UNLOADED.printMessage(getLoadedProfile().getUsername());
+            setLoadedProfile(null);
+        } else {
+            MessageCli.NO_PROFILE_LOADED.printMessage();
+        }
     }
 
     public void deleteProfile(String userName) {
-        userName = toTitleCase(userName);
-        for (Profile profile : database) {
-            if (profile.getUserName().equals(userName)) {
-                database.remove(profile);
-                MessageCli.PROFILE_DELETED.printMessage(userName);
-                return;
-            }
+        ClientProfile profile = findProfileByUsername(userName);
+        if (profile == null) {
+            MessageCli.NO_PROFILE_FOUND_TO_DELETE.printMessage(capitalizeFirstLetter(userName));
+        } else if (isProfileLoaded() && getLoadedProfile().equals(profile)) {
+            MessageCli.CANNOT_DELETE_PROFILE_WHILE_LOADED.printMessage(capitalizeFirstLetter(userName));
+        } else {
+            database.remove(profile);
+            MessageCli.PROFILE_DELETED.printMessage(capitalizeFirstLetter(userName));
         }
-        MessageCli.NO_PROFILE_FOUND_TO_DELETE.printMessage(userName);
     }
 
     public void createPolicy(PolicyType type, String[] options) {
-        // TODO: Complete this method.
-    }
-    
-    private String toTitleCase(String word) {
-        String[] words = word.split(" ");
-        StringBuilder result = new StringBuilder();
-        for (int i = 0; i < words.length; i++) {
-            String firstLetter = words[i].substring(0, 1);
-            String restOfWord = words[i].substring(1);
-            result.append(firstLetter.toUpperCase()).append(restOfWord.toLowerCase());
-            if (i < words.length - 1) {
-                result.append(" ");
-            }
+        if (!isProfileLoaded()) {
+            MessageCli.NO_PROFILE_FOUND_TO_CREATE_POLICY.printMessage();
+            return;
         }
-        return result.toString();
+
+        switch (type) {
+            case HOME:
+                createHomePolicy(options);
+                break;
+            case CAR:
+                createCarPolicy(options);
+                break;
+            case LIFE:
+                createLifePolicy(options);
+                break;
+        }
     }
-    
-    private boolean isUnique(String userName) {
-        for (Profile profile : database) {
-            if (profile.getUserName().equals(userName)) {
+
+    private boolean isUsernameValid(String username) {
+        return username.length() >= 3;
+    }
+
+    private boolean isUsernameUnique(String username) {
+        for (ClientProfile profile : database) {
+            if (profile.getUsername().equalsIgnoreCase(capitalizeFirstLetter(username))) {
                 return false;
             }
         }
         return true;
     }
-    
-    private void printProfile(Profile profile, int rank) {
-        MessageCli.PRINT_DB_PROFILE_HEADER_MINIMAL.printMessage(Integer.toString(rank), profile.getUserName(),
-                Integer.toString(profile.getAge()));
+
+    private boolean isAgeValid(String age) {
+        try {
+            int parsedAge = Integer.parseInt(age);
+            return parsedAge > 0;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    private String capitalizeFirstLetter(String name) {
+        String[] words = name.split(" ");
+        StringBuilder capitalized = new StringBuilder();
+        for (String word : words) {
+            capitalized.append(Character.toUpperCase(word.charAt(0)));
+            capitalized.append(word.substring(1).toLowerCase());
+            capitalized.append(" ");
+        }
+        return capitalized.toString().trim();
+    }
+
+    private ClientProfile findProfileByUsername(String username) {
+        for (ClientProfile profile : database) {
+            if (profile.getUsername().equalsIgnoreCase(capitalizeFirstLetter(username))) {
+                return profile;
+            }
+        }
+        return null;
+    }
+
+    private boolean isProfileLoaded() {
+        return loadedProfile != null;
+    }
+
+    private ClientProfile getLoadedProfile() {
+        return loadedProfile;
+    }
+
+    private void setLoadedProfile(ClientProfile profile) {
+        loadedProfile = profile;
+    }
+
+    private void printProfile(ClientProfile profile, int rank) {
+        String prefix = "";
+        if (isProfileLoaded() && profile.equals(getLoadedProfile())) {
+            prefix = "*** ";
+        }
+        System.out.printf(" %s%d: %s, %d\n", prefix, rank, profile.getUsername(), profile.getAge());
+    }
+
+    private void createHomePolicy(String[] options) {
+        // TODO: Implement this method.
+    }
+
+    private void createCarPolicy(String[] options) {
+        // TODO: Implement this method.
+    }
+
+    private void createLifePolicy(String[] options) {
+        // TODO: Implement this method.
     }
 }

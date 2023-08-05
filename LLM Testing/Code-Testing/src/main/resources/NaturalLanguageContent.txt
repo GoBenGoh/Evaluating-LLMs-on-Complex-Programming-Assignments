@@ -1,13 +1,7 @@
-The compilation error messages indicate that the compiler cannot find the symbol "Profile" in the class "InsuranceSystem". This means that the class "Profile" is either missing or not imported correctly in the code.
+The compilation error messages indicate that the compiler cannot find the symbol "ClientProfile" in the class "InsuranceSystem". This means that the compiler does not recognize the class "ClientProfile" that is being used in the code.
 
-The specific lines where the error occurs are:
+The errors occur at various locations in the code:
 
-- Line 10: The class "Profile" is referenced as a type in the class "InsuranceSystem".
-- Line 105: The class "Profile" is referenced as a type in the class "InsuranceSystem".
-- Line 42: The class "Profile" is referenced as a type in the class "InsuranceSystem".
-- Line 42: The class "Profile" is referenced as a type in the class "InsuranceSystem".
-- Line 53: The class "Profile" is referenced as a type in the class "InsuranceSystem".
-- Line 68: The class "Profile" is referenced as a type in the class "InsuranceSystem".
-- Line 97: The class "Profile" is referenced as a type in the class "InsuranceSystem".
+- Lines 9, 10, 127, 140, 144, 148, 38, 38, 45, 64, 99, and 128: The class "ClientProfile" is not found in the "InsuranceSystem" class. These errors occur when the "ClientProfile" class is referenced as a type or when its methods are called.
 
-To resolve this compilation error, you need to make sure that the class "Profile" is defined and accessible in the code. This could involve creating the "Profile" class or checking if it is imported correctly from another package.
+To fix these errors, the code needs to ensure that the "ClientProfile" class is properly imported and accessible within the "InsuranceSystem" class. This can be done by either adding the import statement for the "ClientProfile" class or by ensuring that the "ClientProfile" class is in the same package as the "InsuranceSystem" class.
