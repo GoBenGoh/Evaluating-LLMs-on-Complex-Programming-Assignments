@@ -1,5 +1,3 @@
-import java.io.File;
-
 public class PromptWriter {
     private String prompt;
     private String response;
@@ -47,6 +45,19 @@ public class PromptWriter {
         else{
             throw new RuntimeException("Type must be c, f, t1, or t2");
         }
+    }
+
+    public String createNaturalLanguageErrorPrompt(){
+        int responseStart = response.indexOf("package nz.ac.auckland.se281");
+        String trimmedResponse = response.substring(responseStart);
+        if (trimmedResponse.charAt(trimmedResponse.length()-1)=='`'){
+            trimmedResponse=trimmedResponse.substring(0,trimmedResponse.length()-4); // remove backticks
+        }
+        int start = 61;
+        String newPrompt = modifyPrompt(prompt, start, extra);
+        int codeStart =  newPrompt.indexOf("The next section contains the code that is throwing the compilation errors:") + 80;
+        newPrompt = modifyPrompt(newPrompt, codeStart, trimmedResponse);
+        return newPrompt;
     }
 
     private String modifyPrompt(String prompt, int index, String message){

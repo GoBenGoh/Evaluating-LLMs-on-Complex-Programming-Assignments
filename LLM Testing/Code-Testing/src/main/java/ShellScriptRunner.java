@@ -1,19 +1,12 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import com.google.gson.*;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class ShellScriptRunner {
-    public static void main(String[] args) {
-        // Hard Coded Student Repo
-        String repo = "../repos_output/assignment-1-repository-12";
-        runTesting(repo);
-    }
-
-    public static TestResultAnalyzer runTesting(String repositoryDirectory) {
+    public static TestResultAnalyzer runTesting(String repositoryDirectory, String key) {
         String xmlPath = repositoryDirectory + "/target/surefire-reports/TEST-nz.ac.auckland.se281.MainTest.xml";
         TestResultAnalyzer testingResults;
 
@@ -24,13 +17,6 @@ public class ShellScriptRunner {
             runCommand(repositoryDirectory, "CLEAR_TESTS");
             runCommand(repositoryDirectory, "ADD_PROVIDED_TESTS");
             runCommand(repositoryDirectory, "TEST");
-
-            List<Integer> providedTestResults = TestResultAnalyzer.extractTestResults(xmlPath);
-            int totalProvided = providedTestResults.get(0);
-            int failures = providedTestResults.get(1);
-            int errors = providedTestResults.get(2);
-            int skipped = providedTestResults.get(3);
-            int numPassedProvidedTests = totalProvided - failures - errors - skipped;
 
             // Getting failed provided tests
             List<Map<String, String>> providedFailureMessages = TestResultAnalyzer.extractFailedTestDetails(xmlPath);
@@ -53,13 +39,6 @@ public class ShellScriptRunner {
             runCommand(repositoryDirectory, "CLEAR_TESTS");
             runCommand(repositoryDirectory, "ADD_HIDDEN_TESTS");
             runCommand(repositoryDirectory, "TEST");
-
-            List<Integer> hiddenTestResults = TestResultAnalyzer.extractTestResults(xmlPath);
-            int totalHidden = hiddenTestResults.get(0);
-            failures = hiddenTestResults.get(1);
-            errors = hiddenTestResults.get(2);
-            skipped = hiddenTestResults.get(3);
-            int numPassedHiddenTests = totalHidden - failures - errors - skipped;
 
             // Getting failed hidden tests
             List<Map<String, String>> hiddenFailureMessages = TestResultAnalyzer.extractFailedTestDetails(xmlPath);
@@ -87,10 +66,8 @@ public class ShellScriptRunner {
 
         } else {
             System.out.println("Build Failed");
-            System.out.println(compileResponse);
             String errorMessages = TestResultAnalyzer.getCompilationErrors(compileResponse);
             ErrorFileWriter.writeErrorsToFile(errorMessages);
-
             testingResults = new TestResultAnalyzer(false, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), errorMessages);
             return testingResults;
         }

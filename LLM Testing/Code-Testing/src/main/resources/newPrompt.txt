@@ -1,67 +1,102 @@
-The instructions for Task 2 are below marked between a pair of "///":
+The instructions for Task 1 are below marked between a pair of "///":
 ///
-Now that the system supports creating profiles, it is time to manage those profiles. This will include loading, unloading, and deleting profiles as explained below.
+Task 1 will require you to implement (some of) the logic for the CREATE_PROFILE and PRINT_DB commands.
 
-Loading Profiles
-The LOAD_PROFILE command loads a profile into the system. This command requires exactly one argument, representing the username to be loaded. Again, the user might type the username in any case, but the system will always process it in title case.
+The CREATE_PROFILE command creates a new client profile with the specified username and age (passed as arguments to the CREATE_PROFILE command). The username should be unique across all other usernames currently in the system, and the age should be a positive integer. If the username is not unique, or the age is not a positive integer, an error message should be printed.
 
-A success message occurs when the profile is found and successfully loaded:
+The PRINT_DB command prints the entire insurance database. If the database is empty, it prints the following:
 
-Profile loaded for <USERNAME>.
-If the profile is not found, then the following message gets printed:
+Database has 0 profiles.
+If the database has exactly one profile, it prints the following:
 
-No profile found for <USERNAME>. Profile not loaded.
-When a profile is successfully loaded, the PRINT_DB command should print an extra *** in front of the currently-loaded profile. For example, if the database has three profiles, and the second profile is successfully loaded, then the PRINT_DB command should print the following:
-
-Database has 3 profiles:
+Database has 1 profile:
  1: Jordan, 21
-*** 2: Jenny, 25
- 3: John, 30
+If the database has more than one profile, it prints the following:
 
-Hint: See the MessageCli.PRINT_DB_PROFILE_HEADER_SHORT message template.
+Database has 2 profiles:
+ 1: Jordan, 21
+ 2: John, 22
+Take note of the differences between the 3 cases above:
 
-While a profile is loaded, the LOAD_PROFILE command could be executed again. The new load will only succeed if the profile is found (as a usual load), otherwise it fails with the usual error when a username cannot be loaded. In this case, the currently-loaded profile remains loaded.
+In the first example, “profiles” is plural, and the sentence ends with a period (“.”)
+In the second example, “profile” is singular, and the sentence ends with a colon (“:”)
+In the third example, “profiles” is plural, and the sentence ends with a colon (“:”)
+Hint: Have a look at the MessageCli.PRINT_DB_POLICY_COUNT message template:
 
-If the new load succeeds, the system will unload the currently-loaded profile, and load the new profile. For example, if the database has three profiles, and the second profile is successfully loaded, and then the third profile is successfully loaded, then the PRINT_DB command should print the following:
+PRINT_DB_POLICY_COUNT("Database has %s profile%s%s")
+This message template has three %s placeholders:
 
-Database has 3 profiles:
+The first %s is for the number of profiles (e.g., “0”, “1”, “2”, etc.)
+The second %s is for the word “profile”, whether you want it to be singular or plural (i.e., “profile” or “profiles”)
+The third %s is for ending the sentence (i.e., “.” or “:”)
+To get the message "Database has 2 profiles:", you can do one of the following:
+
+MessageCli.PRINT_DB_POLICY_COUNT.getMessage("2", "s", ":");    // Using the getMessage() method
+MessageCli.PRINT_DB_POLICY_COUNT.printMessage("2", "s", ":");  // Using the printMessage() method
+
+In addition to above header, if there is at least one profile in the database, the PRINT_DB should also print the following for every profile in the database:
+
+<SPACE><RANK><COLON><SPACE><USERNAME><COMMA><SPACE><AGE>
+For example, for the database with two profiles:
+
+Database has 2 profiles:
  1: Jordan, 21
  2: Jenny, 25
-*** 3: John, 30
-While a profile is loaded, the CREATE_PROFILE command should not be allowed. If the user tries to create a profile while a profile is already loaded, then the following message should be printed:
 
-Cannot create a new profile. First unload the profile for <CURRENT_LOADED_PROFILE_USERNAME>.
-Creating a new profile can go ahead, only after the currently-loaded profile is unloaded (see below).
+Hint: The <RANK> is the position of the profile in the database, in the order they were added successfully into the system, starting from 1. This is not an “ID” of the profile (so, you should not be trying to implement this using static variables).
 
-Unloading Profiles
-The UNLOAD_PROFILE command unloads the currently-loaded profile. This command requires no arguments.
+Hint: See the MessageCli.PRINT_DB_PROFILE_HEADER_MINIMAL message template.
 
-When a profile is successfully unloaded, the following message should be printed:
+When a new profile is created, it should be added to the database. The arguments have the following requirements:
 
-Profile unloaded for <USERNAME>.
-If there is no currently-loaded profile, then the following message should be printed:
+<USERNAME> (✭)
+Must be unique across all other usernames currently in the system
+Must be at least 3 characters long
+The username will only be a single word (✱)
+The user may type the username using any case, but your system needs to always process it in title case (i.e., the first letter of each word is capitalised, with the rest of the letters being lowercase)
+<AGE> (✭)
+Should be a positive integer
+✱ You do not need to worry about the user typing in a username that is more than one word. For example, you do not need to worry about the user typing in CREATE_PROFILE John Smith 21. You can assume that the user will always type in a username that is a single word.
 
-No profile is currently loaded.
+✭ You do not need to worry about test cases where there are multiple errors in the same command. For example, you do not need to worry about the user typing in CREATE_PROFILE Jo twenty (i.e., the username is too short, and the age is not a positive integer). You can assume that the user will always type in a command that has only one error.
 
-Deleting Profiles
-The DELETE_PROFILE command deletes a profile from the database. This command requires exactly one argument, representing the username to be deleted.
+When a successful profile is created, a success message should be printed.
 
-When a profile is successfully deleted, the following message should be printed:
+New profile created for <USERNAME> with age <AGE>.
+For example:
 
-Profile deleted for <USERNAME>.
-When a profile is successfully deleted, this means it will no longer exist in the database.
+insurance system> create-profile joRDaN 21
+New profile created for Jordan with age 21.  // success message
+Take note of how the system printed the name as “Jordan” (i.e., in title case), even though the user typed “joRDaN” (i.e., in weird case).
 
-If the profile is not found, then the following message gets printed:
+The format of this message is very strict. Make sure you check for an appropriate message template in MessageCli to help you.
 
-No profile found for <USERNAME>. No profile was deleted.
-If the profile is currently loaded, then the deletion should not go ahead and the following message gets printed:
+If there was something wrong with the username, then the above success message should not be printed. Instead, one of the following messages gets printed.
 
-Cannot delete profile for <USERNAME> while loaded. No profile was deleted.
-The loaded profile must be unloaded before it can be deleted.
+If the username is too short, then the following message gets printed:
 
-It is however perfectly fine to delete a profile that is not currently loaded, as long as it exists in the database.
+'<USERNAME>' is an invalid username, it should be at least 3 characters long. No profile was created.
+Consider the following example, paying attention to how the user types the username versus how the system prints it:
+
+insurance system> create-profile jo 21
+'Jo' is an invalid username, it should be at least 3 characters long. No profile was created.
+The system printed the name as “Jo” (i.e., in title case), even though the user typed “jo”.
+
+If the username already exists, then the following message gets printed:
+
+Usernames must be unique. No profile was created for '<USERNAME>'.
+Consider the following example, paying attention to how the user types the username versus how the system prints it:
+
+insurance system> create-profile jordan 21  // first time adding a Jordan, so this is successful
+New profile created for Jordan with age 21.
+insurance system> create-profile jorDan 35  // second time adding a Jordan, so this is unsuccessful
+Usernames must be unique. No profile was created for 'Jordan'.
+If the age is not a positive integer, then following message gets printed:
+
+'<AGE>' is an invalid age, please provide a positive whole number only. No profile was created for <USERNAME>.
+Again, remember that the system will always print the username in title case, regardless of how the user types it.
 ///
-The following section is the an existing Java class named MessageCli:
+The following section is an existing Java class named MessageCli:
 ```
 package nz.ac.auckland.se281;
 
@@ -370,256 +405,355 @@ public class Main {
   }
 }
 ```
-Please fix the following code according to the instructions and the failing test cases. Do not assume another class exists! Do not explain the changes made! Only respond with java code!
+Please fix the following code according to these instructions. Do not assume another class exists! Do not explain the changes made! Only respond with java code!
 ```package nz.ac.auckland.se281;
 
 import nz.ac.auckland.se281.Main.PolicyType;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class InsuranceSystem {
+    private List<ClientProfile> database;
+    private ClientProfile loadedProfile;
+
     public InsuranceSystem() {
-        // Only this constructor can be used (if you need to initialise fields).
+        database = new ArrayList<>();
+        loadedProfile = null;
     }
 
     public void printDatabase() {
-        // TODO: Complete this method.
+        if (database.isEmpty()) {
+            MessageCli.PRINT_DB_POLICY_COUNT.printMessage("0", "s", ".");
+        } else {
+            int count = database.size();
+            MessageCli.PRINT_DB_POLICY_COUNT.printMessage(String.valueOf(count), count > 1 ? "s" : "", ":");
+            for (int i = 0; i < count; i++) {
+                printProfile(database.get(i), i + 1);
+            }
+        }
     }
 
     public void createNewProfile(String userName, String age) {
-        // TODO: Complete this method.
+        if (!isUsernameValid(userName)) {
+            MessageCli.INVALID_USERNAME_TOO_SHORT.printMessage(capitalizeFirstLetter(userName));
+        } else if (!isUsernameUnique(userName)) {
+            MessageCli.INVALID_USERNAME_NOT_UNIQUE.printMessage(capitalizeFirstLetter(userName));
+        } else if (!isAgeValid(age)) {
+            MessageCli.INVALID_AGE.printMessage(age, capitalizeFirstLetter(userName));
+        } else {
+            int parsedAge = Integer.parseInt(age);
+            ClientProfile newProfile = new ClientProfile(capitalizeFirstLetter(userName), parsedAge);
+            database.add(newProfile);
+            MessageCli.PROFILE_CREATED.printMessage(capitalizeFirstLetter(userName), age);
+        }
     }
 
     public void loadProfile(String userName) {
-        // TODO: Complete this method.
+        ClientProfile profile = findProfileByUsername(userName);
+        if (profile != null) {
+            setLoadedProfile(profile);
+            MessageCli.PROFILE_LOADED.printMessage(capitalizeFirstLetter(userName));
+        } else {
+            MessageCli.NO_PROFILE_FOUND_TO_LOAD.printMessage(capitalizeFirstLetter(userName));
+        }
     }
 
     public void unloadProfile() {
-        // TODO: Complete this method.
+        if (isProfileLoaded()) {
+            MessageCli.PROFILE_UNLOADED.printMessage(getLoadedProfile().getUsername());
+            setLoadedProfile(null);
+        } else {
+            MessageCli.NO_PROFILE_LOADED.printMessage();
+        }
     }
 
     public void deleteProfile(String userName) {
-        // TODO: Complete this method.
+        ClientProfile profile = findProfileByUsername(userName);
+        if (profile == null) {
+            MessageCli.NO_PROFILE_FOUND_TO_DELETE.printMessage(capitalizeFirstLetter(userName));
+        } else if (isProfileLoaded() && getLoadedProfile().equals(profile)) {
+            MessageCli.CANNOT_DELETE_PROFILE_WHILE_LOADED.printMessage(capitalizeFirstLetter(userName));
+        } else {
+            database.remove(profile);
+            MessageCli.PROFILE_DELETED.printMessage(capitalizeFirstLetter(userName));
+        }
     }
 
     public void createPolicy(PolicyType type, String[] options) {
-        // TODO: Complete this method.
+        if (!isProfileLoaded()) {
+            MessageCli.NO_PROFILE_FOUND_TO_CREATE_POLICY.printMessage();
+            return;
+        }
+
+        switch (type) {
+            case HOME:
+                createHomePolicy(options);
+                break;
+            case CAR:
+                createCarPolicy(options);
+                break;
+            case LIFE:
+                createLifePolicy(options);
+                break;
+        }
+    }
+
+    private boolean isUsernameValid(String username) {
+        return username.length() >= 3;
+    }
+
+    private boolean isUsernameUnique(String username) {
+        for (ClientProfile profile : database) {
+            if (profile.getUsername().equalsIgnoreCase(capitalizeFirstLetter(username))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean isAgeValid(String age) {
+        try {
+            int parsedAge = Integer.parseInt(age);
+            return parsedAge > 0;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    private String capitalizeFirstLetter(String name) {
+        String[] words = name.split(" ");
+        StringBuilder capitalized = new StringBuilder();
+        for (String word : words) {
+            capitalized.append(Character.toUpperCase(word.charAt(0)));
+            capitalized.append(word.substring(1).toLowerCase());
+            capitalized.append(" ");
+        }
+        return capitalized.toString().trim();
+    }
+
+    private ClientProfile findProfileByUsername(String username) {
+        for (ClientProfile profile : database) {
+            if (profile.getUsername().equalsIgnoreCase(capitalizeFirstLetter(username))) {
+                return profile;
+            }
+        }
+        return null;
+    }
+
+    private boolean isProfileLoaded() {
+        return loadedProfile != null;
+    }
+
+    private ClientProfile getLoadedProfile() {
+        return loadedProfile;
+    }
+
+    private void setLoadedProfile(ClientProfile profile) {
+        loadedProfile = profile;
+    }
+
+    private void printProfile(ClientProfile profile, int rank) {
+        String prefix = "";
+        if (isProfileLoaded() && profile.equals(getLoadedProfile())) {
+            prefix = "*** ";
+        }
+        System.out.printf(" %s%d: %s, %d\n", prefix, rank, profile.getUsername(), profile.getAge());
+    }
+
+    private void createHomePolicy(String[] options) {
+        // TODO: Implement this method.
+    }
+
+    private void createCarPolicy(String[] options) {
+        // TODO: Implement this method.
+    }
+
+    private void createLifePolicy(String[] options) {
+        // TODO: Implement this method.
     }
 }
 
 ```
-Here are the failing test cases:
-```@Test
-public void T2_05_unload_profile() throws Exception {
-    runCommands(unpack(CREATE_SOME_CLIENTS, LOAD_PROFILE, "Jenny", UNLOAD_PROFILE, PRINT_DB));
-    assertContains("Profile loaded for Jenny.");
-    assertContains("Profile unloaded for Jenny.");
-    assertContains("1: Jordan, 21");
-    assertContains("2: Tom, 25");
-    assertContains("3: Jenny, 23");
-    assertDoesNotContain("*** 1: Jordan, 21", true);
-    assertDoesNotContain("*** 2: Tom, 25", true);
-    assertDoesNotContain("*** 3: Jenny, 23", true);
+Here are the test cases that must pass:
+```
+package nz.ac.auckland.se281;
+
+import static nz.ac.auckland.se281.Main.Command.*;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import org.junit.runners.Suite.SuiteClasses;
+
+@RunWith(Suite.class)
+@SuiteClasses({MainTest.Task1.class})
+public class MainTest {
+
+  public static class Task1 extends CliTest {
+
+    public Task1() {
+      super(Main.class);
+    }
+
+    @Test
+    public void T1_01_empty_database() throws Exception {
+      runCommands(PRINT_DB);
+      assertContains("Database has 0 profiles.");
+    }
+
+    @Test
+    public void T1_02_add_one_client() throws Exception {
+      runCommands(CREATE_PROFILE, "Jordan", "21", PRINT_DB);
+      assertContains("Database has 1 profile:");
+      assertContains("New profile created for Jordan with age 21.");
+      assertDoesNotContain("Database has 0 profiles", true);
+    }
+
+    @Test
+    public void T1_xx_add_one_client_with_info() throws Exception {
+      runCommands(CREATE_PROFILE, "Jordan", "21", PRINT_DB);
+      assertContains("Database has 1 profile:");
+      assertContains("New profile created for Jordan with age 21.");
+      assertContains("1: Jordan, 21");
+      assertDoesNotContain("Database has 0 profiles", true);
+    }
+
+    @Test
+    public void T1_xx_ignore_short_name() throws Exception {
+      runCommands(CREATE_PROFILE, "Jo", "21", PRINT_DB);
+      assertContains("Database has 0 profiles.");
+      assertContains(
+          "'Jo' is an invalid username, it should be at least 3 characters long. No profile was"
+              + " created.");
+      assertDoesNotContain("Database has 1 profile", true);
+      assertDoesNotContain("New profile created", true);
+      assertDoesNotContain("21");
+    }
+
+    @Test
+    public void T1_xx_ignore_short_name_to_titlecase() throws Exception {
+      runCommands(CREATE_PROFILE, "aL", "21", PRINT_DB);
+      assertContains("Database has 0 profiles.");
+      assertContains(
+          "'Al' is an invalid username, it should be at least 3 characters long. No profile was"
+              + " created.");
+      assertDoesNotContain("Database has 1 profile", true);
+      assertDoesNotContain("New profile created", true);
+      assertDoesNotContain("21");
+    }
+
+    @Test
+    public void T1_xx_add_two_clients() throws Exception {
+      runCommands(CREATE_PROFILE, "Jordan", "21", CREATE_PROFILE, "Tom", "25", PRINT_DB);
+      assertContains("Database has 2 profiles:");
+      assertContains("1: Jordan, 21");
+      assertContains("2: Tom, 25");
+      assertDoesNotContain("Database has 0 profiles", true);
+      assertDoesNotContain("Database has 1 profile", true);
+    }
+
+    @Test
+    public void T1_xx_add_five_clients() throws Exception {
+      runCommands( //
+          CREATE_PROFILE,
+          "Jordan",
+          "21", //
+          CREATE_PROFILE,
+          "Jenny",
+          "22", //
+          CREATE_PROFILE,
+          "TOM",
+          "23", //
+          CREATE_PROFILE,
+          "tOmmY",
+          "24", //
+          CREATE_PROFILE,
+          "aLeX",
+          "25", //
+          PRINT_DB);
+
+      assertContains("Database has 5 profiles:");
+      assertContains("1: Jordan, 21");
+      assertContains("2: Jenny, 22");
+      assertContains("3: Tom, 23");
+      assertContains("4: Tommy, 24");
+      assertContains("5: Alex, 25");
+    }
+
+    @Test
+    public void T1_xx_username_to_titlecase() throws Exception {
+      runCommands(CREATE_PROFILE, "jorDan", "21", CREATE_PROFILE, "TOM", "25", PRINT_DB);
+      assertContains("Database has 2 profiles:");
+      assertContains("1: Jordan, 21");
+      assertContains("2: Tom, 25");
+      assertDoesNotContain("jorDan");
+      assertDoesNotContain("TOM");
+    }
+
+    @Test
+    public void T1_xx_add_ignore_duplicate() throws Exception {
+      runCommands(CREATE_PROFILE, "Jordan", "21", CREATE_PROFILE, "Jordan", "35", PRINT_DB);
+      assertContains("Database has 1 profile:");
+      assertContains("1: Jordan, 21");
+
+      assertContains("Usernames must be unique. No profile was created for 'Jordan'.");
+
+      assertDoesNotContain("Database has 0 profiles", true);
+      assertDoesNotContain("Database has 2 profiles", true);
+      assertDoesNotContain("Jordan, 35", true);
+    }
+
+    @Test
+    public void T1_xx_add_ignore_duplicate_added_later() throws Exception {
+      runCommands(
+          CREATE_PROFILE,
+          "tom",
+          "21", //
+          CREATE_PROFILE,
+          "jordan",
+          "25", //
+          CREATE_PROFILE,
+          "Jenny",
+          "23", //
+          CREATE_PROFILE,
+          "TOM",
+          "32", //
+          PRINT_DB);
+      assertContains("Database has 3 profiles:");
+      assertContains("1: Tom, 21");
+      assertContains("2: Jordan, 25");
+      assertContains("3: Jenny, 23");
+
+      assertContains("Usernames must be unique. No profile was created for 'Tom'.");
+
+      assertDoesNotContain("Database has 4 profiles", true);
+      assertDoesNotContain("Tom, 32", true);
+    }
+
+    @Test
+    public void T1_xx_ignore_invalid_age_negative() throws Exception {
+      runCommands(CREATE_PROFILE, "Jordan", "-1", PRINT_DB);
+      assertContains("Database has 0 profiles.");
+      assertContains(
+          "'-1' is an invalid age, please provide a positive whole number only. No profile was"
+              + " created for Jordan.");
+      assertDoesNotContain("Database has 1 profile", true);
+      assertDoesNotContain("Jordan, -1", true);
+      assertDoesNotContain("New profile created", true);
+    }
+
+    @Test
+    public void T1_xx_add_success_after_invalid_age() throws Exception {
+      runCommands(CREATE_PROFILE, "Jordan", "-1", CREATE_PROFILE, "Jordan", "20", PRINT_DB);
+      assertContains(
+          "'-1' is an invalid age, please provide a positive whole number only. No profile was"
+              + " created for Jordan.");
+      assertContains("Database has 1 profile:");
+      assertContains("1: Jordan, 20");
+      assertDoesNotContain("Database has 0 profiles", true);
+      assertDoesNotContain("Jordan, -1", true);
+    }
+  }
 }
-java.lang.AssertionError: 
-The test is expecting the following output in the console, but it was not there: 
-	"Profile unloaded for Jenny."
-	at nz.ac.auckland.se281.MainTest$Task2.T2_05_unload_profile(MainTest.java:135)
-
-@Test
-public void T2_06_unload_invalid_profile() throws Exception {
-    runCommands(unpack(CREATE_SOME_CLIENTS, LOAD_PROFILE, "jen", UNLOAD_PROFILE, PRINT_DB));
-    assertContains("No profile is currently loaded.");
-    assertContains("1: Jordan, 21");
-    assertContains("2: Tom, 25");
-    assertContains("3: Jenny, 23");
-    assertDoesNotContain("*** 1: Jordan, 21", true);
-    assertDoesNotContain("*** 2: Tom, 25", true);
-    assertDoesNotContain("*** 3: Jenny, 23", true);
-}
-java.lang.AssertionError: 
-The test is expecting the following output in the console, but it was not there: 
-	"No profile is currently loaded."
-	at nz.ac.auckland.se281.MainTest$Task2.T2_06_unload_invalid_profile(MainTest.java:150)
-
-@Test
-public void T2_04_load_profile_switch_profiles() throws Exception {
-    runCommands(unpack(CREATE_SOME_CLIENTS, LOAD_PROFILE, "tom", LOAD_PROFILE, "jenny", PRINT_DB));
-    assertContains("Profile loaded for Tom.");
-    assertContains("Profile loaded for Jenny.");
-    assertContains("Database has 3 profiles:");
-    assertContains("1: Jordan, 21");
-    assertContains("2: Tom, 25");
-    assertContains("*** 3: Jenny, 23");
-    assertDoesNotContain("*** 1: Jordan, 21", true);
-    assertDoesNotContain("*** 2: Tom, 25", true);
-}
-java.lang.AssertionError: 
-The test is expecting the following output in the console, but it was not there: 
-	"Profile loaded for Tom."
-	at nz.ac.auckland.se281.MainTest$Task2.T2_04_load_profile_switch_profiles(MainTest.java:119)
-
-@Test
-public void T2_07_delete_profile_found() throws Exception {
-    runCommands(unpack(CREATE_SOME_CLIENTS, DELETE_PROFILE, "jordan", PRINT_DB));
-    assertContains("Profile deleted for Jordan.");
-    assertContains("Database has 2 profiles:");
-    assertContains("1: Tom, 25");
-    assertContains("2: Jenny, 23");
-    assertDoesNotContain("Jordan, 21", true);
-}
-java.lang.AssertionError: 
-The test is expecting the following output in the console, but it was not there: 
-	"Profile deleted for Jordan."
-	at nz.ac.auckland.se281.MainTest$Task2.T2_07_delete_profile_found(MainTest.java:165)
-
-@Test
-public void T2_02_load_profile_not_found() throws Exception {
-    runCommands(unpack(CREATE_SOME_CLIENTS, LOAD_PROFILE, "Alex"));
-    assertContains("No profile found for Alex. Profile not loaded.");
-    assertDoesNotContain("Profile loaded for Alex.", true);
-}
-java.lang.AssertionError: 
-The test is expecting the following output in the console, but it was not there: 
-	"No profile found for Alex. Profile not loaded."
-	at nz.ac.auckland.se281.MainTest$Task2.T2_02_load_profile_not_found(MainTest.java:98)
-
-@Test
-public void T2_08_delete_profile_while_loaded() throws Exception {
-    runCommands(unpack(CREATE_SOME_CLIENTS, LOAD_PROFILE, "Jenny", DELETE_PROFILE, "jenny", PRINT_DB));
-    assertContains("Profile loaded for Jenny.");
-    assertContains("Cannot delete profile for Jenny while loaded. No profile was deleted.");
-    assertDoesNotContain("Profile deleted for Jenny", true);
-    assertContains("Database has 3 profiles:");
-    assertContains("1: Jordan, 21");
-    assertContains("2: Tom, 25");
-    assertContains("3: Jenny, 23");
-}
-java.lang.AssertionError: 
-The test is expecting the following output in the console, but it was not there: 
-	"Cannot delete profile for Jenny while loaded. No profile was deleted."
-	at nz.ac.auckland.se281.MainTest$Task2.T2_08_delete_profile_while_loaded(MainTest.java:179)
-
-@Test
-public void T2_03_load_profile_found_display() throws Exception {
-    runCommands(unpack(CREATE_SOME_CLIENTS, LOAD_PROFILE, "Tom", PRINT_DB));
-    assertContains("Profile loaded for Tom.");
-    assertContains("Database has 3 profiles:");
-    assertContains("1: Jordan, 21");
-    assertContains("*** 2: Tom, 25");
-    assertContains("3: Jenny, 23");
-}
-java.lang.AssertionError: 
-The test is expecting the following output in the console, but it was not there: 
-	"*** 2: Tom, 25"
-	at nz.ac.auckland.se281.MainTest$Task2.T2_03_load_profile_found_display(MainTest.java:110)
-
-@Test
-public void T3_02_add_home_policy_loaded_profile() throws Exception {
-    runCommands(unpack(CREATE_SOME_CLIENTS, LOAD_PROFILE, "Jenny", POLICY_HOME, options("1000000", "20 Symonds Street", "yes"), PRINT_DB));
-    assertContains("Profile loaded for Jenny.");
-    assertContains("Database has 3 profiles:");
-    assertContains("1: Jordan, 21, 0 policies");
-    assertContains("2: Tom, 25, 0 policies");
-    assertContains("*** 3: Jenny, 23, 1 policy");
-    assertContains("New home policy created for Jenny.");
-    assertContains("Home Policy (20 Symonds Street, Sum Insured: $1000000, Premium: $20000 -> $20000)");
-}
-java.lang.AssertionError: 
-The test is expecting the following output in the console, but it was not there: 
-	"1: Jordan, 21, 0 policies"
-	at nz.ac.auckland.se281.MainTest$Task3.T3_02_add_home_policy_loaded_profile(MainTest.java:217)
-
-@Test
-public void T3_07_two_policies_one_profile_ignore_zero_policy_total_costs() throws Exception {
-    runCommands(unpack(CREATE_SOME_CLIENTS, LOAD_PROFILE, "Tom", POLICY_HOME, options("1000000", "20 Symonds Street", "yes"), POLICY_CAR, options("55000", "Subaru Impreza", "SUB123", "no"), UNLOAD_PROFILE, LOAD_PROFILE, "Jenny", POLICY_CAR, options("55000", "Subaru Impreza", "SUB123", "no"), UNLOAD_PROFILE, PRINT_DB));
-    assertContains("2: Tom, 25, 2 policies for a total of $22950");
-    assertContains("3: Jenny, 23, 1 policy for a total of $8250");
-    assertContains("Home Policy (20 Symonds Street, Sum Insured: $1000000, Premium: $20000 -> $18000)");
-    assertContains("Car Policy (Subaru Impreza, Sum Insured: $55000, Premium: $5500 -> $4950)");
-    assertContains("Car Policy (Subaru Impreza, Sum Insured: $55000, Premium: $8250 -> $8250)");
-}
-java.lang.AssertionError: 
-The test is expecting the following output in the console, but it was not there: 
-	"2: Tom, 25, 2 policies for a total of $22950"
-	at nz.ac.auckland.se281.MainTest$Task3.T3_07_two_policies_one_profile_ignore_zero_policy_total_costs(MainTest.java:349)
-
-@Test
-public void T3_05_three_policies_one_profile() throws Exception {
-    runCommands(unpack(CREATE_SOME_CLIENTS, LOAD_PROFILE, "Jenny", POLICY_HOME, options("1000000", "20 Symonds Street", "yes"), POLICY_HOME, options("1000000", "20 Queen Street", "no"), POLICY_LIFE, options("1000000"), PRINT_DB));
-    assertContains("Profile loaded for Jenny.");
-    assertContains("New home policy created for Jenny.");
-    assertContains("New life policy created for Jenny.");
-    assertContains("Database has 3 profiles:");
-    assertContains("1: Jordan, 21, 0 policies");
-    assertContains("2: Tom, 25, 0 policies");
-    assertContains("*** 3: Jenny, 23, 3 policies");
-    assertContains("Home Policy (20 Symonds Street, Sum Insured: $1000000, Premium: $20000 -> $16000)");
-    assertContains("Home Policy (20 Queen Street, Sum Insured: $1000000, Premium: $10000 -> $8000)");
-    assertContains("Life Policy (Sum Insured: $1000000, Premium: $12300 -> $9840)");
-}
-java.lang.AssertionError: 
-The test is expecting the following output in the console, but it was not there: 
-	"New home policy created for Jenny."
-	at nz.ac.auckland.se281.MainTest$Task3.T3_05_three_policies_one_profile(MainTest.java:292)
-
-@Test
-public void T3_03_add_car_policy_loaded_profile() throws Exception {
-    runCommands(unpack(CREATE_SOME_CLIENTS, LOAD_PROFILE, "Tom", POLICY_CAR, options("55000", "Subaru Impreza", "SUB123", "yes"), PRINT_DB));
-    assertContains("Profile loaded for Tom.");
-    assertContains("New car policy created for Tom.");
-    assertContains("Database has 3 profiles:");
-    assertContains("1: Jordan, 21, 0 policies");
-    assertContains("*** 2: Tom, 25, 1 policy");
-    assertContains("3: Jenny, 23, 0 policies");
-    assertContains("Car Policy (Subaru Impreza, Sum Insured: $55000, Premium: $5580 -> $5580)");
-}
-java.lang.AssertionError: 
-The test is expecting the following output in the console, but it was not there: 
-	"New car policy created for Tom."
-	at nz.ac.auckland.se281.MainTest$Task3.T3_03_add_car_policy_loaded_profile(MainTest.java:239)
-
-@Test
-public void T3_01_cannot_add_policy_without_loaded_profile() throws Exception {
-    runCommands(unpack(CREATE_SOME_CLIENTS, POLICY_HOME, options("1000000", "20 Symonds Street", "yes")));
-    assertContains("Need to load a profile in order to create a policy.");
-    assertDoesNotContain("New home policy created", true);
-}
-java.lang.AssertionError: 
-The test is expecting the following output in the console, but it was not there: 
-	"Need to load a profile in order to create a policy."
-	at nz.ac.auckland.se281.MainTest$Task3.T3_01_cannot_add_policy_without_loaded_profile(MainTest.java:199)
-
-@Test
-public void T3_06_life_policy_over_age_limit() throws Exception {
-    runCommands(CREATE_PROFILE, "Jenny", 101, LOAD_PROFILE, "Jenny", POLICY_LIFE, options("100000"), UNLOAD_PROFILE, PRINT_DB);
-    assertContains("Profile loaded for Jenny.");
-    assertContains("Jenny is over the age limit. No policy was created.");
-    assertContains("Database has 1 profile:");
-    assertContains("1: Jenny, 101, 0 policies");
-    assertDoesNotContain("New life policy created for Jenny.", true);
-    assertDoesNotContain("Life Policy (Sum Insured", true);
-}
-java.lang.AssertionError: 
-The test is expecting the following output in the console, but it was not there: 
-	"Jenny is over the age limit. No policy was created."
-	at nz.ac.auckland.se281.MainTest$Task3.T3_06_life_policy_over_age_limit(MainTest.java:321)
-
-@Test
-public void T3_04_two_different_policies_home_life_one_profile() throws Exception {
-    runCommands(unpack(CREATE_SOME_CLIENTS, LOAD_PROFILE, "Jenny", POLICY_HOME, options("1000000", "20 Symonds Street", "yes"), POLICY_LIFE, options("1000000"), PRINT_DB));
-    assertContains("Profile loaded for Jenny.");
-    assertContains("New home policy created for Jenny.");
-    assertContains("New life policy created for Jenny.");
-    assertContains("Database has 3 profiles:");
-    assertContains("1: Jordan, 21, 0 policies");
-    assertContains("2: Tom, 25, 0 policies");
-    assertContains("*** 3: Jenny, 23, 2 policies");
-    assertContains("Home Policy (20 Symonds Street, Sum Insured: $1000000, Premium: $20000 -> $18000)");
-    assertContains("Life Policy (Sum Insured: $1000000, Premium: $12300 -> $11070)");
-}
-java.lang.AssertionError: 
-The test is expecting the following output in the console, but it was not there: 
-	"New home policy created for Jenny."
-	at nz.ac.auckland.se281.MainTest$Task3.T3_04_two_different_policies_home_life_one_profile(MainTest.java:263)
-
-
 ```

@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ChatGPTAPI {
-    public static void sendRequest(String request, String key) {
+    public static void sendMainRequest(String request, String key) {
         try {
             URL url = new URL("https://api.openai.com/v1/chat/completions");
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -63,7 +63,7 @@ public class ChatGPTAPI {
         String repo = "../assignment_template/assignment-1";
         String commit = "Initial-Commit";
         String workflow = "Own-Progress";
-        String temperature = "0.7";
+        String temperature = String.valueOf(args[1]);
         CSVCreator CSVCreator = new CSVCreator(repo, commit, workflow, temperature);
         CSVCreator.createRepoHeader();
 
@@ -75,7 +75,6 @@ public class ChatGPTAPI {
             }
             else {
                 String error = app.getFileFromResource("errors.txt");
-                System.out.println(error);
                 if(!error.equals("") || error == null){
                     System.out.println("Compilation errors");
                     if (task1)
@@ -107,7 +106,6 @@ public class ChatGPTAPI {
         }
         System.out.println("10 iterations reached");
         CSVCreator.save();
-        return;
     }
 
     private static void startTesting(ChatGPTAPI app, String mode, String[] args, String repo, int attempt, CSVCreator CSVCreator) throws IOException{
@@ -125,7 +123,7 @@ public class ChatGPTAPI {
         else if (mode.equals("1c")){
             request = "src/main/java/Task1CompilationFailureRequest.json";
             promptTemplate = app.getFileFromResource("Prompt Templates/Task1_CompilationError.txt");
-            error = app.getFileFromResource("errors.txt");
+            error = app.getFileFromResource("NaturalLanguageContent.txt");
             promptWriter = new PromptWriter(promptTemplate, responseContent, error, "c");
         }
         else if (mode.equals("1f")){
@@ -171,18 +169,93 @@ public class ChatGPTAPI {
         try(PrintWriter out = new PrintWriter("src/main/resources/newPrompt.txt")){
             out.println(newPrompt);
         }
-        //sendRequest(request, args[0]);
+        sendMainRequest(request, args[0]);
         try {
             TextToJava.convertTextToJavaFile();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        TestResultAnalyzer testingResults = ShellScriptRunner.runTesting(repo);
+        TestResultAnalyzer testingResults = ShellScriptRunner.runTesting(repo, args[0]);
+        if(!testingResults.isCompiled()){
+            sendNaturalLanguageErrorRequest(args[0], testingResults.getErrors());
+        }
         CSVCreator.addAttemptInfo(attempt, testingResults);
 
     }
-    private String getFileFromResource(String fileName) throws IOException {
+
+    public static void sendNaturalLanguageErrorRequest(String key, String errorMessages) {
+        ChatGPTAPI app = new ChatGPTAPI();
+        try{
+            String promptTemplate = app.getFileFromResource("Prompt Templates/NaturalLanguageError.txt");
+            String responseContent = app.getFileFromResource("content.txt");
+            String newPrompt = new PromptWriter(promptTemplate, responseContent, errorMessages, "naturalLanguage")
+                    .createNaturalLanguageErrorPrompt();
+            String request = "src/main/java/NaturalLanguageRequest.json";
+            Request newRequest = new Request("gpt-3.5-turbo", newPrompt); // object for gson to convert
+            Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+            JsonElement jsonElement = gson.toJsonTree(newRequest);
+            String jsonString = gson.toJson(jsonElement);
+            try(PrintWriter out = new PrintWriter(request)){
+                out.println(jsonString);
+            }
+            try(PrintWriter out = new PrintWriter("src/main/resources/newNaturalLanguageErrorPrompt.txt")){
+                out.println(newPrompt);
+            }
+            catch (IOException e){
+                System.out.println(e);
+            }
+        }
+        catch (IOException e){
+            System.out.println(e);
+        }
+
+        System.out.println("Sending compilation error request");
+        try {
+            URL url = new URL("https://api.openai.com/v1/chat/completions");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Content-Type", "application/json");
+            con.setRequestProperty("Accept", "application/json");
+            //Make sure you put the right Organization key saved earlier.
+            con.setDoOutput(true);
+            //Make sure you put the right API Key saved earlier.
+            con.setRequestProperty("Authorization", "Bearer "+ key);
+            String jsonInputString = readLinesAsString(new File("src/main/java/NaturalLanguageRequest.json"));
+            try (OutputStream os = con.getOutputStream()) {
+                byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+            int responseCode = con.getResponseCode();
+            System.out.println("Response Code : " + responseCode);
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            JsonObject jsonObject = JsonParser.parseString(String.valueOf(response)).getAsJsonObject();
+            JsonElement choices =  jsonObject.get("choices");
+            JsonElement message = choices.getAsJsonArray().get(0).getAsJsonObject().get("message");
+            JsonElement content = message.getAsJsonObject().get("content");
+            try(PrintWriter out = new PrintWriter("src/main/resources/NaturalLanguageResponse.txt")){
+                out.println(response);
+            }
+            try(PrintWriter out = new PrintWriter("src/main/resources/NaturalLanguageContent.txt")){
+                out.println(content.getAsString());
+            }
+            catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+            in.close();
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public String getFileFromResource(String fileName) throws IOException {
 
         // The class loader that loaded the class
         ClassLoader classLoader = getClass().getClassLoader();
