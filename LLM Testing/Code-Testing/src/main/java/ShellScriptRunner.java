@@ -2,7 +2,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -11,13 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ShellScriptRunner {
-    public static void main(String[] args) {
-        // Hard Coded Student Repo
-        String repo = "../repos_output/assignment-1-repository-12";
-        runTesting(repo);
-    }
-
-    public static TestResultAnalyzer runTesting(String repositoryDirectory) {
+    public static TestResultAnalyzer runTesting(String repositoryDirectory, String key) {
         String xmlPath = repositoryDirectory + "/target/surefire-reports/TEST-nz.ac.auckland.se281.MainTest.xml";
         TestResultAnalyzer testingResults;
 
@@ -97,10 +90,8 @@ public class ShellScriptRunner {
 
         } else {
             System.out.println("Build Failed");
-            System.out.println(compileResponse);
             String errorMessages = TestResultAnalyzer.getCompilationErrors(compileResponse);
             ErrorFileWriter.writeErrorsToFile(errorMessages);
-
             testingResults = new TestResultAnalyzer(false, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), errorMessages);
             return testingResults;
         }

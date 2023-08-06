@@ -1,0 +1,31 @@
+The compilation error messages indicate that the compiler is unable to find the symbol "ClientProfile" in the class "nz.ac.auckland.se281.InsuranceSystem". This means that the compiler does not recognize the class or interface named "ClientProfile" that is being used in the code.
+
+The error messages show the line numbers where the errors occur and provide additional information about the location of the error.
+
+Here are the specific errors:
+
+1. Line 9: The symbol "ClientProfile" cannot be found in the class "nz.ac.auckland.se281.InsuranceSystem". This error occurs at the import statement: `import nz.ac.auckland.se281.Main.PolicyType;`. The class "ClientProfile" is not imported or defined in the code.
+
+2. Line 10: The symbol "ClientProfile" cannot be found in the class "nz.ac.auckland.se281.InsuranceSystem". This error occurs at the import statement: `import java.util.ArrayList;`. The class "ClientProfile" is not imported or defined in the code.
+
+3. Line 127: The symbol "ClientProfile" cannot be found in the class "nz.ac.auckland.se281.InsuranceSystem". This error occurs at the method declaration: `public void printDatabase()`. The return type "ClientProfile" is not recognized.
+
+4. Line 140: The symbol "ClientProfile" cannot be found in the class "nz.ac.auckland.se281.InsuranceSystem". This error occurs at the method declaration: `public void createNewProfile(String userName, String age)`. The parameter type "ClientProfile" is not recognized.
+
+5. Line 144: The symbol "ClientProfile" cannot be found in the class "nz.ac.auckland.se281.InsuranceSystem". This error occurs at the method declaration: `public void loadProfile(String userName)`. The parameter type "ClientProfile" is not recognized.
+
+6. Line 148: The symbol "ClientProfile" cannot be found in the class "nz.ac.auckland.se281.InsuranceSystem". This error occurs at the method declaration: `public void unloadProfile()`. The return type "ClientProfile" is not recognized.
+
+7. Line 38: The symbol "ClientProfile" cannot be found in the class "nz.ac.auckland.se281.InsuranceSystem". This error occurs at the method declaration: `public void deleteProfile(String userName)`. The parameter type "ClientProfile" is not recognized.
+
+8. Line 38: The symbol "ClientProfile" cannot be found in the class "nz.ac.auckland.se281.InsuranceSystem". This error occurs at the method declaration: `public void deleteProfile(String userName)`. The parameter type "ClientProfile" is not recognized.
+
+9. Line 45: The symbol "ClientProfile" cannot be found in the class "nz.ac.auckland.se281.InsuranceSystem". This error occurs at the method declaration: `public void createPolicy(PolicyType type, String[] options)`. The parameter type "ClientProfile" is not recognized.
+
+10. Line 64: The symbol "ClientProfile" cannot be found in the class "nz.ac.auckland.se281.InsuranceSystem". This error occurs at the method declaration: `private boolean isUsernameUnique(String username)`. The variable type "ClientProfile" is not recognized.
+
+11. Line 99: The symbol "ClientProfile" cannot be found in the class "nz.ac.auckland.se281.InsuranceSystem". This error occurs at the method declaration: `private ClientProfile findProfileByUsername(String username)`. The return type "ClientProfile" is not recognized.
+
+12. Line 128: The symbol "ClientProfile" cannot be found in the class "nz.ac.auckland.se281.InsuranceSystem". This error occurs at the method declaration: `private boolean isProfileLoaded()`. The return type "ClientProfile" is not recognized.
+
+To fix these compilation errors, you need to import or define the class "ClientProfile" in the code.
