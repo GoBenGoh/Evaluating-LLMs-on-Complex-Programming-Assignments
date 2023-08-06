@@ -67,7 +67,6 @@ public class ShellScriptRunner {
         } else {
             System.out.println("Build Failed");
             String errorMessages = TestResultAnalyzer.getCompilationErrors(compileResponse);
-            ChatGPTAPI.sendNaturalLanguageErrorRequest(key, errorMessages);
             ErrorFileWriter.writeErrorsToFile(errorMessages);
             testingResults = new TestResultAnalyzer(false, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), errorMessages);
             return testingResults;

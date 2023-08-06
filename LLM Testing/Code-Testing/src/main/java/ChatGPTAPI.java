@@ -106,7 +106,6 @@ public class ChatGPTAPI {
         }
         System.out.println("10 iterations reached");
         CSVCreator.save();
-        return;
     }
 
     private static void startTesting(ChatGPTAPI app, String mode, String[] args, String repo, int attempt, CSVCreator CSVCreator) throws IOException{
@@ -178,6 +177,9 @@ public class ChatGPTAPI {
         }
 
         TestResultAnalyzer testingResults = ShellScriptRunner.runTesting(repo, args[0]);
+        if(!testingResults.isCompiled()){
+            sendNaturalLanguageErrorRequest(args[0], testingResults.getErrors());
+        }
         CSVCreator.addAttemptInfo(attempt, testingResults);
 
     }
