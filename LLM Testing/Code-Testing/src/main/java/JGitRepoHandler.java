@@ -9,6 +9,8 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class JGitRepoHandler {
     private Repository repository;
@@ -42,5 +44,16 @@ public class JGitRepoHandler {
     public String getCurrentCommitHash() throws IOException, GitAPIException {
         ObjectId head = repository.resolve("HEAD");
         return head.getName();
+    }
+
+    public List<String> getAllCommitHashes() throws IOException, GitAPIException {
+        List<String> commitHashes = new ArrayList<>();
+
+        Iterable<RevCommit> commits = git.log().call();
+        for (RevCommit commit : commits) {
+            commitHashes.add(commit.getName());
+        }
+
+        return commitHashes;
     }
 }
