@@ -51,35 +51,6 @@ public class TestResultAnalyzer {
         return errors;
     }
 
-//    public static List<Integer> extractTestResults(String xmlFilePath) {
-//        List<Integer> values = new ArrayList<>();
-//
-//        try {
-//            File file = new File(xmlFilePath);
-//            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-//            DocumentBuilder builder = factory.newDocumentBuilder();
-//            Document document = builder.parse(file);
-//            document.getDocumentElement().normalize();
-//
-//            Element testsuiteElement = (Element) document.getElementsByTagName("testsuite").item(0);
-//            int tests = Integer.parseInt(testsuiteElement.getAttribute("tests"));
-//            int errors = Integer.parseInt(testsuiteElement.getAttribute("errors"));
-//            int skipped = Integer.parseInt(testsuiteElement.getAttribute("skipped"));
-//            int failures = Integer.parseInt(testsuiteElement.getAttribute("failures"));
-//
-//            values.add(tests);
-//            values.add(failures);
-//            values.add(errors);
-//            values.add(skipped);
-//
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        return values;
-//    }
-
     public static String getCompilationErrors(String compResponse) {
         int errorsStart = compResponse.indexOf("[ERROR] COMPILATION ERROR : "); // Errors start here in compResponse
         if (errorsStart != -1){ // If there are errors
