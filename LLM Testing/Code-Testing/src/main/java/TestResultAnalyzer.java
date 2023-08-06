@@ -76,13 +76,10 @@ public class TestResultAnalyzer {
         taskTestDetails.add(new LinkedHashMap<>()); // Task 3 test cases
 
         try {
-            // Create the XmlReportPoller with the desired maxAttempts and pollingInterval
-            XmlReportPoller reportPoller = new XmlReportPoller(10, 1000); // 10 attempts with 1 second interval
-            // Use the XmlReportPoller to get the report file
-            File xmlReportFile = reportPoller.waitForReport(xmlFilePath);
+            File file = new File(xmlFilePath);
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
-            Document document = builder.parse(xmlReportFile);
+            Document document = builder.parse(file);
             document.getDocumentElement().normalize();
 
             NodeList failedTests = document.getElementsByTagName("testcase");
