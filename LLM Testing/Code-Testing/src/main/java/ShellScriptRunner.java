@@ -2,6 +2,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +26,17 @@ public class ShellScriptRunner {
         if (isBuildSucceeded) {
             // Running Provided Tests
             runCommand(repositoryDirectory, "CLEAR_TESTS");
+
+            // Add a short delay and check again until the test directory becomes empty
+            while (!isTestDirectoryEmpty(repositoryDirectory)) {
+                try {
+                    System.out.println("Waiting for the test directory to become empty...");
+                    Thread.sleep(1000); // Add a 1-second delay
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
             runCommand(repositoryDirectory, "ADD_PROVIDED_TESTS");
             runCommand(repositoryDirectory, "TEST");
 
@@ -51,6 +66,17 @@ public class ShellScriptRunner {
 
             // Running Hidden Tests
             runCommand(repositoryDirectory, "CLEAR_TESTS");
+
+            // Add a short delay and check again until the test directory becomes empty
+            while (!isTestDirectoryEmpty(repositoryDirectory)) {
+                try {
+                    System.out.println("Waiting for the test directory to become empty...");
+                    Thread.sleep(1000); // Add a 1-second delay
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
             runCommand(repositoryDirectory, "ADD_HIDDEN_TESTS");
             runCommand(repositoryDirectory, "TEST");
 
@@ -137,5 +163,17 @@ public class ShellScriptRunner {
         }
         return output.toString();
     }
+
+    public static boolean isTestDirectoryEmpty(String directory) {
+        String testDirectoryPath = directory + "/src/test/java/nz/ac/auckland/se281";
+        Path testDirectory = Paths.get(testDirectoryPath);
+        try {
+            return Files.list(testDirectory).count() == 0;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }
 
