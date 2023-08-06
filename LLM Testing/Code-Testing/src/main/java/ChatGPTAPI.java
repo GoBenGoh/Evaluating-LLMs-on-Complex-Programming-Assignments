@@ -176,7 +176,7 @@ public class ChatGPTAPI {
             e.printStackTrace();
         }
 
-        TestResultAnalyzer testingResults = ShellScriptRunner.runTesting(repo, args[0]);
+        TestResultAnalyzer testingResults = ShellScriptRunner.runTesting(repo);
         if(!testingResults.isCompiled()){
             sendNaturalLanguageErrorRequest(args[0], testingResults.getErrors());
         }

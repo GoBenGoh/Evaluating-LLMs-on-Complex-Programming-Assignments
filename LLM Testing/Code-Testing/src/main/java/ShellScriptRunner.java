@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ShellScriptRunner {
-    public static TestResultAnalyzer runTesting(String repositoryDirectory, String key) {
+    public static TestResultAnalyzer runTesting(String repositoryDirectory) {
         String xmlPath = repositoryDirectory + "/target/surefire-reports/TEST-nz.ac.auckland.se281.MainTest.xml";
         TestResultAnalyzer testingResults;
 

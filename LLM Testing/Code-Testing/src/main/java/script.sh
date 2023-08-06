@@ -15,9 +15,7 @@ case "$2" in
     ./mvnw clean compile
     ;;
   "TEST")
-    ./mvnw clean compile
-    sync
-    ./mvnw test
+    ./mvnw clean compile test
     ;;
   "CLEAR_TESTS")
     cd "src/test/java/nz/ac/auckland/se281"
