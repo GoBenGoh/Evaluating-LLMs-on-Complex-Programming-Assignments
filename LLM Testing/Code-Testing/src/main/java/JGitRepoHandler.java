@@ -37,15 +37,6 @@ public class JGitRepoHandler {
         checkoutCommand.setName(commitObjectId.getName()).call();
     }
 
-    public String getRepoPath() {
-        return repository.getWorkTree().getAbsolutePath();
-    }
-
-    public String getCurrentCommitHash() throws IOException, GitAPIException {
-        ObjectId head = repository.resolve("HEAD");
-        return head.getName();
-    }
-
     public List<String> getAllCommitHashes() throws IOException, GitAPIException {
         List<String> commitHashes = new ArrayList<>();
 
