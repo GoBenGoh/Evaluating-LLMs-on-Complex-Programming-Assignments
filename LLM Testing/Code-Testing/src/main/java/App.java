@@ -26,6 +26,8 @@ public class App {
                 repoHandler.switchToCommit(commitHash);
 //                ChatGPTAPI.runTestIterations(args, studentRepo, commitHash, workflow);
             }
+
+            repoHandler.close();
         }
     }
 

@@ -50,4 +50,10 @@ public class JGitRepoHandler {
 
         return commitHashes;
     }
+
+    public void close() {
+        git.close();
+        repository.close();
+    }
+
 }
