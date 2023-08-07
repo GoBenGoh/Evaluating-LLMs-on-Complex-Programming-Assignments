@@ -6,7 +6,7 @@ import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
-
+import java.util.Collections;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -49,10 +49,13 @@ public class JGitRepoHandler {
     public List<String> getAllCommitHashes() throws IOException, GitAPIException {
         List<String> commitHashes = new ArrayList<>();
 
-        Iterable<RevCommit> commits = git.log().call();
+        Iterable<RevCommit> commits = git.log().all().call();
         for (RevCommit commit : commits) {
             commitHashes.add(commit.getName());
         }
+
+        // Reverse the order of commit hashes before returning
+        Collections.reverse(commitHashes);
 
         return commitHashes;
     }
