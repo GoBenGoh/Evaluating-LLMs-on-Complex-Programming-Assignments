@@ -55,14 +55,11 @@ public class ChatGPTAPI {
             System.out.println(e.getMessage());
         }
     }
-    public static void main(String[] args) throws IOException{
+    public static void runTestIterations(String[] args, String repo, String commit, String workflow) throws IOException{
         ChatGPTAPI app = new ChatGPTAPI();
         boolean task1 = true;
         boolean isStart = true;
 
-        String repo = "../assignment_template/assignment-1";
-        String commit = "Initial-Commit";
-        String workflow = "Own-Progress";
         String temperature = String.valueOf(args[1]);
         CSVCreator CSVCreator = new CSVCreator(repo, commit, workflow, temperature);
         CSVCreator.createRepoHeader();
