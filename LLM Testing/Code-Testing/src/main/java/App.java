@@ -10,7 +10,7 @@ public class App {
         String repo = "../assignment_template/assignment-1";
         String commit = "Initial-Commit";
         String workflow = "Own-Progress";
-//        ChatGPTAPI.runTestIterations(args, repo, commit, workflow);
+        ChatGPTAPI.runTestIterations(args, repo, commit, workflow);
 
         // Test GPT's Progress starting from students code
         workflow = "Piggyback";
@@ -24,7 +24,7 @@ public class App {
             List<String> repoCommits = repoHandler.getAllCommitHashes();
             for (String commitHash: repoCommits) {
                 repoHandler.switchToCommit(commitHash);
-//                ChatGPTAPI.runTestIterations(args, studentRepo, commitHash, workflow);
+                ChatGPTAPI.runTestIterations(args, studentRepo, commitHash, workflow);
             }
 
             repoHandler.close();
