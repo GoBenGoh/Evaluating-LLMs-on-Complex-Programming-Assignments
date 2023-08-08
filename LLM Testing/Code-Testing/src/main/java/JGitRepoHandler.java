@@ -28,6 +28,9 @@ public class JGitRepoHandler {
     }
 
     public void switchToCommit(String commitHash) throws IOException, GitAPIException {
+        // Remove untracked files
+        git.clean().setCleanDirectories(true).setForce(true).setIgnore(false).call();
+
         // Discard any changes in the working directory
         git.reset().setMode(ResetCommand.ResetType.HARD).call();
 
