@@ -27,6 +27,8 @@ public class App {
                 ChatGPTAPI.runTestIterations(args, studentRepo, commitHash, workflow);
             }
 
+            // Switch back to the initial commit before closing the repository
+            repoHandler.switchToCommit(repoCommits.get(0));
             repoHandler.close();
         }
     }
