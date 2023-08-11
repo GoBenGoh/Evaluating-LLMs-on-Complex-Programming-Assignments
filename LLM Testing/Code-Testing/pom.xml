@@ -15,7 +15,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
-                    <mainClass>ChatGPTAPI</mainClass>
+                    <mainClass>App</mainClass>
                 </configuration>
             </plugin>
         </plugins>
@@ -45,6 +45,11 @@
             <version>5.7.1</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.eclipse.jgit</groupId>
+            <artifactId>org.eclipse.jgit</artifactId>
+            <version>6.5.0.202303070854-r</version>
+        </dependency>
 
     </dependencies>
 
