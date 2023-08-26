@@ -40,4 +40,19 @@ public class FailureFileWriter {
             e.printStackTrace();
         }
     }
+    public static String getFailuresAsString(List<String> failedProvidedTests, List<String> failedHiddenTests, List<String> providedAsserts, List<String> hiddenAsserts){
+        List<String> failedTests = new ArrayList<>(failedProvidedTests);
+        failedTests.addAll(failedHiddenTests);
+        List<String> assertionMessages = new ArrayList<>(providedAsserts);
+        assertionMessages.addAll(hiddenAsserts);
+        StringBuffer failures = new StringBuffer();
+        for (int i = 0; i < failedTests.size(); i++) {
+            String failedTest = failedTests.get(i);
+            failures.append(failedTest);
+            failures.append("\n");
+            String assertionMessage = assertionMessages.get(i);
+            failures.append(assertionMessage);
+        }
+        return failures.toString();
+    }
 }

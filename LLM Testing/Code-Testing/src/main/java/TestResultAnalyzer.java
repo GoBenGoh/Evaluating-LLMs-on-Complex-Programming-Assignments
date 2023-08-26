@@ -19,9 +19,14 @@ public class TestResultAnalyzer {
 
     private final List<String> t3ProvidedTestNames;
     private final List<String> t3HiddenTestNames;
+    private String t1Failures = "";
+    private String t2Failures = "";
+    private String t3Failures = "";
     private final String errors;
 
-    public TestResultAnalyzer(boolean isCompiled, List<String> t1ProvidedTestNames, List<String> t1HiddenTestNames, List<String> t2ProvidedTestNames, List<String> t2HiddenTestNames, List<String> t3ProvidedTestNames, List<String> t3HiddenTestNames, String errors){
+    public TestResultAnalyzer(boolean isCompiled, List<String> t1ProvidedTestNames, List<String> t1HiddenTestNames,
+                              List<String> t2ProvidedTestNames, List<String> t2HiddenTestNames,
+                              List<String> t3ProvidedTestNames, List<String> t3HiddenTestNames, String errors){
         this.isCompiled = isCompiled;
         this.t1ProvidedTestNames = t1ProvidedTestNames;
         this.t1HiddenTestNames = t1HiddenTestNames;
@@ -67,6 +72,13 @@ public class TestResultAnalyzer {
         // If no match is found, return an empty string
         return "";
     }
+
+    public String getT1Failures(){return t1Failures;}
+    public void setT1Failures(String failures){this.t1Failures=failures;}
+    public String getT2Failures(){return t2Failures;}
+    public void setT2Failures(String failures){this.t2Failures=failures;}
+    public String getT3Failures(){return t3Failures;}
+    public void setT3Failures(String failures){this.t3Failures=failures;}
 
 
     public static List<Map<String, String>> extractFailedTestDetails(String xmlFilePath) {
