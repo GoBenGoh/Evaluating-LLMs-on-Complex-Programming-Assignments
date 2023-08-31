@@ -75,11 +75,13 @@ public class ChatGPTAPI {
             String content = getResponseContent(response);
             System.out.println(content);
             if (isNaturalLanguageRequest){
-                createResponseTxtFiles("src/main/resources/NaturalLanguageResponse.txt", response, "src/main/resources/NaturalLanguageContent.txt", content);
+                createResponseTxtFiles("src/main/resources/NaturalLanguageResponse.txt", response,
+                        "src/main/resources/NaturalLanguageContent.txt", content);
                 this.content=content;
             }
             else{
-                createResponseTxtFiles("src/main/resources/response.txt", response, "src/main/resources/content.txt", content);
+                createResponseTxtFiles("src/main/resources/response.txt", response,
+                        "src/main/resources/content.txt", content);
                 this.content=content;
             }
 
@@ -88,7 +90,8 @@ public class ChatGPTAPI {
         }
     }
 
-    private static void createResponseTxtFiles(String fileName, StringBuffer response, String fileName1, String content) throws FileNotFoundException {
+    private static void createResponseTxtFiles(String fileName, StringBuffer response, String fileName1, String content)
+            throws FileNotFoundException {
         try (PrintWriter out = new PrintWriter(fileName)) {
             out.println(response);
         }
@@ -107,7 +110,8 @@ public class ChatGPTAPI {
         return content.getAsString();
     }
 
-    public void runTestIterations(String[] args, String repo, String commit, String workflow) throws IOException, InterruptedException {
+    public void runTestIterations(String[] args, String repo, String commit, String workflow)
+            throws IOException, InterruptedException {
         ChatGPTAPI app = new ChatGPTAPI();
         boolean task1 = true;
         boolean isStart = true;
@@ -115,10 +119,10 @@ public class ChatGPTAPI {
         String temperature = String.valueOf(args[1]);
         CSVCreator CSVCreator = new CSVCreator(repo, commit, workflow, temperature);
         CSVCreator.createRepoHeader();
-        TestResultAnalyzer resultAnalyzer = new TestResultAnalyzer(false, new ArrayList<>(), new ArrayList<>(),
-                new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "");
+        TestResultAnalyzer resultAnalyzer = new TestResultAnalyzer(false, new ArrayList<>(),
+                new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "");
 
-        for(int i = 0; i < 2; i++){
+        for(int i = 0; i < 10; i++){
             int attempt = i + 1;
             System.out.println(attempt);
 
@@ -165,7 +169,8 @@ public class ChatGPTAPI {
     }
 
     private TestResultAnalyzer startTesting(ChatGPTAPI app, String mode, String[] args, String repo, int attempt,
-                                                   CSVCreator CSVCreator, TestResultAnalyzer priorResults) throws IOException, InterruptedException {
+                                                   CSVCreator CSVCreator, TestResultAnalyzer priorResults)
+            throws IOException, InterruptedException {
         String responseContent = this.content;
         System.out.println("Response content: "+"\n"+responseContent);
         String jsonRequest = setJsonRequest(mode);
@@ -178,10 +183,12 @@ public class ChatGPTAPI {
         String newPrompt = promptWriter.output(); // new prompt in string form
         Request newRequest;
         if (args[1] == null){ //default 0.7 temperature
-            newRequest = new Request("gpt-3.5-turbo-16k", newPrompt, 0.7); // object for gson to convert
+            // object for gson to convert
+            newRequest = new Request("gpt-3.5-turbo-16k", newPrompt, 0.7);
         }
         else{
-            newRequest = new Request("gpt-3.5-turbo-16k", newPrompt, Double.valueOf(args[1])); // object for gson to convert
+            // object for gson to convert
+            newRequest = new Request("gpt-3.5-turbo-16k", newPrompt, Double.valueOf(args[1]));
         }
         Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create(); // format JSON
         JsonElement jsonElement = gson.toJsonTree(newRequest);
@@ -192,6 +199,7 @@ public class ChatGPTAPI {
         try(PrintWriter out = new PrintWriter("src/main/resources/newPrompt.txt")){
             out.println(newPrompt);
         }
+        // Ask GPT to complete the code
         sendGPTRequest(jsonRequest, args[0], false);
         try {
             TextToJava.convertTextToJavaFile();
@@ -199,23 +207,29 @@ public class ChatGPTAPI {
             e.printStackTrace();
         }
 
+        // Run Testing
         TestResultAnalyzer testingResults = ShellScriptRunner.runTesting(repo);
+
+        // If natural language explanation for errors is specified
         if(args.length == 3){
             if(!testingResults.isCompiled() && args[2].equals("natural")){
-                writeNaturalLanguageJson(testingResults.getErrors(), app);
+                String nLRequest = writeNaturalLanguageJson(testingResults.getErrors(), app);
                 System.out.println("Sending compilation error request");
-                sendGPTRequest(jsonRequest, args[0], true);
+
+                // Ask GPT to explain compilation errors
+                sendGPTRequest(nLRequest, args[0], true);
             }
             else{
                 System.out.println("Not sending natural language request");
             }
         }
 
+        // Update CSV file with testing results
         CSVCreator.addAttemptInfo(attempt, testingResults);
         return testingResults;
     }
 
-    public void writeNaturalLanguageJson(String errorMessages, ChatGPTAPI app) throws IOException {
+    public String writeNaturalLanguageJson(String errorMessages, ChatGPTAPI app) throws IOException {
         String promptTemplate = app.getFileFromResource("Prompt Templates/NaturalLanguageError.txt");
         String responseContent = this.content;
         String newPrompt = new PromptWriter(promptTemplate, responseContent, errorMessages, "naturalLanguage")
@@ -232,9 +246,12 @@ public class ChatGPTAPI {
         try(PrintWriter out = new PrintWriter("src/main/resources/newNaturalLanguageErrorPrompt.txt")){
             out.println(newPrompt);
         }
+        return jsonRequest;
     }
 
-    private static PromptWriter setPromptWriter(String mode, ChatGPTAPI app, String responseContent, boolean isNaturalLanguage, TestResultAnalyzer results) throws IOException {
+    private static PromptWriter setPromptWriter(String mode, ChatGPTAPI app, String responseContent,
+                                                boolean isNaturalLanguage, TestResultAnalyzer results)
+            throws IOException {
         String promptTemplate;
         String error;
         String failure;
@@ -308,12 +325,12 @@ public class ChatGPTAPI {
     }
 
     public String getFileFromResource(String fileName) throws IOException {
-
         // The class loader that loaded the class
         ClassLoader classLoader = getClass().getClassLoader();
-        String inputStream = new String(classLoader.getResourceAsStream(fileName).readAllBytes(), StandardCharsets.UTF_8);
+        String inputStream = new String(classLoader.getResourceAsStream(fileName).readAllBytes(),
+                StandardCharsets.UTF_8);
 
-        // the stream holding the file content
+        // The stream holding the file content
         if (inputStream == null) {
             throw new IllegalArgumentException("file not found! " + fileName);
         } else {
@@ -321,15 +338,10 @@ public class ChatGPTAPI {
         }
 
     }
-    public static String readLinesAsString(File file) {
-        List<String> returnLines = new LinkedList<String>();
-        String text = "";
-        try {
-            text = new String(Files.readAllBytes(Paths.get(file.getAbsolutePath())),
+    public static String readLinesAsString(File file) throws IOException {
+        String text = new String(Files.readAllBytes(Paths.get(file.getAbsolutePath())),
                     StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
         return text;
     }
 }
