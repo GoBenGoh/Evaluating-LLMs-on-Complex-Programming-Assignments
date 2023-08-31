@@ -29,10 +29,6 @@ LLM Testing/Code-Testing/errors.txt
 .DS_Store
 LLM Testing/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java
 LLM Testing/BenCam.zip
-LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java
-LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java
-LLM Testing/Code-Testing/src/main/resources/content.txt
-LLM Testing/Code-Testing/src/main/resources/errors.txt
 LLM Testing/Code-Testing/src/main/resources/NaturalLanguageContent.txt
 LLM Testing/Code-Testing/src/main/resources/NaturalLanguageResponse.txt
 LLM Testing/Code-Testing/src/main/resources/newNaturalLanguageErrorPrompt.txt
@@ -47,3 +43,4 @@ LLM Testing/Code-Testing/src/main/resources/newPrompt.txt
 LLM Testing/Code-Testing/src/main/resources/errors.txt
 LLM Testing/Code-Testing/src/main/resources/content.txt
 LLM Testing/Code-Testing/src/main/java/Task1CompilationFailureRequest.json
+LLM Testing/assignment-1_Own-Progress/assignment-1_Initial-Commit.csv
