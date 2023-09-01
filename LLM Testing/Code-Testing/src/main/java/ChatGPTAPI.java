@@ -45,7 +45,7 @@ public class ChatGPTAPI {
             "    }\n" +
             "}\n";
 
-    public void sendGPTRequest(String request, String key, boolean isNaturalLanguageRequest) {
+    public String sendGPTRequest(String request, String key, boolean isNaturalLanguageRequest) {
         try {
             URL url = new URL("https://api.openai.com/v1/chat/completions");
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -58,6 +58,7 @@ public class ChatGPTAPI {
             con.setRequestProperty("Authorization", "Bearer "+ key);
             //Make sure to REPLACE the path of the json file!
             String jsonInputString = readLinesAsString(new File(request));
+            System.out.println("JSON Input String: \n"+jsonInputString);
             try (OutputStream os = con.getOutputStream()) {
                 byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
                 os.write(input, 0, input.length);
@@ -73,21 +74,21 @@ public class ChatGPTAPI {
             }
             in.close();
             String content = getResponseContent(response);
-            System.out.println(content);
             if (isNaturalLanguageRequest){
                 createResponseTxtFiles("src/main/resources/NaturalLanguageResponse.txt", response,
                         "src/main/resources/NaturalLanguageContent.txt", content);
-                this.content=content;
             }
             else{
                 createResponseTxtFiles("src/main/resources/response.txt", response,
                         "src/main/resources/content.txt", content);
                 this.content=content;
             }
+            return content;
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+        throw new RuntimeException("Unexpected Error in sendGPTRequest");
     }
 
     private static void createResponseTxtFiles(String fileName, StringBuffer response, String fileName1, String content)
@@ -200,9 +201,11 @@ public class ChatGPTAPI {
             out.println(newPrompt);
         }
         // Ask GPT to complete the code
-        sendGPTRequest(jsonRequest, args[0], false);
+        String content = sendGPTRequest(jsonRequest, args[0], false);
         try {
-            TextToJava.convertTextToJavaFile();
+//            TextToJava.convertTextToJavaFile();
+            TextToJava.convertStringToJavaFile(content);
+
         } catch (IOException e) {
             e.printStackTrace();
         }

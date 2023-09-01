@@ -44,3 +44,4 @@ LLM Testing/Code-Testing/src/main/resources/errors.txt
 LLM Testing/Code-Testing/src/main/resources/content.txt
 LLM Testing/Code-Testing/src/main/java/Task1CompilationFailureRequest.json
 LLM Testing/assignment-1_Own-Progress/assignment-1_Initial-Commit.csv
+*.json
