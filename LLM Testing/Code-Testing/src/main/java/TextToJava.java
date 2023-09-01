@@ -15,6 +15,13 @@ public class TextToJava {
         saveJavaFile(javaCode, javaFilePath);
     }
 
+    public static void convertStringToJavaFile(String string) throws IOException{
+        String javaFilePath = "../assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java";
+        String javaCode = extractJavaCode(string);
+        System.out.println(javaCode);
+        saveJavaFile(javaCode, javaFilePath);
+    }
+
     public static String extractJavaCode(String text) {
         // Case where code surrounded by backticks
         int startIndex = text.indexOf("```java");

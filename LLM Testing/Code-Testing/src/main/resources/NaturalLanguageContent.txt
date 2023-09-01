@@ -1,31 +1,163 @@
-The compilation error messages indicate that the compiler is unable to find the symbol "ClientProfile" in the class "nz.ac.auckland.se281.InsuranceSystem". This means that the compiler does not recognize the class or interface named "ClientProfile" that is being used in the code.
+package nz.ac.auckland.se281;
 
-The error messages show the line numbers where the errors occur and provide additional information about the location of the error.
+import nz.ac.auckland.se281.Main.PolicyType;
 
-Here are the specific errors:
+import java.util.ArrayList;
+import java.util.List;
 
-1. Line 9: The symbol "ClientProfile" cannot be found in the class "nz.ac.auckland.se281.InsuranceSystem". This error occurs at the import statement: `import nz.ac.auckland.se281.Main.PolicyType;`. The class "ClientProfile" is not imported or defined in the code.
+public class InsuranceSystem {
+    private List<ClientProfile> database;
 
-2. Line 10: The symbol "ClientProfile" cannot be found in the class "nz.ac.auckland.se281.InsuranceSystem". This error occurs at the import statement: `import java.util.ArrayList;`. The class "ClientProfile" is not imported or defined in the code.
+    public InsuranceSystem() {
+        database = new ArrayList<>();
+    }
 
-3. Line 127: The symbol "ClientProfile" cannot be found in the class "nz.ac.auckland.se281.InsuranceSystem". This error occurs at the method declaration: `public void printDatabase()`. The return type "ClientProfile" is not recognized.
+    public void printDatabase() {
+        if (database.isEmpty()) {
+            System.out.println("Database has 0 profiles.");
+        } else if (database.size() == 1) {
+            System.out.println("Database has 1 profile:");
+            System.out.println(" 1: " + database.get(0).toString());
+        } else {
+            System.out.println("Database has " + database.size() + " profiles:");
+            for (int i = 0; i < database.size(); i++) {
+                System.out.println(" " + (i + 1) + ": " + database.get(i).toString());
+            }
+        }
+    }
 
-4. Line 140: The symbol "ClientProfile" cannot be found in the class "nz.ac.auckland.se281.InsuranceSystem". This error occurs at the method declaration: `public void createNewProfile(String userName, String age)`. The parameter type "ClientProfile" is not recognized.
+    public void createNewProfile(String userName, String age) {
+        if (!isValidUsername(userName)) {
+            System.out.println("'" + userName + "' is an invalid username, it should be at least 3 characters long. No profile was created.");
+            return;
+        }
 
-5. Line 144: The symbol "ClientProfile" cannot be found in the class "nz.ac.auckland.se281.InsuranceSystem". This error occurs at the method declaration: `public void loadProfile(String userName)`. The parameter type "ClientProfile" is not recognized.
+        if (!isUniqueUsername(userName)) {
+            System.out.println("Usernames must be unique. No profile was created for '" + userName + "'.");
+            return;
+        }
 
-6. Line 148: The symbol "ClientProfile" cannot be found in the class "nz.ac.auckland.se281.InsuranceSystem". This error occurs at the method declaration: `public void unloadProfile()`. The return type "ClientProfile" is not recognized.
+        int parsedAge;
+        try {
+            parsedAge = Integer.parseInt(age);
+        } catch (NumberFormatException e) {
+            System.out.println("'" + age + "' is an invalid age, please provide a positive whole number only. No profile was created for " + userName + ".");
+            return;
+        }
 
-7. Line 38: The symbol "ClientProfile" cannot be found in the class "nz.ac.auckland.se281.InsuranceSystem". This error occurs at the method declaration: `public void deleteProfile(String userName)`. The parameter type "ClientProfile" is not recognized.
+        if (parsedAge <= 0) {
+            System.out.println("'" + age + "' is an invalid age, please provide a positive whole number only. No profile was created for " + userName + ".");
+            return;
+        }
 
-8. Line 38: The symbol "ClientProfile" cannot be found in the class "nz.ac.auckland.se281.InsuranceSystem". This error occurs at the method declaration: `public void deleteProfile(String userName)`. The parameter type "ClientProfile" is not recognized.
+        database.add(new ClientProfile(userName, parsedAge));
+        System.out.println("New profile created for " + toTitleCase(userName) + " with age " + parsedAge + ".");
+    }
 
-9. Line 45: The symbol "ClientProfile" cannot be found in the class "nz.ac.auckland.se281.InsuranceSystem". This error occurs at the method declaration: `public void createPolicy(PolicyType type, String[] options)`. The parameter type "ClientProfile" is not recognized.
+    public void loadProfile(String userName) {
+        if (isProfileLoaded()) {
+            System.out.println("Cannot load a new profile. First unload the profile for " + loadedProfile.getUserName() + ".");
+            return;
+        }
 
-10. Line 64: The symbol "ClientProfile" cannot be found in the class "nz.ac.auckland.se281.InsuranceSystem". This error occurs at the method declaration: `private boolean isUsernameUnique(String username)`. The variable type "ClientProfile" is not recognized.
+        ClientProfile profile = findProfile(userName);
+        if (profile == null) {
+            System.out.println("No profile found for " + userName + ". Profile not loaded.");
+            return;
+        }
 
-11. Line 99: The symbol "ClientProfile" cannot be found in the class "nz.ac.auckland.se281.InsuranceSystem". This error occurs at the method declaration: `private ClientProfile findProfileByUsername(String username)`. The return type "ClientProfile" is not recognized.
+        loadedProfile = profile;
+        System.out.println("Profile loaded for " + loadedProfile.getUserName() + ".");
+    }
 
-12. Line 128: The symbol "ClientProfile" cannot be found in the class "nz.ac.auckland.se281.InsuranceSystem". This error occurs at the method declaration: `private boolean isProfileLoaded()`. The return type "ClientProfile" is not recognized.
+    public void unloadProfile() {
+        if (!isProfileLoaded()) {
+            System.out.println("No profile is currently loaded.");
+            return;
+        }
 
-To fix these compilation errors, you need to import or define the class "ClientProfile" in the code.
+        System.out.println("Profile unloaded for " + loadedProfile.getUserName() + ".");
+        loadedProfile = null;
+    }
+
+    public void deleteProfile(String userName) {
+        if (isProfileLoaded() && loadedProfile.getUserName().equals(userName)) {
+            System.out.println("Cannot delete profile for " + userName + " while loaded. No profile was deleted.");
+            return;
+        }
+
+        boolean removed = database.removeIf(profile -> profile.getUserName().equals(userName));
+
+        if (removed) {
+            System.out.println("Profile deleted for " + userName + ".");
+        } else {
+            System.out.println("No profile found for " + userName + ". No profile was deleted.");
+        }
+    }
+
+    public void createPolicy(PolicyType type, String[] options) {
+        if (!isProfileLoaded()) {
+            System.out.println("Need to load a profile in order to create a policy.");
+            return;
+        }
+
+        switch (type) {
+            case HOME:
+                createHomePolicy(options);
+                break;
+            case CAR:
+                createCarPolicy(options);
+                break;
+            case LIFE:
+                createLifePolicy(options);
+                break;
+        }
+    }
+
+    private boolean isValidUsername(String username) {
+        return username.length() >= 3;
+    }
+
+    private boolean isUniqueUsername(String username) {
+        for (ClientProfile profile : database) {
+            if (profile.getUserName().equalsIgnoreCase(username)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private String toTitleCase(String word) {
+        String[] words = word.split(" ");
+        StringBuilder result = new StringBuilder();
+        for (String w : words) {
+            result.append(Character.toUpperCase(w.charAt(0))).append(w.substring(1).toLowerCase()).append(" ");
+        }
+        return result.toString().trim();
+    }
+
+    private ClientProfile findProfile(String username) {
+        for (ClientProfile profile : database) {
+            if (profile.getUserName().equalsIgnoreCase(username)) {
+                return profile;
+            }
+        }
+        return null;
+    }
+
+    private boolean isProfileLoaded() {
+        return loadedProfile != null;
+    }
+
+    private void createHomePolicy(String[] options) {
+        // TODO: Implement this method
+    }
+
+    private void createCarPolicy(String[] options) {
+        // TODO: Implement this method
+    }
+
+    private void createLifePolicy(String[] options) {
+        // TODO: Implement this method
+    }
+}

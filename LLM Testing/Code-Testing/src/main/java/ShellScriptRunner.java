@@ -1,7 +1,4 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -10,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ShellScriptRunner {
-    public static TestResultAnalyzer runTesting(String repositoryDirectory) {
+    public static TestResultAnalyzer runTesting(String repositoryDirectory){
         String xmlPath = repositoryDirectory + "/target/surefire-reports/TEST-nz.ac.auckland.se281.MainTest.xml";
         TestResultAnalyzer testingResults;
 
@@ -81,18 +78,31 @@ public class ShellScriptRunner {
             List<String> t3HiddenAsserts = new ArrayList<>(t3HiddenFailureMessages.values());
             List<String> t3FailedHiddenTests = TestFinder.extractTestMethods(t3HiddenTestNames, "HIDDEN");
 
-            FailureFileWriter.writeFailuresToFile(t1FailedProvidedTests, t1FailedHiddenTests, t1ProvidedAsserts, t1HiddenAsserts, "T1");
-            FailureFileWriter.writeFailuresToFile(t2FailedProvidedTests, t2FailedHiddenTests, t2ProvidedAsserts, t2HiddenAsserts, "T2");
-            FailureFileWriter.writeFailuresToFile(t3FailedProvidedTests, t3FailedHiddenTests, t3ProvidedAsserts, t3HiddenAsserts, "T3");
+            testingResults = new TestResultAnalyzer(true, t1ProvidedTestNames, t1HiddenTestNames,
+                    t2ProvidedTestNames, t2HiddenTestNames, t3ProvidedTestNames, t3HiddenTestNames, "");
+            testingResults.setT1Failures(FailureFileWriter.getFailuresAsString(t1FailedProvidedTests,
+                    t1FailedHiddenTests, t1ProvidedAsserts, t1HiddenAsserts));
+            testingResults.setT2Failures(FailureFileWriter.getFailuresAsString(t2FailedProvidedTests,
+                    t2FailedHiddenTests, t2ProvidedAsserts, t2HiddenAsserts));
+            testingResults.setT3Failures(FailureFileWriter.getFailuresAsString(t3FailedProvidedTests,
+                    t3FailedHiddenTests, t3ProvidedAsserts, t3HiddenAsserts));
 
-            testingResults = new TestResultAnalyzer(true, t1ProvidedTestNames, t1HiddenTestNames, t2ProvidedTestNames, t2HiddenTestNames, t3ProvidedTestNames, t3HiddenTestNames, "");
+            //Logging purposes
+            FailureFileWriter.writeFailuresToFile(t1FailedProvidedTests, t1FailedHiddenTests, t1ProvidedAsserts,
+                    t1HiddenAsserts, "T1");
+            FailureFileWriter.writeFailuresToFile(t2FailedProvidedTests, t2FailedHiddenTests, t2ProvidedAsserts,
+                    t2HiddenAsserts, "T2");
+            FailureFileWriter.writeFailuresToFile(t3FailedProvidedTests, t3FailedHiddenTests, t3ProvidedAsserts,
+                    t3HiddenAsserts, "T3");
+
             return testingResults;
 
         } else {
             System.out.println("Build Failed");
             String errorMessages = TestResultAnalyzer.getCompilationErrors(compileResponse);
             ErrorFileWriter.writeErrorsToFile(errorMessages);
-            testingResults = new TestResultAnalyzer(false, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), errorMessages);
+            testingResults = new TestResultAnalyzer(false, new ArrayList<>(), new ArrayList<>(),
+                    new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), errorMessages);
             return testingResults;
         }
     }
@@ -109,7 +119,8 @@ public class ShellScriptRunner {
                 throw new UnsupportedOperationException("Unsupported operating system: " + osName);
             }
 
-            String[] scriptCommand = {bashExecutablePath, "-c", "./src/main/java/script.sh " + repositoryDirectory + " " + command};
+            String[] scriptCommand = {bashExecutablePath, "-c",
+                    "./src/main/java/script.sh " + repositoryDirectory + " " + command};
             ProcessBuilder processBuilder = new ProcessBuilder(scriptCommand);
             processBuilder.redirectErrorStream(true);
             Process process = processBuilder.start();

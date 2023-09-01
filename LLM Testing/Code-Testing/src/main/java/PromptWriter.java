@@ -55,7 +55,8 @@ public class PromptWriter {
         }
         int start = 61;
         String newPrompt = modifyPrompt(prompt, start, extra);
-        int codeStart =  newPrompt.indexOf("The next section contains the code that is throwing the compilation errors:") + 80;
+        int codeStart =
+                newPrompt.indexOf("The next section contains the code that is throwing the compilation errors:") + 80;
         newPrompt = modifyPrompt(newPrompt, codeStart, trimmedResponse);
         return newPrompt;
     }
