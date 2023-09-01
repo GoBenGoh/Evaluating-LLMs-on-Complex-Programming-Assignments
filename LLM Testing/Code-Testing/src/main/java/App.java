@@ -13,25 +13,26 @@ public class App {
         ChatGPTAPI chatGPTAPI = new ChatGPTAPI();
         chatGPTAPI.runTestIterations(args, repo, commit, workflow);
 
-//        // Test GPT's Progress starting from students code
-//        workflow = "Piggyback";
-//        // Will replace repos with selected list for testing
-//        List<String> repoPaths = generateRepoPaths(15);
-//
-//        for (String studentRepo: repoPaths) {
-//            JGitRepoHandler repoHandler = new JGitRepoHandler(studentRepo);
-//
-//            // Will replace all commit hashes with selected list for testing
-//            List<String> repoCommits = repoHandler.getAllCommitHashes();
-//            for (String commitHash: repoCommits) {
-//                repoHandler.switchToCommit(commitHash);
-//                ChatGPTAPI.runTestIterations(args, studentRepo, commitHash, workflow);
-//            }
-//
-//            // Switch back to the initial commit before closing the repository
-//            repoHandler.switchToCommit(repoCommits.get(0));
-//            repoHandler.close();
-//        }
+        // Test GPT's Progress starting from students code
+        workflow = "Piggyback";
+        // Will replace repos with selected list for testing
+        List<String> repoPaths = generateRepoPaths(15);
+
+        for (String studentRepo: repoPaths) {
+            JGitRepoHandler repoHandler = new JGitRepoHandler(studentRepo);
+
+            // Will replace all commit hashes with selected list for testing
+            List<String> repoCommits = repoHandler.getAllCommitHashes();
+            for (String commitHash: repoCommits) {
+                chatGPTAPI = new ChatGPTAPI();
+                repoHandler.switchToCommit(commitHash);
+                chatGPTAPI.runTestIterations(args, studentRepo, commitHash, workflow);
+            }
+
+            // Switch back to the initial commit before closing the repository
+            repoHandler.switchToCommit(repoCommits.get(0));
+            repoHandler.close();
+        }
     }
 
     public static List<String> generateRepoPaths(int numberOfRepos) {

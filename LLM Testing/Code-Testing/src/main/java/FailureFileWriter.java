@@ -52,6 +52,7 @@ public class FailureFileWriter {
             failures.append("\n");
             String assertionMessage = assertionMessages.get(i);
             failures.append(assertionMessage);
+            failures.append("\n");
         }
         return failures.toString();
     }

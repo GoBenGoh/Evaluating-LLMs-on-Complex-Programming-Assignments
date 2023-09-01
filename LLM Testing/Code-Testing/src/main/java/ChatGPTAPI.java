@@ -1,6 +1,4 @@
 import com.google.gson.*;
-import org.checkerframework.checker.units.qual.C;
-
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -8,8 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+
 public class ChatGPTAPI {
     public String content = "package nz.ac.auckland.se281;\n" +
             "\n" +
@@ -112,7 +109,7 @@ public class ChatGPTAPI {
     }
 
     public void runTestIterations(String[] args, String repo, String commit, String workflow)
-            throws IOException, InterruptedException {
+            throws IOException{
         ChatGPTAPI app = new ChatGPTAPI();
         boolean task1 = true;
         boolean isStart = true;
@@ -171,7 +168,7 @@ public class ChatGPTAPI {
 
     private TestResultAnalyzer startTesting(ChatGPTAPI app, String mode, String[] args, String repo, int attempt,
                                                    CSVCreator CSVCreator, TestResultAnalyzer priorResults)
-            throws IOException, InterruptedException {
+            throws IOException{
         String responseContent = this.content;
         System.out.println("Response content: "+"\n"+responseContent);
         String jsonRequest = setJsonRequest(mode);
