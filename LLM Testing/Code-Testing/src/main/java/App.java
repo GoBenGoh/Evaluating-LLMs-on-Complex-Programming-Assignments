@@ -34,6 +34,7 @@ public class App {
                 String commitHash = (String) commitInfo.get("commit_hash");
                 int commitNumber = (int) commitInfo.get("commit_number");
 
+                // Run testing on commit
                 chatGPTAPI = new ChatGPTAPI();
                 repoHandler.switchToCommit(commitHash);
                 chatGPTAPI.runTestIterations(args, studentRepo, commitHash, commitNumber, workflow);
