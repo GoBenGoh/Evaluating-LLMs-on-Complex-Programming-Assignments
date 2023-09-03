@@ -108,14 +108,15 @@ public class ChatGPTAPI {
         return content.getAsString();
     }
 
-    public void runTestIterations(String[] args, String repo, String commit, String workflow)
+    public void runTestIterations(String[] args, String repo, String commit, int commitNumber, String workflow)
             throws IOException{
         ChatGPTAPI app = new ChatGPTAPI();
         boolean task1 = true;
         boolean isStart = true;
 
         String temperature = String.valueOf(args[1]);
-        CSVCreator CSVCreator = new CSVCreator(repo, commit, workflow, temperature);
+        String commitOrder = String.valueOf(commitNumber);
+        CSVCreator CSVCreator = new CSVCreator(repo, commit, commitOrder, workflow, temperature);
         CSVCreator.createRepoHeader();
         TestResultAnalyzer resultAnalyzer = new TestResultAnalyzer(false, new ArrayList<>(),
                 new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "");

@@ -11,7 +11,7 @@ public class App {
         String commit = "Initial-Commit";
         String workflow = "Own-Progress";
         ChatGPTAPI chatGPTAPI = new ChatGPTAPI();
-        chatGPTAPI.runTestIterations(args, repo, commit, workflow);
+        chatGPTAPI.runTestIterations(args, repo, commit, 1, workflow);
 
         // Test GPT's Progress starting from students code
         workflow = "Piggyback";
@@ -23,10 +23,12 @@ public class App {
 
             // Will replace all commit hashes with selected list for testing
             List<String> repoCommits = repoHandler.getAllCommitHashes();
+            int commitNumber = 1;
             for (String commitHash: repoCommits) {
                 chatGPTAPI = new ChatGPTAPI();
                 repoHandler.switchToCommit(commitHash);
-                chatGPTAPI.runTestIterations(args, studentRepo, commitHash, workflow);
+                chatGPTAPI.runTestIterations(args, studentRepo, commitHash, commitNumber, workflow);
+                commitNumber++;
             }
 
             // Switch back to the initial commit before closing the repository
