@@ -10,19 +10,21 @@ import java.util.Map;
 public class CSVCreator {
     private CSVWriter csvWriter;
     private String repository;
-    private String commit;
+    private String commitHash;
+    private String commitNumber;
     private String workflow;
     private String temperature;
 
-    public CSVCreator(String repo, String commit, String workflow, String temperature) {
+    public CSVCreator(String repo, String commitHash, String commitNumber, String workflow, String temperature) {
         this.repository = getRepoNameFromDirectory(repo);
-        this.commit = commit;
+        this.commitHash = commitHash;
+        this.commitNumber = commitNumber;
         this.workflow = workflow;
         this.temperature = temperature;
 
         createRepoTestingDirectory();
         try {
-            csvWriter = new CSVWriter(new FileWriter("../" + this.repository + "_" + this.workflow + "/" + this.repository + "_" + this.commit + ".csv"));
+            csvWriter = new CSVWriter(new FileWriter("../" + this.repository + "_" + this.workflow + "_" + this.temperature + "/commit_" + this.commitNumber + ".csv"));
         } catch (IOException e) {
             System.out.println("An error occurred while initializing the CSVWriter.");
             e.printStackTrace();
@@ -30,7 +32,7 @@ public class CSVCreator {
     }
 
     private void createRepoTestingDirectory() {
-        String folderPath = "../" + this.repository + "_" + this.workflow;
+        String folderPath = "../" + this.repository + "_" + this.workflow + "_" + this.temperature;
         File folder = new File(folderPath);
         if (!folder.exists()) {
             if (folder.mkdirs()) {
@@ -44,7 +46,7 @@ public class CSVCreator {
     // Testing CSV creation
     public static void main(String[] args) {
         // Creating a sample CSVCreator instance
-        CSVCreator csvCreator = new CSVCreator("repo", "commit", "workflow", "0.5");
+        CSVCreator csvCreator = new CSVCreator("repo", "commit", String.valueOf(1),"workflow", "0.5");
         csvCreator.createRepoHeader();
 
         // Sample TestResultAnalyzer data for compiled code
@@ -81,7 +83,7 @@ public class CSVCreator {
     }
 
     public void createRepoHeader() {
-        String[] initialHeader = {"Repo = " + repository + ", " + "Commit = " + commit + ", " + "Workflow = " + workflow + ", " + "Temperature = " + temperature};
+        String[] initialHeader = {"Repo = " + repository + ", " + "Commit = " + commitHash + ", " + "Workflow = " + workflow + ", " + "Temperature = " + temperature};
         csvWriter.writeNext(initialHeader);
         String[] headers = {"Attempt","Task 1 (Provided)","Failed Tests","Task 1 (Hidden)","Failed Tests","Task 2 (Provided)","Failed Tests","Task 2 (Hidden)","Failed Tests","Task 3 (Provided)","Failed Tests","Task 3 (Hidden)","Failed Tests", "Compilation Errors"};
         csvWriter.writeNext(headers);
