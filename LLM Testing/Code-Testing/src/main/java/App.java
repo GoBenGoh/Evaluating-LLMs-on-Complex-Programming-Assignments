@@ -1,8 +1,11 @@
 import org.eclipse.jgit.api.errors.GitAPIException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class App {
     public static void main(String[] args) throws IOException, GitAPIException, InterruptedException {
@@ -15,24 +18,29 @@ public class App {
 
         // Test GPT's Progress starting from students code
         workflow = "Piggyback";
-        // Will replace repos with selected list for testing
-        List<String> repoPaths = generateRepoPaths(15);
+        // Get student repo information from JSON
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<Map<String, Object>> repositoriesToTest = objectMapper.readValue(
+                new File("src/main/java/repos_config.json"),
+                objectMapper.getTypeFactory().constructCollectionType(List.class, Map.class)
+        );
 
-        for (String studentRepo: repoPaths) {
+        for (Map<String, Object> repoConfig: repositoriesToTest) {
+            String studentRepo = (String) repoConfig.get("repo_path");
             JGitRepoHandler repoHandler = new JGitRepoHandler(studentRepo);
 
-            // Will replace all commit hashes with selected list for testing
-            List<String> repoCommits = repoHandler.getAllCommitHashes();
-            int commitNumber = 1;
-            for (String commitHash: repoCommits) {
+            List<Map<String, Object>> repoCommits = (List<Map<String, Object>>) repoConfig.get("repo_commits");
+            for (Map<String, Object> commitInfo : repoCommits) {
+                String commitHash = (String) commitInfo.get("commit_hash");
+                int commitNumber = (int) commitInfo.get("commit_number");
+
                 chatGPTAPI = new ChatGPTAPI();
                 repoHandler.switchToCommit(commitHash);
                 chatGPTAPI.runTestIterations(args, studentRepo, commitHash, commitNumber, workflow);
-                commitNumber++;
             }
 
             // Switch back to the initial commit before closing the repository
-            repoHandler.switchToCommit(repoCommits.get(0));
+            repoHandler.switchToCommit(repoCommits.get(0).get("commit_hash").toString());
             repoHandler.close();
         }
     }
