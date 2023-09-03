@@ -40,7 +40,8 @@ public class App {
             }
 
             // Switch back to the initial commit before closing the repository
-            repoHandler.switchToCommit(repoCommits.get(0).get("commit_hash").toString());
+            String initialCommitHash = (String) repoConfig.get("initial_commit");
+            repoHandler.switchToCommit(initialCommitHash);
             repoHandler.close();
         }
     }
