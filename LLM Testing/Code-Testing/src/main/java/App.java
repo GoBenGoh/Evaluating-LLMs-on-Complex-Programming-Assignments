@@ -34,6 +34,9 @@ public class App {
                 String commitHash = (String) commitInfo.get("commit_hash");
                 int commitNumber = (int) commitInfo.get("commit_number");
 
+                // Retrieve content of InsuranceSystem.java for current commit
+                String content = FileContentReader.getFileContent(studentRepo);
+
                 // Run testing on commit
                 chatGPTAPI = new ChatGPTAPI();
                 repoHandler.switchToCommit(commitHash);
