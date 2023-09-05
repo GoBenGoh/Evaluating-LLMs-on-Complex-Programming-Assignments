@@ -92,7 +92,7 @@ public class ChatGPTAPI {
         TestResultAnalyzer resultAnalyzer = new TestResultAnalyzer(false, new ArrayList<>(),
                 new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "");
 
-        for(int i = 0; i < 3; i++){
+        for(int i = 0; i < 10; i++){
             int attempt = i + 1;
             System.out.println(attempt);
 
