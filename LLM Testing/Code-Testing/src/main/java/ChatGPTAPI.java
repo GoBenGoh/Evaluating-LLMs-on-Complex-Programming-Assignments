@@ -41,6 +41,7 @@ public class ChatGPTAPI {
             "        // TODO: Complete this method.\n" +
             "    }\n" +
             "}\n";
+    public boolean badResponse = false;
 
     public String sendGPTRequest(String request, String key, boolean isNaturalLanguageRequest) {
         try {
@@ -127,29 +128,29 @@ public class ChatGPTAPI {
 
             if (isStart){
                 resultAnalyzer = startTesting(app, "1", args, repo, attempt, CSVCreator, resultAnalyzer);
-                isStart = false;
+                if (!this.badResponse){
+                    isStart = false;
+                }
             }
             else {
                 String errors = resultAnalyzer.getErrors();
                 String task1Failures = resultAnalyzer.getT1Failures();
                 String task2Failures = resultAnalyzer.getT2Failures();
                 if(errors != ""){
-                    System.out.println("Compilation errors: \n");
-                    System.out.println(errors);
+                    System.out.println("Last iteration had compilation errors");
                     if (task1)
                         resultAnalyzer = startTesting(app, "1c", args, repo, attempt, CSVCreator, resultAnalyzer);
                     else
                         resultAnalyzer = startTesting(app, "2c", args, repo, attempt, CSVCreator, resultAnalyzer);
                 }
                 else{
-                    System.out.println("No compilation errors");
                     if (!task1Failures.equals("")) {
-                        System.out.println("Task 1 test failures: \n");
+                        System.out.println("Last iteration had Task 1 test failures: \n");
                         System.out.println(task1Failures);
                         resultAnalyzer = startTesting(app, "1f", args, repo, attempt, CSVCreator, resultAnalyzer);
                     }
                     else if (task1Failures.equals("") && !task2Failures.equals("")) {
-                        System.out.println("Task 2 test failures: \n");
+                        System.out.println("Last iteration had Task 2 test failures: \n");
                         System.out.println(task2Failures);
                         task1 = false;
                         resultAnalyzer = startTesting(app, "2f", args, repo, attempt, CSVCreator, resultAnalyzer);
@@ -171,7 +172,6 @@ public class ChatGPTAPI {
                                                    CSVCreator CSVCreator, TestResultAnalyzer priorResults)
             throws IOException{
         String responseContent = this.content;
-        System.out.println("Response content: "+"\n"+responseContent);
         String jsonRequest = setJsonRequest(mode);
         boolean isNaturalLanguage = false;
         if (args[2] == "natural"){
@@ -199,9 +199,19 @@ public class ChatGPTAPI {
             out.println(newPrompt);
         }
         // Ask GPT to complete the code
+        System.out.println("Sending request to ChatGPT");
         String content = sendGPTRequest(jsonRequest, args[0], false);
+        if (content.indexOf("package nz.ac.auckland.se281") == -1){ // Bad response by ChatGPT
+            System.out.println("Bad Response from ChatGPT!");
+            // Set the content to the same content before the GPT request
+            this.content = responseContent;
+            // Set badResponse status in case it is the first iteration
+            this.badResponse = true;
+            // Return last results so the next iteration has the same prompt in hopes for a better response
+            return priorResults;
+        }
+        this.badResponse = false;
         try {
-//            TextToJava.convertTextToJavaFile();
             TextToJava.convertStringToJavaFile(content);
 
         } catch (IOException e) {
@@ -215,7 +225,7 @@ public class ChatGPTAPI {
         if(args.length == 3){
             if(!testingResults.isCompiled() && args[2].equals("natural")){
                 String nLRequest = writeNaturalLanguageJson(testingResults.getErrors(), app);
-                System.out.println("Sending compilation error request");
+                System.out.println("Sending compilation error natural language request");
 
                 // Ask GPT to explain compilation errors
                 sendGPTRequest(nLRequest, args[0], true);
@@ -272,8 +282,8 @@ public class ChatGPTAPI {
         }
         else if (mode.equals("1f")){
             promptTemplate = app.getFileFromResource("Prompt Templates/Task1_FailedTests.txt");
-//            failure = app.getFileFromResource("provided_failures.txt");
             failure = results.getT1Failures();
+            System.out.println("T1 Failures: \n" + failure);
             return new PromptWriter(promptTemplate, responseContent, failure, "f");
         }
         else if (mode.equals("2")){
@@ -292,8 +302,8 @@ public class ChatGPTAPI {
         }
         else if (mode.equals("2f")){
             promptTemplate = app.getFileFromResource("Prompt Templates/Task2_FailedTests.txt");
-//            failure = app.getFileFromResource("provided_failures.txt");
             failure = results.getT2Failures();
+            System.out.println("T2 Failures: \n" + failure);
             return new PromptWriter(promptTemplate, responseContent, failure, "f");
         }
         else {

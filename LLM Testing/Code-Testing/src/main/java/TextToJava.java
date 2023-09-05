@@ -9,7 +9,6 @@ public class TextToJava {
     public static void convertTextToJavaFile() throws IOException {
         String textFilePath = "./src/main/resources/content.txt";
         String javaFilePath = "../assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java";
-
         String content = readFile(textFilePath);
         String javaCode = extractJavaCode(content);
         saveJavaFile(javaCode, javaFilePath);
@@ -18,7 +17,6 @@ public class TextToJava {
     public static void convertStringToJavaFile(String string) throws IOException{
         String javaFilePath = "../assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java";
         String javaCode = extractJavaCode(string);
-        System.out.println(javaCode);
         saveJavaFile(javaCode, javaFilePath);
     }
 
