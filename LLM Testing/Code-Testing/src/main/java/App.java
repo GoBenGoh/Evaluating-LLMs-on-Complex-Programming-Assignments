@@ -13,7 +13,40 @@ public class App {
         String repo = "../assignment_template/assignment-1";
         String commit = "Initial-Commit";
         String workflow = "Own-Progress";
-        ChatGPTAPI chatGPTAPI = new ChatGPTAPI();
+        String initialCommit = "package nz.ac.auckland.se281;\n" +
+                "\n" +
+                "import nz.ac.auckland.se281.Main.PolicyType;\n" +
+                "\n" +
+                "public class InsuranceSystem {\n" +
+                "    public InsuranceSystem() {\n" +
+                "        // Only this constructor can be used (if you need to initialise fields).\n" +
+                "    }\n" +
+                "\n" +
+                "    public void printDatabase() {\n" +
+                "        // TODO: Complete this method.\n" +
+                "    }\n" +
+                "\n" +
+                "    public void createNewProfile(String userName, String age) {\n" +
+                "        // TODO: Complete this method.\n" +
+                "    }\n" +
+                "\n" +
+                "    public void loadProfile(String userName) {\n" +
+                "        // TODO: Complete this method.\n" +
+                "    }\n" +
+                "\n" +
+                "    public void unloadProfile() {\n" +
+                "        // TODO: Complete this method.\n" +
+                "    }\n" +
+                "\n" +
+                "    public void deleteProfile(String userName) {\n" +
+                "        // TODO: Complete this method.\n" +
+                "    }\n" +
+                "\n" +
+                "    public void createPolicy(PolicyType type, String[] options) {\n" +
+                "        // TODO: Complete this method.\n" +
+                "    }\n" +
+                "}\n";
+        ChatGPTAPI chatGPTAPI = new ChatGPTAPI(initialCommit);
         chatGPTAPI.runTestIterations(args, repo, commit, 1, workflow);
 
         // Test GPT's Progress starting from students code
@@ -38,7 +71,7 @@ public class App {
                 String content = FileContentReader.getFileContent(studentRepo);
 
                 // Run testing on commit
-                chatGPTAPI = new ChatGPTAPI();
+                chatGPTAPI = new ChatGPTAPI(content);
                 repoHandler.switchToCommit(commitHash);
                 chatGPTAPI.runTestIterations(args, studentRepo, commitHash, commitNumber, workflow);
             }

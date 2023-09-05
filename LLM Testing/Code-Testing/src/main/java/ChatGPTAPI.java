@@ -8,39 +8,11 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class ChatGPTAPI {
-    public String content = "package nz.ac.auckland.se281;\n" +
-            "\n" +
-            "import nz.ac.auckland.se281.Main.PolicyType;\n" +
-            "\n" +
-            "public class InsuranceSystem {\n" +
-            "    public InsuranceSystem() {\n" +
-            "        // Only this constructor can be used (if you need to initialise fields).\n" +
-            "    }\n" +
-            "\n" +
-            "    public void printDatabase() {\n" +
-            "        // TODO: Complete this method.\n" +
-            "    }\n" +
-            "\n" +
-            "    public void createNewProfile(String userName, String age) {\n" +
-            "        // TODO: Complete this method.\n" +
-            "    }\n" +
-            "\n" +
-            "    public void loadProfile(String userName) {\n" +
-            "        // TODO: Complete this method.\n" +
-            "    }\n" +
-            "\n" +
-            "    public void unloadProfile() {\n" +
-            "        // TODO: Complete this method.\n" +
-            "    }\n" +
-            "\n" +
-            "    public void deleteProfile(String userName) {\n" +
-            "        // TODO: Complete this method.\n" +
-            "    }\n" +
-            "\n" +
-            "    public void createPolicy(PolicyType type, String[] options) {\n" +
-            "        // TODO: Complete this method.\n" +
-            "    }\n" +
-            "}\n";
+    public String content;
+
+    public ChatGPTAPI(String content){
+        this.content = content;
+    }
 
     public String sendGPTRequest(String request, String key, boolean isNaturalLanguageRequest) {
         try {
@@ -110,7 +82,6 @@ public class ChatGPTAPI {
 
     public void runTestIterations(String[] args, String repo, String commit, int commitNumber, String workflow)
             throws IOException{
-        ChatGPTAPI app = new ChatGPTAPI();
         boolean task1 = true;
         boolean isStart = true;
 
@@ -121,12 +92,12 @@ public class ChatGPTAPI {
         TestResultAnalyzer resultAnalyzer = new TestResultAnalyzer(false, new ArrayList<>(),
                 new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "");
 
-        for(int i = 0; i < 10; i++){
+        for(int i = 0; i < 3; i++){
             int attempt = i + 1;
             System.out.println(attempt);
 
             if (isStart){
-                resultAnalyzer = startTesting(app, "1", args, repo, attempt, CSVCreator, resultAnalyzer);
+                resultAnalyzer = startTesting("1", args, repo, attempt, CSVCreator, resultAnalyzer);
                 isStart = false;
             }
             else {
@@ -137,22 +108,22 @@ public class ChatGPTAPI {
                     System.out.println("Compilation errors: \n");
                     System.out.println(errors);
                     if (task1)
-                        resultAnalyzer = startTesting(app, "1c", args, repo, attempt, CSVCreator, resultAnalyzer);
+                        resultAnalyzer = startTesting("1c", args, repo, attempt, CSVCreator, resultAnalyzer);
                     else
-                        resultAnalyzer = startTesting(app, "2c", args, repo, attempt, CSVCreator, resultAnalyzer);
+                        resultAnalyzer = startTesting("2c", args, repo, attempt, CSVCreator, resultAnalyzer);
                 }
                 else{
                     System.out.println("No compilation errors");
                     if (!task1Failures.equals("")) {
                         System.out.println("Task 1 test failures: \n");
                         System.out.println(task1Failures);
-                        resultAnalyzer = startTesting(app, "1f", args, repo, attempt, CSVCreator, resultAnalyzer);
+                        resultAnalyzer = startTesting("1f", args, repo, attempt, CSVCreator, resultAnalyzer);
                     }
                     else if (task1Failures.equals("") && !task2Failures.equals("")) {
                         System.out.println("Task 2 test failures: \n");
                         System.out.println(task2Failures);
                         task1 = false;
-                        resultAnalyzer = startTesting(app, "2f", args, repo, attempt, CSVCreator, resultAnalyzer);
+                        resultAnalyzer = startTesting("2f", args, repo, attempt, CSVCreator, resultAnalyzer);
                     }
                     else{
                         // All tests pass
@@ -167,7 +138,7 @@ public class ChatGPTAPI {
         CSVCreator.save();
     }
 
-    private TestResultAnalyzer startTesting(ChatGPTAPI app, String mode, String[] args, String repo, int attempt,
+    private TestResultAnalyzer startTesting(String mode, String[] args, String repo, int attempt,
                                                    CSVCreator CSVCreator, TestResultAnalyzer priorResults)
             throws IOException{
         String responseContent = this.content;
@@ -177,7 +148,7 @@ public class ChatGPTAPI {
         if (args[2] == "natural"){
             isNaturalLanguage = true;
         }
-        PromptWriter promptWriter = setPromptWriter(mode, app, responseContent, isNaturalLanguage, priorResults);
+        PromptWriter promptWriter = setPromptWriter(mode, responseContent, isNaturalLanguage, priorResults);
 
         String newPrompt = promptWriter.output(); // new prompt in string form
         Request newRequest;
@@ -214,7 +185,7 @@ public class ChatGPTAPI {
         // If natural language explanation for errors is specified
         if(args.length == 3){
             if(!testingResults.isCompiled() && args[2].equals("natural")){
-                String nLRequest = writeNaturalLanguageJson(testingResults.getErrors(), app);
+                String nLRequest = writeNaturalLanguageJson(testingResults.getErrors());
                 System.out.println("Sending compilation error request");
 
                 // Ask GPT to explain compilation errors
@@ -230,8 +201,8 @@ public class ChatGPTAPI {
         return testingResults;
     }
 
-    public String writeNaturalLanguageJson(String errorMessages, ChatGPTAPI app) throws IOException {
-        String promptTemplate = app.getFileFromResource("Prompt Templates/NaturalLanguageError.txt");
+    public String writeNaturalLanguageJson(String errorMessages) throws IOException {
+        String promptTemplate = getFileFromResource("Prompt Templates/NaturalLanguageError.txt");
         String responseContent = this.content;
         String newPrompt = new PromptWriter(promptTemplate, responseContent, errorMessages, "naturalLanguage")
                 .createNaturalLanguageErrorPrompt();
@@ -250,20 +221,20 @@ public class ChatGPTAPI {
         return jsonRequest;
     }
 
-    private static PromptWriter setPromptWriter(String mode, ChatGPTAPI app, String responseContent,
+    private static PromptWriter setPromptWriter(String mode, String responseContent,
                                                 boolean isNaturalLanguage, TestResultAnalyzer results)
             throws IOException {
         String promptTemplate;
         String error;
         String failure;
         if (mode.equals("1")){
-            promptTemplate = app.getFileFromResource("Prompt Templates/Task1.txt");
+            promptTemplate = getFileFromResource("Prompt Templates/Task1.txt");
             return new PromptWriter(promptTemplate, responseContent, "t1");
         }
         else if (mode.equals("1c")){
-            promptTemplate = app.getFileFromResource("Prompt Templates/Task1_CompilationError.txt");
+            promptTemplate = getFileFromResource("Prompt Templates/Task1_CompilationError.txt");
             if (isNaturalLanguage){
-                error = app.getFileFromResource("NaturalLanguageContent.txt");
+                error = getFileFromResource("NaturalLanguageContent.txt");
             }
             else{
                 error = results.getErrors();
@@ -271,19 +242,19 @@ public class ChatGPTAPI {
             return new PromptWriter(promptTemplate, responseContent, error, "c");
         }
         else if (mode.equals("1f")){
-            promptTemplate = app.getFileFromResource("Prompt Templates/Task1_FailedTests.txt");
+            promptTemplate = getFileFromResource("Prompt Templates/Task1_FailedTests.txt");
 //            failure = app.getFileFromResource("provided_failures.txt");
             failure = results.getT1Failures();
             return new PromptWriter(promptTemplate, responseContent, failure, "f");
         }
         else if (mode.equals("2")){
-            promptTemplate = app.getFileFromResource("Prompt Templates/Task2.txt");
+            promptTemplate = getFileFromResource("Prompt Templates/Task2.txt");
             return new PromptWriter(promptTemplate, responseContent, "t2");
         }
         else if (mode.equals("2c")){
-            promptTemplate = app.getFileFromResource("Prompt Templates/Task2_CompilationError.txt");
+            promptTemplate = getFileFromResource("Prompt Templates/Task2_CompilationError.txt");
             if (isNaturalLanguage){
-                error = app.getFileFromResource("NaturalLanguageContent.txt");
+                error = getFileFromResource("NaturalLanguageContent.txt");
             }
             else{
                 error = results.getErrors();
@@ -291,7 +262,7 @@ public class ChatGPTAPI {
             return new PromptWriter(promptTemplate, responseContent, error, "c");
         }
         else if (mode.equals("2f")){
-            promptTemplate = app.getFileFromResource("Prompt Templates/Task2_FailedTests.txt");
+            promptTemplate = getFileFromResource("Prompt Templates/Task2_FailedTests.txt");
 //            failure = app.getFileFromResource("provided_failures.txt");
             failure = results.getT2Failures();
             return new PromptWriter(promptTemplate, responseContent, failure, "f");
@@ -325,9 +296,9 @@ public class ChatGPTAPI {
         }
     }
 
-    public String getFileFromResource(String fileName) throws IOException {
+    public static String getFileFromResource(String fileName) throws IOException {
         // The class loader that loaded the class
-        ClassLoader classLoader = getClass().getClassLoader();
+        ClassLoader classLoader = ChatGPTAPI.class.getClassLoader();
         String inputStream = new String(classLoader.getResourceAsStream(fileName).readAllBytes(),
                 StandardCharsets.UTF_8);
 
