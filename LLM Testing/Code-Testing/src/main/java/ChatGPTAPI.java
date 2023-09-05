@@ -98,7 +98,6 @@ public class ChatGPTAPI {
 
             if (isStart){
                 resultAnalyzer = startTesting("1", args, repo, attempt, CSVCreator, resultAnalyzer);
-                isStart = false;
                 if (!this.badResponse){
                     isStart = false;
                 }
