@@ -33,7 +33,7 @@ public class TextToJava {
                     codeBlock = text.substring(startIndex + 3, endIndex).trim();
                 }
                 else { // code starts with ``` but doesn't end with ```
-                    codeBlock = text.substring(startIndex);
+                    codeBlock = text.substring(startIndex + 3);
                 }
                 return codeBlock;
 
