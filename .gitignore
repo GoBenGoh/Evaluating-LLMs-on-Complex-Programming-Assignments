@@ -46,3 +46,5 @@ LLM Testing/Code-Testing/src/main/java/Task1CompilationFailureRequest.json
 LLM Testing/assignment-1_Own-Progress/assignment-1_Initial-Commit.csv
 *.json
 !repos_config.json
+*.csv
+LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java
