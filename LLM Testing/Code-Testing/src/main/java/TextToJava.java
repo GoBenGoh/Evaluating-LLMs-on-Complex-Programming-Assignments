@@ -25,13 +25,20 @@ public class TextToJava {
         int startIndex = text.indexOf("```java");
         int endIndex = text.lastIndexOf("```");
 
-        if (startIndex == -1){ // code between a pair of ```
+        if (startIndex == -1){
             startIndex = text.indexOf("```");
-            if (startIndex == 0 && endIndex != startIndex){
-                String codeBlock = text.substring(startIndex + 3, endIndex).trim();
+            if (startIndex == 0){
+                String codeBlock;
+                if (endIndex != startIndex){ // code between a pair of ```
+                    codeBlock = text.substring(startIndex + 3, endIndex).trim();
+                }
+                else { // code starts with ``` but doesn't end with ```
+                    codeBlock = text.substring(startIndex + 3);
+                }
                 return codeBlock;
+
             }
-            if (startIndex>0){
+            if (startIndex>0){ // code ends with ``` but does not start with ```
                 String codeBlock = text.substring(0, startIndex).trim();
                 return codeBlock;
             }
