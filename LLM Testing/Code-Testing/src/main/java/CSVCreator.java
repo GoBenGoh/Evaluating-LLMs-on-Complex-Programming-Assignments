@@ -8,12 +8,12 @@ import java.util.List;
 import java.util.Map;
 
 public class CSVCreator {
-    private CSVWriter csvWriter;
-    private String repository;
-    private String commitHash;
-    private String commitNumber;
-    private String workflow;
-    private String temperature;
+    public CSVWriter csvWriter;
+    public String repository;
+    public String commitHash;
+    public String commitNumber;
+    public String workflow;
+    public String temperature;
 
     public CSVCreator(String repo, String commitHash, String commitNumber, String workflow, String temperature) {
         this.repository = getRepoNameFromDirectory(repo);
@@ -21,25 +21,14 @@ public class CSVCreator {
         this.commitNumber = commitNumber;
         this.workflow = workflow;
         this.temperature = temperature;
-
-        createRepoTestingDirectory();
+        String folderPath = "../" + this.repository + "_" + this.workflow + "_" + this.temperature;
+        DirectoryCreator.createDirectory(folderPath);
         try {
-            csvWriter = new CSVWriter(new FileWriter("../" + this.repository + "_" + this.workflow + "_" + this.temperature + "/commit_" + this.commitNumber + ".csv"));
+            csvWriter = new CSVWriter(new FileWriter("../" + this.repository + "_" + this.workflow + "_" +
+                    this.temperature + "/commit_" + this.commitNumber + ".csv"));
         } catch (IOException e) {
             System.out.println("An error occurred while initializing the CSVWriter.");
             e.printStackTrace();
-        }
-    }
-
-    private void createRepoTestingDirectory() {
-        String folderPath = "../" + this.repository + "_" + this.workflow + "_" + this.temperature;
-        File folder = new File(folderPath);
-        if (!folder.exists()) {
-            if (folder.mkdirs()) {
-                System.out.println("Folder created: " + folderPath);
-            } else {
-                System.out.println("Failed to create folder: " + folderPath);
-            }
         }
     }
 
