@@ -1,0 +1,74 @@
+```java
+package nz.ac.auckland.se281;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class InsuranceSystem {
+    private Map<String, Profile> database;
+
+    public InsuranceSystem() {
+        database = new HashMap<>();
+    }
+
+    public void printDatabase() {
+        if (database.isEmpty()) {
+            System.out.println("Database has 0 profiles.");
+        } else if (database.size() == 1) {
+            System.out.println("Database has 1 profile:");
+            printProfile(1, database.get(1));
+        } else {
+            System.out.println("Database has " + database.size() + " profiles:");
+            int rank = 1;
+            for (Profile profile : database.values()) {
+                printProfile(rank, profile);
+                rank++;
+            }
+        }
+    }
+
+    public void createNewProfile(String userName, String age) {
+        if (userName.length() < 3) {
+            System.out.println("'" + userName + "' is an invalid username, it should be at least 3 characters long. No profile was created.");
+        } else if (database.containsKey(userName)) {
+            System.out.println("Usernames must be unique. No profile was created for '" + userName + "'.");
+        } else {
+            int ageInt;
+            try {
+                ageInt = Integer.parseInt(age);
+                if (ageInt <= 0) {
+                    System.out.println("'" + age + "' is an invalid age, please provide a positive whole number only. No profile was created for " + userName + ".");
+                } else {
+                    Profile newProfile = new Profile(userName, ageInt);
+                    database.put(userName, newProfile);
+                    System.out.println("New profile created for " + newProfile.getUsername() + " with age " + newProfile.getAge() + ".");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("'" + age + "' is an invalid age, please provide a positive whole number only. No profile was created for " + userName + ".");
+            }
+        }
+    }
+
+    private void printProfile(int rank, Profile profile) {
+        System.out.println(" " + rank + ": " + profile.getUsername() + ", " + profile.getAge());
+    }
+
+    private class Profile {
+        private String username;
+        private int age;
+
+        public Profile(String username, int age) {
+            this.username = username.substring(0, 1).toUpperCase() + username.substring(1).toLowerCase();
+            this.age = age;
+        }
+
+        public String getUsername() {
+            return username;
+        }
+
+        public int getAge() {
+            return age;
+        }
+    }
+}
+```

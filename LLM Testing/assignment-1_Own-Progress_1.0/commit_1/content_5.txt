@@ -1,3 +1,5 @@
+The code has been modified to compile correctly. Here is the updated code:
+
 ```java
 package nz.ac.auckland.se281;
 
@@ -62,28 +64,6 @@ public class InsuranceSystem {
         // Print success message
         System.out.println("New profile created for " + newProfile.getTitleCaseUsername() + " with age "
                 + newProfile.getAge() + ".");
-    }
-}
-
-class ClientProfile {
-    private final String username;
-    private final String age;
-
-    public ClientProfile(String username, String age) {
-        this.username = username;
-        this.age = age;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getAge() {
-        return age;
-    }
-
-    public String getTitleCaseUsername() {
-        return username.substring(0, 1).toUpperCase() + username.substring(1).toLowerCase();
     }
 }
 ```

@@ -1,0 +1,257 @@
+```
+package nz.ac.auckland.se281;
+
+import nz.ac.auckland.se281.Main.PolicyType;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class InsuranceSystem {
+    private Map<String, Profile> database;
+    private Profile loadedProfile;
+
+    public InsuranceSystem() {
+        database = new HashMap<>();
+        loadedProfile = null;
+    }
+
+    public void printDatabase() {
+        if (database.isEmpty()) {
+            System.out.println("Database has 0 profiles.");
+        } else if (database.size() == 1) {
+            System.out.println("Database has 1 profile:");
+            printProfile(database.get(1));
+        } else {
+            System.out.println("Database has " + database.size() + " profiles:");
+            int rank = 1;
+            for (Profile profile : database.values()) {
+                printProfile(rank, profile);
+                rank++;
+            }
+        }
+    }
+
+    public void createNewProfile(String userName, String age) {
+        if (userName.length() < 3) {
+            System.out.println("'" + userName + "' is an invalid username, it should be at least 3 characters long. No profile was created.");
+        } else if (database.containsKey(userName)) {
+            System.out.println("Usernames must be unique. No profile was created for '" + userName + "'.");
+        } else {
+            int ageInt;
+            try {
+                ageInt = Integer.parseInt(age);
+                if (ageInt <= 0) {
+                    System.out.println("'" + age + "' is an invalid age, please provide a positive whole number only. No profile was created for " + userName + ".");
+                } else {
+                    Profile newProfile = new Profile(userName, ageInt);
+                    database.put(userName, newProfile);
+                    System.out.println("New profile created for " + newProfile.getUsername() + " with age " + newProfile.getAge() + ".");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("'" + age + "' is an invalid age, please provide a positive whole number only. No profile was created for " + userName + ".");
+            }
+        }
+    }
+
+    public void loadProfile(String userName) {
+        if (database.containsKey(userName)) {
+            if (loadedProfile != null) {
+                System.out.println("Cannot load a new profile. First unload the profile for " + loadedProfile.getUsername() + ".");
+            } else {
+                loadedProfile = database.get(userName);
+                System.out.println("Profile loaded for " + loadedProfile.getUsername() + ".");
+            }
+        } else {
+            System.out.println("No profile found for " + userName + ". Profile not loaded.");
+        }
+    }
+
+    public void unloadProfile() {
+        if (loadedProfile != null) {
+            System.out.println("Profile unloaded for " + loadedProfile.getUsername() + ".");
+            loadedProfile = null;
+        } else {
+            System.out.println("No profile is currently loaded.");
+        }
+    }
+
+    public void deleteProfile(String userName) {
+        if (database.containsKey(userName)) {
+            if (loadedProfile != null && loadedProfile.getUsername().equals(userName)) {
+                System.out.println("Cannot delete profile for " + userName + " while loaded. No profile was deleted.");
+            } else {
+                database.remove(userName);
+                System.out.println("Profile deleted for " + userName + ".");
+            }
+        } else {
+            System.out.println("No profile found for " + userName + ". No profile was deleted.");
+        }
+    }
+
+    public void createPolicy(PolicyType type, String[] options) {
+        if (loadedProfile == null) {
+            System.out.println("Need to load a profile in order to create a policy.");
+        } else {
+            switch (type) {
+                case HOME:
+                    if (loadedProfile.getHomePolicy() != null) {
+                        System.out.println(loadedProfile.getUsername() + " already has a home policy. No new policy was created.");
+                    } else {
+                        String sumToInsure = options[0];
+                        String propertyAddress = options[1];
+                        String rental = options[2];
+                        HomePolicy homePolicy = new HomePolicy(sumToInsure, propertyAddress, rental);
+                        loadedProfile.setHomePolicy(homePolicy);
+                        System.out.println("New home policy created for " + loadedProfile.getUsername() + ".");
+                    }
+                    break;
+                case CAR:
+                    if (loadedProfile.getCarPolicy() != null) {
+                        System.out.println(loadedProfile.getUsername() + " already has a car policy. No new policy was created.");
+                    } else {
+                        String sumToInsure = options[0];
+                        String makeAndModel = options[1];
+                        String licensePlate = options[2];
+                        String mechanicalWarranty = options[3];
+                        CarPolicy carPolicy = new CarPolicy(sumToInsure, makeAndModel, licensePlate, mechanicalWarranty);
+                        loadedProfile.setCarPolicy(carPolicy);
+                        System.out.println("New car policy created for " + loadedProfile.getUsername() + ".");
+                    }
+                    break;
+                case LIFE:
+                    if (loadedProfile.getLifePolicy() != null) {
+                        System.out.println(loadedProfile.getUsername() + " already has a life policy. No new policy was created.");
+                    } else {
+                        String sumToInsure = options[0];
+                        LifePolicy lifePolicy = new LifePolicy(sumToInsure);
+                        loadedProfile.setLifePolicy(lifePolicy);
+                        System.out.println("New life policy created for " + loadedProfile.getUsername() + ".");
+                    }
+                    break;
+            }
+        }
+    }
+
+    private void printProfile(int rank, Profile profile) {
+        System.out.println(" " + rank + ": " + profile.getUsername() + ", " + profile.getAge());
+    }
+
+    private class Profile {
+        private String username;
+        private int age;
+        private HomePolicy homePolicy;
+        private CarPolicy carPolicy;
+        private LifePolicy lifePolicy;
+
+        public Profile(String username, int age) {
+            this.username = username.substring(0, 1).toUpperCase() + username.substring(1).toLowerCase();
+            this.age = age;
+            this.homePolicy = null;
+            this.carPolicy = null;
+            this.lifePolicy = null;
+        }
+
+        public String getUsername() {
+            return username;
+        }
+
+        public int getAge() {
+            return age;
+        }
+
+        public HomePolicy getHomePolicy() {
+            return homePolicy;
+        }
+
+        public void setHomePolicy(HomePolicy homePolicy) {
+            this.homePolicy = homePolicy;
+        }
+
+        public CarPolicy getCarPolicy() {
+            return carPolicy;
+        }
+
+        public void setCarPolicy(CarPolicy carPolicy) {
+            this.carPolicy = carPolicy;
+        }
+
+        public LifePolicy getLifePolicy() {
+            return lifePolicy;
+        }
+
+        public void setLifePolicy(LifePolicy lifePolicy) {
+            this.lifePolicy = lifePolicy;
+        }
+
+        public int getRank() {
+            List<Profile> profiles = new ArrayList<>(database.values());
+            profiles.sort((p1, p2) -> p1.username.compareToIgnoreCase(p2.username));
+            return profiles.indexOf(this) + 1;
+        }
+    }
+
+    private abstract class Policy {
+        private String sumToInsure;
+
+        public Policy(String sumToInsure) {
+            this.sumToInsure = sumToInsure;
+        }
+
+        public String getSumToInsure() {
+            return sumToInsure;
+        }
+    }
+
+    private class HomePolicy extends Policy {
+        private String propertyAddress;
+        private String rental;
+
+        public HomePolicy(String sumToInsure, String propertyAddress, String rental) {
+            super(sumToInsure);
+            this.propertyAddress = propertyAddress;
+            this.rental = rental;
+        }
+
+        public String getPropertyAddress() {
+            return propertyAddress;
+        }
+
+        public String getRental() {
+            return rental;
+        }
+    }
+
+    private class CarPolicy extends Policy {
+        private String makeAndModel;
+        private String licensePlate;
+        private String mechanicalWarranty;
+
+        public CarPolicy(String sumToInsure, String makeAndModel, String licensePlate, String mechanicalWarranty) {
+            super(sumToInsure);
+            this.makeAndModel = makeAndModel;
+            this.licensePlate = licensePlate;
+            this.mechanicalWarranty = mechanicalWarranty;
+        }
+
+        public String getMakeAndModel() {
+            return makeAndModel;
+        }
+
+        public String getLicensePlate() {
+            return licensePlate;
+        }
+
+        public String getMechanicalWarranty() {
+            return mechanicalWarranty;
+        }
+    }
+
+    private class LifePolicy extends Policy {
+        public LifePolicy(String sumToInsure) {
+            super(sumToInsure);
+        }
+    }
+}
+```

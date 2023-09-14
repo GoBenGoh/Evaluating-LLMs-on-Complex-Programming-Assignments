@@ -1,4 +1,3 @@
-```java
 package nz.ac.auckland.se281;
 
 import java.util.ArrayList;
@@ -64,26 +63,3 @@ public class InsuranceSystem {
                 + newProfile.getAge() + ".");
     }
 }
-
-class ClientProfile {
-    private final String username;
-    private final String age;
-
-    public ClientProfile(String username, String age) {
-        this.username = username;
-        this.age = age;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getAge() {
-        return age;
-    }
-
-    public String getTitleCaseUsername() {
-        return username.substring(0, 1).toUpperCase() + username.substring(1).toLowerCase();
-    }
-}
-```

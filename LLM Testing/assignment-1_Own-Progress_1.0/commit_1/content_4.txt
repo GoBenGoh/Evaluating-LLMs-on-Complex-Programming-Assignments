@@ -36,8 +36,8 @@ public class InsuranceSystem {
 
         // Check if username is at least 3 characters long
         if (userName.length() < 3) {
-            System.out.println(
-                    "'" + userName + "' is an invalid username, it should be at least 3 characters long. No profile was created.");
+            System.out
+                    .println("'" + userName + "' is an invalid username, it should be at least 3 characters long. No profile was created.");
             return;
         }
 
@@ -45,13 +45,13 @@ public class InsuranceSystem {
         try {
             int ageInt = Integer.parseInt(age);
             if (ageInt <= 0) {
-                System.out.println(
-                        "'" + age + "' is an invalid age, please provide a positive whole number only. No profile was created for " + userName + ".");
+                System.out
+                        .println("'" + age + "' is an invalid age, please provide a positive whole number only. No profile was created for " + userName + ".");
                 return;
             }
         } catch (NumberFormatException e) {
-            System.out.println(
-                    "'" + age + "' is an invalid age, please provide a positive whole number only. No profile was created for " + userName + ".");
+            System.out
+                    .println("'" + age + "' is an invalid age, please provide a positive whole number only. No profile was created for " + userName + ".");
             return;
         }
 
@@ -60,30 +60,7 @@ public class InsuranceSystem {
         database.add(newProfile);
 
         // Print success message
-        System.out.println("New profile created for " + newProfile.getTitleCaseUsername() + " with age "
-                + newProfile.getAge() + ".");
-    }
-}
-
-class ClientProfile {
-    private final String username;
-    private final String age;
-
-    public ClientProfile(String username, String age) {
-        this.username = username;
-        this.age = age;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getAge() {
-        return age;
-    }
-
-    public String getTitleCaseUsername() {
-        return username.substring(0, 1).toUpperCase() + username.substring(1).toLowerCase();
+        System.out.println("New profile created for " + newProfile.getTitleCaseUsername() + " with age " + newProfile.getAge() + ".");
     }
 }
 ```
