@@ -45,6 +45,10 @@ public class TextToJava {
         }
 
         if (startIndex != -1 && endIndex != -1) { // code between ```java and ```
+            if (endIndex < startIndex){ // endIndex is the ``` in ```java
+                String codeBlock = text.substring(startIndex + 7).trim();
+                return codeBlock;
+            }
             String codeBlock = text.substring(startIndex + 7, endIndex).trim();
             return codeBlock;
         }
