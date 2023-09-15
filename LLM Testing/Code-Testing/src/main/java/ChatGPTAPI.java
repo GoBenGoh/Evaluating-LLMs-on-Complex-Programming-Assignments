@@ -202,7 +202,7 @@ public class ChatGPTAPI {
 
                 // Ask GPT to explain compilation errors
                 sendGPTRequest(nLRequest, args[0], true, Double.valueOf(args[1]),
-                        attempt, repo, CSVCreator.workflow, Integer.parseInt(CSVCreator.commitNumber));
+                        attempt, CSVCreator.repository, CSVCreator.workflow, Integer.parseInt(CSVCreator.commitNumber));
             }
             else{
                 System.out.println("Not sending natural language request");
