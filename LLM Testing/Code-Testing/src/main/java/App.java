@@ -49,38 +49,38 @@ public class App {
         ChatGPTAPI chatGPTAPI = new ChatGPTAPI(initialCommit);
         chatGPTAPI.runTestIterations(args, repo, commit, 1, workflow);
 
-//        // Test GPT's Progress starting from students code
-//        workflow = "Piggyback";
-//        // Get student repo information from JSON
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        List<Map<String, Object>> repositoriesToTest = objectMapper.readValue(
-//                new File("src/main/java/repos_config.json"),
-//                objectMapper.getTypeFactory().constructCollectionType(List.class, Map.class)
-//        );
-//
-//        for (Map<String, Object> repoConfig: repositoriesToTest) {
-//            String studentRepo = (String) repoConfig.get("repo_path");
-//            JGitRepoHandler repoHandler = new JGitRepoHandler(studentRepo);
-//
-//            List<Map<String, Object>> repoCommits = (List<Map<String, Object>>) repoConfig.get("repo_commits");
-//            for (Map<String, Object> commitInfo : repoCommits) {
-//                String commitHash = (String) commitInfo.get("commit_hash");
-//                int commitNumber = (int) commitInfo.get("commit_number");
-//
-//                // Retrieve content of InsuranceSystem.java for current commit
-//                String content = FileContentReader.getFileContent(studentRepo);
-//
-//                // Run testing on commit
-//                chatGPTAPI = new ChatGPTAPI(content);
-//                repoHandler.switchToCommit(commitHash);
-//                chatGPTAPI.runTestIterations(args, studentRepo, commitHash, commitNumber, workflow);
-//            }
-//
-//            // Switch back to the initial commit before closing the repository
-//            String initialCommitHash = (String) repoConfig.get("initial_commit");
-//            repoHandler.switchToCommit(initialCommitHash);
-//            repoHandler.close();
-//        }
+        // Test GPT's Progress starting from students code
+        workflow = "Piggyback";
+        // Get student repo information from JSON
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<Map<String, Object>> repositoriesToTest = objectMapper.readValue(
+                new File("src/main/java/repos_config.json"),
+                objectMapper.getTypeFactory().constructCollectionType(List.class, Map.class)
+        );
+
+        for (Map<String, Object> repoConfig: repositoriesToTest) {
+            String studentRepo = (String) repoConfig.get("repo_path");
+            JGitRepoHandler repoHandler = new JGitRepoHandler(studentRepo);
+
+            List<Map<String, Object>> repoCommits = (List<Map<String, Object>>) repoConfig.get("repo_commits");
+            for (Map<String, Object> commitInfo : repoCommits) {
+                String commitHash = (String) commitInfo.get("commit_hash");
+                int commitNumber = (int) commitInfo.get("commit_number");
+
+                // Retrieve content of InsuranceSystem.java for current commit
+                String content = FileContentReader.getFileContent(studentRepo);
+
+                // Run testing on commit
+                chatGPTAPI = new ChatGPTAPI(content);
+                repoHandler.switchToCommit(commitHash);
+                chatGPTAPI.runTestIterations(args, studentRepo, commitHash, commitNumber, workflow);
+            }
+
+            // Switch back to the initial commit before closing the repository
+            String initialCommitHash = (String) repoConfig.get("initial_commit");
+            repoHandler.switchToCommit(initialCommitHash);
+            repoHandler.close();
+        }
     }
 
     public static List<String> generateRepoPaths(int numberOfRepos) {
