@@ -1,0 +1,18 @@
+[ERROR] /C:/Users/benja/OneDrive/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/Main.java:[178,24] cannot find symbol
+  symbol:   method loadProfile(java.lang.String)
+  location: variable insuranceSystem of type nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/OneDrive/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/Main.java:[181,24] cannot find symbol
+  symbol:   method unloadProfile()
+  location: variable insuranceSystem of type nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/OneDrive/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/Main.java:[184,24] cannot find symbol
+  symbol:   method deleteProfile(java.lang.String)
+  location: variable insuranceSystem of type nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/OneDrive/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/Main.java:[190,24] cannot find symbol
+  symbol:   method createPolicy(nz.ac.auckland.se281.Main.PolicyType,java.lang.String[])
+  location: variable insuranceSystem of type nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/OneDrive/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/Main.java:[193,24] cannot find symbol
+  symbol:   method createPolicy(nz.ac.auckland.se281.Main.PolicyType,java.lang.String[])
+  location: variable insuranceSystem of type nz.ac.auckland.se281.InsuranceSystem
+[ERROR] /C:/Users/benja/OneDrive/Documents/GitHub/WhoWroteThisCode-HumanOrAI/LLM Testing/assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/Main.java:[196,24] cannot find symbol
+  symbol:   method createPolicy(nz.ac.auckland.se281.Main.PolicyType,java.lang.String[])
+  location: variable insuranceSystem of type nz.ac.auckland.se281.InsuranceSystem

@@ -14,7 +14,8 @@ public class ChatGPTAPI {
     }
     public boolean badResponse = false;
 
-    public String sendGPTRequest(String request, String key, boolean isNaturalLanguageRequest) {
+    public String sendGPTRequest(String request, String key, boolean isNaturalLanguageRequest, double temperature,
+                                 int attempt, String repo, String workflow, int commitNumber) {
         try {
             URL url = new URL("https://api.openai.com/v1/chat/completions");
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -27,7 +28,7 @@ public class ChatGPTAPI {
             con.setRequestProperty("Authorization", "Bearer "+ key);
             //Make sure to REPLACE the path of the json file!
             String jsonInputString = readLinesAsString(new File(request));
-            System.out.println("JSON Input String: \n"+jsonInputString);
+            Logger.logToGPT(jsonInputString, temperature, attempt, repo, workflow, commitNumber);
             try (OutputStream os = con.getOutputStream()) {
                 byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
                 os.write(input, 0, input.length);
@@ -50,6 +51,7 @@ public class ChatGPTAPI {
             else{
                 createResponseTxtFiles("src/main/resources/response.txt", response,
                         "src/main/resources/content.txt", content);
+                Logger.logFromGPT(response, content, temperature, attempt, repo, workflow, commitNumber);
                 this.content=content;
             }
             return content;
@@ -138,8 +140,8 @@ public class ChatGPTAPI {
         CSVCreator.save();
     }
 
-    private TestResultAnalyzer startTesting(String mode, String[] args, String repo, int attempt,
-                                                   CSVCreator CSVCreator, TestResultAnalyzer priorResults)
+    private TestResultAnalyzer startTesting(String mode, String[] args, String repo, int attempt, CSVCreator CSVCreator,
+                                            TestResultAnalyzer priorResults)
             throws IOException{
         String responseContent = this.content;
         String jsonRequest = setJsonRequest(mode);
@@ -170,7 +172,8 @@ public class ChatGPTAPI {
         }
         // Ask GPT to complete the code
         System.out.println("Sending request to ChatGPT");
-        String content = sendGPTRequest(jsonRequest, args[0], false);
+        String content = sendGPTRequest(jsonRequest, args[0], false, Double.valueOf(args[1]),
+                attempt, CSVCreator.repository, CSVCreator.workflow, Integer.parseInt(CSVCreator.commitNumber));
         if (content.indexOf("package nz.ac.auckland.se281") == -1){ // Bad response by ChatGPT
             System.out.println("Bad Response from ChatGPT!");
             // Set the content to the same content before the GPT request
@@ -198,7 +201,8 @@ public class ChatGPTAPI {
                 System.out.println("Sending compilation error natural language request");
 
                 // Ask GPT to explain compilation errors
-                sendGPTRequest(nLRequest, args[0], true);
+                sendGPTRequest(nLRequest, args[0], true, Double.valueOf(args[1]),
+                        attempt, CSVCreator.repository, CSVCreator.workflow, Integer.parseInt(CSVCreator.commitNumber));
             }
             else{
                 System.out.println("Not sending natural language request");

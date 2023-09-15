@@ -1,0 +1,117 @@
+```
+import nz.ac.auckland.se281.Main.PolicyType;
+import java.util.ArrayList;
+import java.util.List;
+
+public class InsuranceSystem {
+    private static List<Profile> database = new ArrayList<>();
+  
+    public void printDatabase() {
+        if (database.size() == 0) {
+            System.out.println("Database has 0 profiles.");
+        } else if (database.size() == 1) {
+            System.out.println("Database has 1 profile:");
+            Profile profile = database.get(0);
+            System.out.println(" 1: " + profile.getUsername() + ", " + profile.getAge());
+        } else {
+            System.out.println("Database has " + database.size() + " profiles:");
+            for (int i = 0; i < database.size(); i++) {
+                Profile profile = database.get(i);
+                System.out.println(" " + (i + 1) + ": " + profile.getUsername() + ", " + profile.getAge());
+            }
+        }
+    }
+
+    public void createNewProfile(String username, String age) {
+        boolean isUsernameUnique = true;
+        if (username.length() < 3) {
+            System.out.println("'" + username + "' is an invalid username, it should be at least 3 characters long. No profile was created.");
+            return;
+        }
+        if (!age.matches("[1-9][0-9]*")) {
+            System.out.println("'" + age + "' is an invalid age, please provide a positive whole number only. No profile was created for " + username + ".");
+            return;
+        }
+        for (Profile profile : database) {
+            if (profile.getUsername().equalsIgnoreCase(username)) {
+                System.out.println("Usernames must be unique. No profile was created for '" + username + "'.");
+                isUsernameUnique = false;
+                return;
+            }
+        }
+        if (isUsernameUnique) {
+            Profile profile = new Profile(username, age);
+            database.add(profile);
+            System.out.println("New profile created for " + username + " with age " + age + ".");
+        }
+    }
+
+    public void loadProfile(String username) {   
+        for (Profile profile : database) {
+            if (profile.getUsername().equalsIgnoreCase(username)) {
+                System.out.println("Profile loaded for " + username + ".");
+                return;
+            }
+        }
+        System.out.println("No profile found for " + username + ". Profile not loaded.");
+    }
+
+    public void unloadProfile() {
+        if (!database.isEmpty()) {
+            String username = database.get(0).getUsername();
+            database.remove(0);
+            System.out.println("Profile unloaded for " + username + ".");
+        } else {
+            System.out.println("No profile is currently loaded.");
+        }
+    }
+
+    public void deleteProfile(String username) {
+        boolean profileExists = false;
+        for (Profile profile : database) {
+            if (profile.getUsername().equalsIgnoreCase(username)) {
+                profileExists = true;
+                database.remove(profile);
+                System.out.println("Profile deleted for " + username + ".");
+                return;
+            }
+        }
+        if (!profileExists) {
+            System.out.println("No profile found for " + username + ". No profile was deleted.");
+        }
+    }
+
+    public void createPolicy(PolicyType type, String[] options) {
+        if (database.isEmpty()) {
+            System.out.println("Need to load a profile in order to create a policy.");
+        } else {
+            Profile profile = database.get(0);
+            if (type == PolicyType.HOME) {
+                double sumInsured = Double.parseDouble(options[0]);
+                String address = options[1];
+                boolean isRental = options[2].equalsIgnoreCase("y");
+                HomePolicy policy = new HomePolicy(sumInsured, address, isRental);
+                profile.addPolicy(policy);
+                System.out.println("New Home policy created for " + profile.getUsername() + ".");
+            } else if (type == PolicyType.CAR) {
+                double sumInsured = Double.parseDouble(options[0]);
+                String makeAndModel = options[1];
+                String licensePlate = options[2];
+                boolean hasMechanicalWarranty = options[3].equalsIgnoreCase("y");
+                CarPolicy policy = new CarPolicy(sumInsured, makeAndModel, licensePlate, hasMechanicalWarranty);
+                profile.addPolicy(policy);
+                System.out.println("New Car policy created for " + profile.getUsername() + ".");
+            } else if (type == PolicyType.LIFE) {
+                double sumInsured = Double.parseDouble(options[0]);
+                if (!profile.hasLifePolicy()) {
+                    LifePolicy policy = new LifePolicy(sumInsured);
+                    profile.addPolicy(policy);
+                    System.out.println("New Life policy created for " + profile.getUsername() + ".");
+                } else {
+                    System.out.println(profile.getUsername() + " already has a life policy. No new policy was created.");
+                }
+            }
+        }
+    }
+}
+```

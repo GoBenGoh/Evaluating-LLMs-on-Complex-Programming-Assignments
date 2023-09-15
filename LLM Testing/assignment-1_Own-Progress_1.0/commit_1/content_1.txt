@@ -1,0 +1,185 @@
+```
+package nz.ac.auckland.se281;
+
+import nz.ac.auckland.se281.Main.PolicyType;
+import java.util.ArrayList;
+import java.util.List;
+
+public class InsuranceSystem {
+    private static List<ClientProfile> database = new ArrayList<>();
+  
+    public void printDatabase() {
+        if (database.size() == 0) {
+            System.out.println("Database has 0 profiles.");
+        } else if (database.size() == 1) {
+            System.out.println("Database has 1 profile:");
+            printProfile(database.get(0), 1);
+        } else {
+            System.out.println("Database has "+ database.size() + " profiles:");
+            for (int i = 0; i < database.size(); i++) {
+                printProfile(database.get(i), i + 1);
+            }
+        }
+    }
+
+    public void createNewProfile(String userName, String age) {
+       // Check if username already exists in the database
+        for (ClientProfile profile : database) {
+            if (profile.getUsername().equalsIgnoreCase(userName)) {
+                System.out.println(MessageCli.INVALID_USERNAME_NOT_UNIQUE.getMessage(userName));
+                return;
+            }
+        }
+
+        // Check if username is at least 3 characters long
+        if (userName.length() < 3) {
+            System.out.println(MessageCli.INVALID_USERNAME_TOO_SHORT.getMessage(userName));
+            return;
+        }
+
+        // Check if age is a positive integer
+        try {
+            int ageInt = Integer.parseInt(age);
+            if (ageInt <= 0) {
+                System.out.println(MessageCli.INVALID_AGE.getMessage(age, userName));
+                return;
+            }
+        } catch (NumberFormatException e) {
+            System.out.println(MessageCli.INVALID_AGE.getMessage(age, userName));
+            return;
+        }
+
+        // Add the new profile to the database
+        ClientProfile newProfile = new ClientProfile(userName, age);
+        database.add(newProfile);
+        System.out.println(MessageCli.PROFILE_CREATED.getMessage(userName, age));
+    }
+
+    public void loadProfile(String userName) {
+        // Check if a profile with the given username exists in the database
+        for (ClientProfile profile : database) {
+            if (profile.getUsername().equalsIgnoreCase(userName)) {
+                System.out.println(MessageCli.PROFILE_LOADED.getMessage(userName));
+                return;
+            }
+        }
+
+        // If no profile found, print error message
+        System.out.println(MessageCli.NO_PROFILE_FOUND_TO_LOAD.getMessage(userName));
+    }
+
+    public void unloadProfile() {
+        // Check if a profile is currently loaded
+        if (database.isEmpty()) {
+            System.out.println(MessageCli.NO_PROFILE_LOADED.getMessage());
+        } else {
+            System.out.println(MessageCli.PROFILE_UNLOADED.getMessage(database.get(0).getUsername()));
+        }
+    }
+
+    public void deleteProfile(String userName) {
+        // Check if a profile with the given username exists in the database
+        for (ClientProfile profile : database) {
+            if (profile.getUsername().equalsIgnoreCase(userName)) {
+                if (!database.isEmpty() && database.get(0).getUsername().equalsIgnoreCase(userName)) {
+                    System.out.println(MessageCli.CANNOT_DELETE_PROFILE_WHILE_LOADED.getMessage(userName));
+                } else {
+                    database.remove(profile);
+                    System.out.println(MessageCli.PROFILE_DELETED.getMessage(userName));
+                }
+                return;
+            }
+        }
+
+        // If no profile found, print error message
+        System.out.println(MessageCli.NO_PROFILE_FOUND_TO_DELETE.getMessage(userName));
+    }
+
+    public void createPolicy(PolicyType type, String[] options) {
+        if (database.isEmpty()) {
+            System.out.println(MessageCli.NO_PROFILE_FOUND_TO_CREATE_POLICY.getMessage());
+            return;
+        }
+
+        ClientProfile loadedProfile = database.get(0);
+
+        switch (type) {
+            case HOME:
+                createHomePolicy(options, loadedProfile);
+                break;
+            case CAR:
+                createCarPolicy(options, loadedProfile);
+                break;
+            case LIFE:
+                createLifePolicy(options, loadedProfile);
+                break;
+        }
+    }
+
+    private void createHomePolicy(String[] options, ClientProfile profile) {
+        double sumInsured;
+        try {
+            sumInsured = Double.parseDouble(options[0]);
+        } catch (NumberFormatException e) {
+            System.out.println(MessageCli.INVALID_SUM_INSURED.getMessage(options[0]));
+            return;
+        }
+
+        String address = options[1];
+        boolean rental = options[2].equalsIgnoreCase("y");
+
+        HomePolicy policy = new HomePolicy(sumInsured, address, rental);
+        profile.addPolicy(policy);
+        System.out.println(MessageCli.NEW_POLICY_CREATED.getMessage("Home", profile.getUsername()));
+    }
+
+    private void createCarPolicy(String[] options, ClientProfile profile) {
+        double sumInsured;
+        try {
+            sumInsured = Double.parseDouble(options[0]);
+        } catch (NumberFormatException e) {
+            System.out.println(MessageCli.INVALID_SUM_INSURED.getMessage(options[0]));
+            return;
+        }
+
+        String makeAndModel = options[1];
+        String licensePlate = options[2];
+        boolean mechanicalWarranty = options[3].equalsIgnoreCase("y");
+
+        CarPolicy policy = new CarPolicy(sumInsured, makeAndModel, licensePlate, mechanicalWarranty);
+        profile.addPolicy(policy);
+        System.out.println(MessageCli.NEW_POLICY_CREATED.getMessage("Car", profile.getUsername()));
+    }
+
+    private void createLifePolicy(String[] options, ClientProfile profile) {
+        double sumInsured;
+        try {
+            sumInsured = Double.parseDouble(options[0]);
+        } catch (NumberFormatException e) {
+            System.out.println(MessageCli.INVALID_SUM_INSURED.getMessage(options[0]));
+            return;
+        }
+
+        if (profile.hasLifePolicy()) {
+            System.out.println(MessageCli.ALREADY_HAS_LIFE_POLICY.getMessage(profile.getUsername()));
+            return;
+        }
+
+        int age = profile.getAge();
+        if (age > LifePolicy.MAX_AGE) {
+            System.out.println(MessageCli.OVER_AGE_LIMIT_LIFE_POLICY.getMessage(profile.getUsername()));
+            return;
+        }
+
+        LifePolicy policy = new LifePolicy(sumInsured, profile);
+        profile.addPolicy(policy);
+        System.out.println(MessageCli.NEW_POLICY_CREATED.getMessage("Life", profile.getUsername()));
+    }
+
+    private void printProfile(ClientProfile profile, int position) {
+        System.out.println(
+            MessageCli.PRINT_DB_PROFILE_HEADER_MINIMAL.getMessage(
+                position, profile.getUsername(), profile.getAge()));
+    }
+}
+```
