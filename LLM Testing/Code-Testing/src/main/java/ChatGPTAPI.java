@@ -182,7 +182,7 @@ public class ChatGPTAPI {
         }
         this.badResponse = false;
         try {
-            TextToJava.convertStringToJavaFile(content);
+            TextToJava.convertStringToJavaFile(content, repo);
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -14,10 +14,10 @@ public class TextToJava {
         saveJavaFile(javaCode, javaFilePath);
     }
 
-    public static void convertStringToJavaFile(String string) throws IOException{
-        String javaFilePath = "../assignment_template/assignment-1/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java";
+    public static void convertStringToJavaFile(String string, String repoPath) throws IOException{
+        String insuranceSystemPath = "/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java";
         String javaCode = extractJavaCode(string);
-        saveJavaFile(javaCode, javaFilePath);
+        saveJavaFile(javaCode, repoPath + insuranceSystemPath);
     }
 
     public static String extractJavaCode(String text) {
