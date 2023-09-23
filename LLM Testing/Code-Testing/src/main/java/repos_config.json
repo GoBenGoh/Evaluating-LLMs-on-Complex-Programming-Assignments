@@ -1,5 +1,199 @@
 [
   {
+    "repo_path": "../repos_output/assignment-1-repository-1",
+    "initial_commit": "3fc44552d024222305c022970a5c6b46b4dae57b",
+    "repo_commits": [
+      {
+        "commit_hash": "2713886751d481219dcc7a357269c8fcf01b1295",
+        "commit_number": 2
+      },
+      {
+        "commit_hash": "01135e766ebdb73d82ce0ed38f6f40873bcad127",
+        "commit_number": 3
+      },
+      {
+        "commit_hash": "c4f3f26f7cd86cd06ab2a2e1946f75525574163e",
+        "commit_number": 4
+      },
+      {
+        "commit_hash": "f7933425a4383ec139af6eaf08dac19b536024c8",
+        "commit_number": 5
+      },
+      {
+        "commit_hash": "d8a9c28ae8fa7e990904da7e6a82094479da6cab",
+        "commit_number": 6
+      },
+      {
+        "commit_hash": "d0cd1163c69e345284e4173307c14afb882755ff",
+        "commit_number": 7
+      },
+      {
+        "commit_hash": "1671ace5527031aaef550b2c89d69c07482fdb85",
+        "commit_number": 8
+      },
+      {
+        "commit_hash": "d9c3d41f8d7177faf477d6ace4617c8236c15d58",
+        "commit_number": 9
+      },
+      {
+        "commit_hash": "73b758a421167fb6b7f84d90e949eec82629e339",
+        "commit_number": 10
+      },
+      {
+        "commit_hash": "c8a07670fcadf0662d7d078aaa8fbad907dd5bae",
+        "commit_number": 11
+      },
+      {
+        "commit_hash": "2381c3f9a9ccfd845c3c6bba42938bdb13f61f09",
+        "commit_number": 12
+      },
+      {
+        "commit_hash": "69534c181fcc1acfcc9fbd169163f28a048bf8d3",
+        "commit_number": 13
+      },
+      {
+        "commit_hash": "4e4875cb93721dc243885d05aa2b26b71fa5b89b",
+        "commit_number": 14
+      },
+      {
+        "commit_hash": "f340bd818401f0b59de5e590ca8597a1424edfa4",
+        "commit_number": 15
+      },
+      {
+        "commit_hash": "af4c14f8f6c2ada34a532601e44224e5e51958bd",
+        "commit_number": 16
+      },
+      {
+        "commit_hash": "b7d0dc58ce1593a5f8f6b35506eff116e2f1024a",
+        "commit_number": 17
+      },
+      {
+        "commit_hash": "280c5217e2884059726ea5abf1e1f49fc64095a4",
+        "commit_number": 18
+      },
+      {
+        "commit_hash": "6c92af848a44ed486b48fa1907852a5af7e48e36",
+        "commit_number": 19
+      },
+      {
+        "commit_hash": "3e41d03604b6cbfed380d6c282be98b1bfca83d4",
+        "commit_number": 20
+      },
+      {
+        "commit_hash": "479289c79f0901394c49cf8e92841d3a0f91c40a",
+        "commit_number": 21
+      },
+      {
+        "commit_hash": "bbf576378c4f3d1f57038c58c975319dfa528744",
+        "commit_number": 22
+      },
+      {
+        "commit_hash": "04eaaa67c8185da0412971db73834d4508465a5f",
+        "commit_number": 23
+      },
+      {
+        "commit_hash": "74de3fc816ba25dbdcd4ba6fb3a2fa72d0978591",
+        "commit_number": 24
+      },
+      {
+        "commit_hash": "14e39df9e5724f59321991b66cb89778c5b11860",
+        "commit_number": 25
+      },
+      {
+        "commit_hash": "5c768518bc36f40cc9c5ffb5eebcdb5953205ad9",
+        "commit_number": 26
+      }
+    ]
+  },
+  {
+    "repo_path": "../repos_output/assignment-1-repository-2",
+    "initial_commit": "043af04ccd8b8a41cb0c2db2c4dcd10f50fa7b31",
+    "repo_commits": [
+      {
+        "commit_hash": "f63a6be6e82bd3f30b20ff42f361c7df30243b2d",
+        "commit_number": 2
+      },
+      {
+        "commit_hash": "7692c1acfa8237978819ce2451419346d8680e67",
+        "commit_number": 3
+      },
+      {
+        "commit_hash": "0e3a1c1520c58dceaa24d21a9730ecfe1f72de7c",
+        "commit_number": 4
+      },
+      {
+        "commit_hash": "685b524b4d880edd39432b308cc5c24dffb78b9b",
+        "commit_number": 5
+      }
+    ]
+  },
+  {
+    "repo_path": "../repos_output/assignment-1-repository-8",
+    "initial_commit": "6e82736b581a1a78b83e2a4bf846c7991ff903d9",
+    "repo_commits": [
+      {
+        "commit_hash": "de933fc344bf8441eb813a8b95c78cbc39d29920",
+        "commit_number": 2
+      },
+      {
+        "commit_hash": "b7bec90ec0d4c69865b84a0a877b32d1dd791a96",
+        "commit_number": 3
+      },
+      {
+        "commit_hash": "3d78d09765f2fb8e4240bcb86e97a7cf17ddd447",
+        "commit_number": 4
+      },
+      {
+        "commit_hash": "503fcb471e29874f2fad5e8726588c316bc1fabd",
+        "commit_number": 5
+      },
+      {
+        "commit_hash": "d5c4939b32c75b475c343ddbc5279c10a79bd750",
+        "commit_number": 6
+      },
+      {
+        "commit_hash": "667d497af985a9e96794b5a25e4ddc930242f923",
+        "commit_number": 7
+      },
+      {
+        "commit_hash": "75ab14945d3aed4d01b32a1e834d43e84eed0061",
+        "commit_number": 8
+      },
+      {
+        "commit_hash": "9a5827006137ae0784aa7a83934b5e00c624a80c",
+        "commit_number": 9
+      },
+      {
+        "commit_hash": "e4752b8c156125b545ff8b0cbab2870e7e3b4ed9",
+        "commit_number": 10
+      },
+      {
+        "commit_hash": "af292496be9fc2b20613190d63b983e5cbb936dd",
+        "commit_number": 11
+      },
+      {
+        "commit_hash": "1873bc754738afc420e0f5a6766a73fb5e207a73",
+        "commit_number": 12
+      },
+      {
+        "commit_hash": "6810da8a1191e4558041412bffa78033eb0ebb88",
+        "commit_number": 13
+      },
+      {
+        "commit_hash": "de931917bad785055a80208f6f8bd5d8cd454ba4",
+        "commit_number": 14
+      },
+      {
+        "commit_hash": "8451c62b447c428134663d1562d5b6d5240d73c4",
+        "commit_number": 15
+      },
+      {
+        "commit_hash": "34ed1bac3a052c5ea23bd213a90b770a5581b60c",
+        "commit_number": 16
+      }
+    ]
+  },
+  {
     "repo_path": "../repos_output/assignment-1-repository-12",
     "initial_commit": "93d4304683a933eb2025132a8880e8c1436a7d09",
     "repo_commits": [
@@ -58,34 +252,100 @@
       {
         "commit_hash": "8265108858a51ea0c9182dd53593b51f300094fe",
         "commit_number": 17
+      }
+    ]
+  },
+  {
+    "repo_path": "../repos_output/assignment-1-repository-14",
+    "initial_commit": "7b06af4c98bbda8c8365c89f6f617eaef5bbec97",
+    "repo_commits": [
+      {
+        "commit_hash": "54f03126886398f19312ee548a02087b0800aa84",
+        "commit_number": 2
       },
       {
-        "commit_hash": "36a28ff10b4f74f5d3922e8f549e15083c6e5635",
+        "commit_hash": "c9359ac73f6a205dcac5c7577ccf3957f9ac2a03",
+        "commit_number": 3
+      },
+      {
+        "commit_hash": "98c33d3ef633aeaa01308b1d5d7186c655e7adae",
+        "commit_number": 4
+      },
+      {
+        "commit_hash": "35d475a833a854f0f48fa8e56b5cd6723f669ecc",
+        "commit_number": 5
+      },
+      {
+        "commit_hash": "ca30847333460cf0b546da31a50e261af777062d",
+        "commit_number": 6
+      },
+      {
+        "commit_hash": "4430c20b9b64b2e9a88147badbcaff90c8168d06",
+        "commit_number": 7
+      },
+      {
+        "commit_hash": "315ca23830c24af816b2c11ed54e637f5c335dff",
+        "commit_number": 8
+      },
+      {
+        "commit_hash": "2f2fd849258736d05f8d2ea98e97445c5604cf65",
+        "commit_number": 9
+      },
+      {
+        "commit_hash": "db745b39edff166e75e35216aef3d2fdae1b4fb6",
+        "commit_number": 10
+      },
+      {
+        "commit_hash": "c75c50def68d7f100b50d913d0978f4103f782b7",
+        "commit_number": 11
+      },
+      {
+        "commit_hash": "d97ca09217ff8ade95f376314f760f6c0a819e9f",
+        "commit_number": 12
+      },
+      {
+        "commit_hash": "d3c2c553f4a835df2ca594ec4535867b36665cc6",
+        "commit_number": 13
+      },
+      {
+        "commit_hash": "10c1069f3c39d3f73699114a76f48cf8c566e0e9",
+        "commit_number": 14
+      },
+      {
+        "commit_hash": "bb707c7211421631da6254db8eaf3665f120ff8d",
+        "commit_number": 15
+      },
+      {
+        "commit_hash": "30ccc09b03ce2978306566b48a151b0fdf4e52f1",
+        "commit_number": 16
+      },
+      {
+        "commit_hash": "6cb2f474bd785ad62567c6931120932e391a1566",
+        "commit_number": 17
+      },
+      {
+        "commit_hash": "94e2e5b4c8ff675f2619d561b9236452ac2a169a",
+        "commit_number": 18
+      },
+      {
+        "commit_hash": "59303293d4dd335444594c5d1e09508b08b68ce2",
         "commit_number": 19
       },
       {
-        "commit_hash": "bb269f4152e90b51bac5715e89b9674805b36b3f",
+        "commit_hash": "cc1eb52c92652248b2707f57f2596417c883e435",
         "commit_number": 20
       },
       {
-        "commit_hash": "916633dcb4d0973081f5ea5f9d69c5464b36119e",
+        "commit_hash": "cde285d408ec1325a88c8f12d9d815e394346bdd",
         "commit_number": 21
       },
       {
-        "commit_hash": "2746dbeeddd875b78aacbdf54e8822eab7c5c8db",
+        "commit_hash": "a8e7cef4e650ad15ed647f6c057d4d17dbfb5e10",
         "commit_number": 22
       },
       {
-        "commit_hash": "197525bfb5b8e516cca50ec6e97415ec53c84d87",
+        "commit_hash": "354828370a4511bb4addf567cd51cd6f0bd51c2c",
         "commit_number": 23
-      },
-      {
-        "commit_hash": "f107438e1ffdeda4362496e1f086e3d8556531b1",
-        "commit_number": 25
-      },
-      {
-        "commit_hash": "327bcf150e463dc5e841b5a6b8e1e448cc1d7c0d",
-        "commit_number": 30
       }
     ]
   }
