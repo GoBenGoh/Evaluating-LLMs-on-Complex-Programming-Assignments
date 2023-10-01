@@ -30,7 +30,7 @@ public class TextToJava {
             for (File file : files) {
                 String fileName = file.getName();
                 if (!fileName.equals("Main.java") && !fileName.equals("MessageCli.java") && !fileName.equals("InsuranceSystem.java")) {
-                    // Delete the file
+
                     try {
                         file.delete();
                     } catch (SecurityException e) {
