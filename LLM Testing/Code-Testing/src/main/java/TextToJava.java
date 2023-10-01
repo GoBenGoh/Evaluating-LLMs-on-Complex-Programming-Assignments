@@ -1,4 +1,5 @@
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -18,6 +19,27 @@ public class TextToJava {
         String insuranceSystemPath = "/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java";
         String javaCode = extractJavaCode(string);
         saveJavaFile(javaCode, repoPath + insuranceSystemPath);
+        deleteDuplicateFiles(repoPath);
+    }
+
+    public static void deleteDuplicateFiles(String repoPath) {
+        File srcFolder = new File(repoPath + "/src/main/java/nz/ac/auckland/se281");
+        File[] files = srcFolder.listFiles();
+
+        if (files != null) {
+            for (File file : files) {
+                String fileName = file.getName();
+                if (!fileName.equals("Main.java") && !fileName.equals("MessageCli.java") && !fileName.equals("InsuranceSystem.java")) {
+                    // Delete the file
+                    try {
+                        file.delete();
+                    } catch (SecurityException e) {
+                        System.err.println("Failed to delete: " + fileName);
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
     }
 
     public static String extractJavaCode(String text) {
