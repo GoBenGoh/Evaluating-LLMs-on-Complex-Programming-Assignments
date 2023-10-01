@@ -17,7 +17,8 @@ public class TextToJava {
 
     public static void convertStringToJavaFile(String string, String repoPath) throws IOException{
         String insuranceSystemPath = "/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java";
-        String javaCode = extractJavaCode(string);
+//        String javaCode = extractJavaCode(string);
+        String javaCode = removeBackticks(string);
         saveJavaFile(javaCode, repoPath + insuranceSystemPath);
         deleteDuplicateFiles(repoPath);
     }
@@ -82,6 +83,12 @@ public class TextToJava {
         }
 
         return null;
+    }
+
+    public static String removeBackticks(String text){
+        int startIndex = text.indexOf("package");
+        String code = text.substring(startIndex);
+        return code.replaceAll("`", "");
     }
 
     public static String readFile(String filePath) throws IOException {
