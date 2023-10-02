@@ -405,7 +405,7 @@ public class Main {
   }
 }
 ```
-Please fix the following code according to the instructions and the failing test cases. Do not assume another class exists! Do not explain the changes made! Only respond with java code!
+Please fix the following code according to the instructions and the failing test cases. Do not assume another class exists! Do not explain the changes made! Only respond with java code! Write your response in one java file.
 ```
 ```
 Here are the failing test cases:

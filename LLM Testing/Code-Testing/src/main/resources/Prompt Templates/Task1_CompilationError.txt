@@ -408,7 +408,7 @@ public class Main {
 The following Task 1 code does not compile. The compilation error is displayed below.
 ```
 ```
-Please rewrite the code below so that it compiles. Do not assume another class exists! Do not explain the changes made! Only respond with java code!
+Please rewrite the code below so that it compiles. Do not assume another class exists! Do not explain the changes made! Only respond with java code! Write your response in one java file.
 ```
 ```
 Here are the test cases that must pass:

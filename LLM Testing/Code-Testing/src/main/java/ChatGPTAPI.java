@@ -214,6 +214,7 @@ public class ChatGPTAPI {
         return testingResults;
     }
 
+    @Deprecated
     public String writeNaturalLanguageJson(String errorMessages) throws IOException {
         String promptTemplate = getFileFromResource("Prompt Templates/NaturalLanguageError.txt");
         String responseContent = this.content;

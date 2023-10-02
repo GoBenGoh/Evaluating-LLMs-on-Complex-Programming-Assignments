@@ -66,13 +66,13 @@ public class App {
             for (Map<String, Object> commitInfo : repoCommits) {
                 String commitHash = (String) commitInfo.get("commit_hash");
                 int commitNumber = (int) commitInfo.get("commit_number");
+                repoHandler.switchToCommit(commitHash);
 
-                // Retrieve content of InsuranceSystem.java for current commit
+                // Retrieve student code for current commit
                 String content = FileContentReader.getFileContent(studentRepo);
 
                 // Run testing on commit
                 chatGPTAPI = new ChatGPTAPI(content);
-                repoHandler.switchToCommit(commitHash);
                 chatGPTAPI.runTestIterations(args, studentRepo, commitHash, commitNumber, workflow);
             }
 
