@@ -120,10 +120,6 @@
       {
         "commit_hash": "0e3a1c1520c58dceaa24d21a9730ecfe1f72de7c",
         "commit_number": 4
-      },
-      {
-        "commit_hash": "685b524b4d880edd39432b308cc5c24dffb78b9b",
-        "commit_number": 5
       }
     ]
   },
@@ -186,10 +182,6 @@
       {
         "commit_hash": "8451c62b447c428134663d1562d5b6d5240d73c4",
         "commit_number": 15
-      },
-      {
-        "commit_hash": "34ed1bac3a052c5ea23bd213a90b770a5581b60c",
-        "commit_number": 16
       }
     ]
   },
