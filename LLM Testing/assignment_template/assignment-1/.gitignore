@@ -213,6 +213,7 @@ fabric.properties
 
 # Package Files #
 *.jar
+!codestyle.jar
 *.war
 *.nar
 *.ear
