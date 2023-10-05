@@ -26,19 +26,19 @@ public class PromptWriter {
         if(type == "c"){
             int errorStart = prompt.indexOf("The compilation error is displayed below.") + 46; // Start after the lines above
             String newPrompt = modifyPrompt(prompt, errorStart, extra);
-            int codeStart = newPrompt.indexOf("Only respond with java code!") + 33; // Start after the lines above
+            int codeStart = newPrompt.indexOf("Write your response in one java file.") + 42; // Start after the lines above
             newPrompt = modifyPrompt(newPrompt, codeStart, trimmedResponse);
             return newPrompt;
         }
         else if(type == "f") {
-            int codeStart = prompt.indexOf("Only respond with java code!") + 33; // Start after the lines above
+            int codeStart = prompt.indexOf("Write your response in one java file.") + 42; // Start after the lines above
             String newPrompt = modifyPrompt(prompt, codeStart, trimmedResponse);
             int testStart = newPrompt.indexOf("Here are the failing test cases:") + 37; // Start after the lines above
             newPrompt = modifyPrompt(newPrompt, testStart, extra);
             return newPrompt;
         }
         else if (type == "t1" || type == "t2"){
-            int codeStart = prompt.indexOf("Only respond with java code!") + 33; // Start after the lines above
+            int codeStart = prompt.indexOf("Write your response in one java file.") + 42; // Start after the lines above
             String newPrompt = modifyPrompt(prompt, codeStart, trimmedResponse);
             return newPrompt;
         }
