@@ -1,3 +1,6 @@
+/**
+ * This is a class used by GSON. GSON converts this class into a JSON request to be sent to GPT.
+ */
 public class Request {
     public String model;
     public Message[] messages = new Message[1];

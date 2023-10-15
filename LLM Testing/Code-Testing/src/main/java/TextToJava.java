@@ -6,6 +6,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * This class is meant for extracting the code from GPT's response content and placing it in a repository for testing.
+ */
 public class TextToJava {
     public static void convertStringToJavaFile(String string, String repoPath) throws IOException{
         String insuranceSystemPath = "/src/main/java/nz/ac/auckland/se281/InsuranceSystem.java";
