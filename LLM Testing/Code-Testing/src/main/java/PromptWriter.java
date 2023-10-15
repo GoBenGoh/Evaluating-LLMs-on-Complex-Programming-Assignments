@@ -1,3 +1,6 @@
+/**
+ * This class is responsible for writing the prompts sent to GPT.
+ */
 public class PromptWriter {
     private String prompt;
     private String response;
@@ -16,6 +19,11 @@ public class PromptWriter {
         this.extra = extra;
     }
 
+    /**
+     * Creates a prompt depending on the type of request that needs to be sent.
+     * It places code, compilation errors, and test failures into the correct placeholder areas of each prompt template.
+     * @return
+     */
     public String output(){
         int start = response.indexOf("package nz.ac.auckland.se281");
         String trimmedResponse = response.substring(start);
@@ -47,6 +55,11 @@ public class PromptWriter {
         }
     }
 
+    /**
+     * This method writes the compilation errors into the placeholder area of the natural language explanation prompt.
+     * This method is currently unused as the natural language functionality is not fully implemented.
+     * @return
+     */
     public String createNaturalLanguageErrorPrompt(){
         int responseStart = response.indexOf("package nz.ac.auckland.se281");
         String trimmedResponse = response.substring(responseStart);
@@ -61,6 +74,13 @@ public class PromptWriter {
         return newPrompt;
     }
 
+    /**
+     * This method inserts messages into the placeholder sections of prompts.
+     * @param prompt
+     * @param index
+     * @param message
+     * @return
+     */
     private String modifyPrompt(String prompt, int index, String message){
         String newString = new String();
         for (int i = 0; i < prompt.length(); i++) {

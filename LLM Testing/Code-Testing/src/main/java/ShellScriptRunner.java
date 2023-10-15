@@ -6,7 +6,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This class is responsible for running tests on the GPT API responses.
+ */
 public class ShellScriptRunner {
+    /**
+     * This method runs testing on the repository that contains GPT's code.
+     * @param repositoryDirectory
+     * @return
+     */
     public static TestResultAnalyzer runTesting(String repositoryDirectory){
         String xmlPath = repositoryDirectory + "/target/surefire-reports/TEST-nz.ac.auckland.se281.MainTest.xml";
         TestResultAnalyzer testingResults;
@@ -78,6 +86,7 @@ public class ShellScriptRunner {
             List<String> t3HiddenAsserts = new ArrayList<>(t3HiddenFailureMessages.values());
             List<String> t3FailedHiddenTests = TestFinder.extractTestMethods(t3HiddenTestNames, "HIDDEN");
 
+            // Record test results
             testingResults = new TestResultAnalyzer(true, t1ProvidedTestNames, t1HiddenTestNames,
                     t2ProvidedTestNames, t2HiddenTestNames, t3ProvidedTestNames, t3HiddenTestNames, "");
             testingResults.setT1Failures(FailureFileWriter.getFailuresAsString(t1FailedProvidedTests,
@@ -87,7 +96,7 @@ public class ShellScriptRunner {
             testingResults.setT3Failures(FailureFileWriter.getFailuresAsString(t3FailedProvidedTests,
                     t3FailedHiddenTests, t3ProvidedAsserts, t3HiddenAsserts));
 
-            //Logging purposes
+            // Log failures
             FailureFileWriter.writeFailuresToFile(t1FailedProvidedTests, t1FailedHiddenTests, t1ProvidedAsserts,
                     t1HiddenAsserts, "T1");
             FailureFileWriter.writeFailuresToFile(t2FailedProvidedTests, t2FailedHiddenTests, t2ProvidedAsserts,
@@ -107,6 +116,12 @@ public class ShellScriptRunner {
         }
     }
 
+    /**
+     * Executes testing by running a bash script that uses mvn commands
+     * @param repositoryDirectory
+     * @param command
+     * @return
+     */
     private static String runCommand(String repositoryDirectory, String command) {
         try {
             String osName = System.getProperty("os.name").toLowerCase();

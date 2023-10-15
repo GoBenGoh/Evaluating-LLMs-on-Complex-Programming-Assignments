@@ -9,6 +9,9 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * This class is used for storing the results from testing
+ */
 public class TestResultAnalyzer {
     private final boolean isCompiled;
     private final List<String> t1ProvidedTestNames;
@@ -80,7 +83,13 @@ public class TestResultAnalyzer {
     public String getT3Failures(){return t3Failures;}
     public void setT3Failures(String failures){this.t3Failures=failures;}
 
-
+    /**
+     * Extracts information about failed test cases from an XML file representing test suite results and organizes
+     * them by tasks.
+     * @param xmlFilePath The path to the XML file containing the testing results.
+     * @return A list of maps, where each map represents a task (Task 1, Task 2, and Task 3) and contains
+     *         test case names as keys and their associated failure messages as values.
+     */
     public static List<Map<String, String>> extractFailedTestDetails(String xmlFilePath) {
         List<Map<String, String>> taskTestDetails = new ArrayList<>();
         taskTestDetails.add(new LinkedHashMap<>()); // Task 1 test cases

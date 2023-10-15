@@ -3,10 +3,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This is the main class.
+ */
 public class App {
     public static void main(String[] args) throws IOException, GitAPIException, InterruptedException {
         // Test GPT's Own Progress
@@ -83,14 +85,4 @@ public class App {
         }
     }
 
-    public static List<String> generateRepoPaths(int numberOfRepos) {
-        List<String> repoPaths = new ArrayList<>();
-
-        for (int i = 1; i <= numberOfRepos; i++) {
-            String repoPath = "../repos_output/assignment-1-repository-" + i;
-            repoPaths.add(repoPath);
-        }
-
-        return repoPaths;
-    }
 }

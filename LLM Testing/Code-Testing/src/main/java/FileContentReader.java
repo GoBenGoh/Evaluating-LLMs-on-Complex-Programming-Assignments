@@ -5,6 +5,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is used for reading the files in a student's repository for the assignment.
+ * The provided classes in the assignment are excluded from being read.
+ */
 public class FileContentReader {
     public static String getFileContent(String repoPath) throws IOException {
         List<String> excludedFiles = List.of("Main.java", "MessageCli.java", "InsuranceSystem.java");
