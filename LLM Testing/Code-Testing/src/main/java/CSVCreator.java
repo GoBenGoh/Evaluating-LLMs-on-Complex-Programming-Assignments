@@ -7,6 +7,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This class is responsible for creating the CSVs that record testing results.
+ */
 public class CSVCreator {
     public CSVWriter csvWriter;
     public String repository;
@@ -32,7 +35,10 @@ public class CSVCreator {
         }
     }
 
-    // Testing CSV creation
+    /**
+     * This method is only for debugging and testing purposes. This runs CSVCreator in isolation.
+     * @param args
+     */
     public static void main(String[] args) {
         // Creating a sample CSVCreator instance
         CSVCreator csvCreator = new CSVCreator("repo", "commit", String.valueOf(1),"workflow", "0.5");

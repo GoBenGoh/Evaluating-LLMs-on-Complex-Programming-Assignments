@@ -7,6 +7,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+/**
+ * This class is responsible for sending requests to the GPT API and testing its responses.
+ */
 public class ChatGPTAPI {
     public String content;
     public ChatGPTAPI(String content){
@@ -14,6 +17,19 @@ public class ChatGPTAPI {
     }
     public boolean badResponse = false;
 
+    /**
+     * This method sends POST requests to the GPT API.
+     * It also logs the requests to GPT and responses from GPT.
+     * @param request
+     * @param key
+     * @param isNaturalLanguageRequest
+     * @param temperature
+     * @param attempt
+     * @param repo
+     * @param workflow
+     * @param commitNumber
+     * @return
+     */
     public String sendGPTRequest(String request, String key, boolean isNaturalLanguageRequest, double temperature,
                                  int attempt, String repo, String workflow, int commitNumber) {
         try {
@@ -62,6 +78,14 @@ public class ChatGPTAPI {
         throw new RuntimeException("Unexpected Error in sendGPTRequest");
     }
 
+    /**
+     * This method records the responses from GPT into txt files.
+     * @param fileName
+     * @param response
+     * @param fileName1
+     * @param content
+     * @throws FileNotFoundException
+     */
     private static void createResponseTxtFiles(String fileName, StringBuffer response, String fileName1, String content)
             throws FileNotFoundException {
         try (PrintWriter out = new PrintWriter(fileName)) {
@@ -74,6 +98,11 @@ public class ChatGPTAPI {
         }
     }
 
+    /**
+     * This method extracts the message content from GPT's response.
+     * @param response
+     * @return
+     */
     private static String getResponseContent(StringBuffer response) {
         JsonObject jsonObject = JsonParser.parseString(String.valueOf(response)).getAsJsonObject();
         JsonElement choices =  jsonObject.get("choices");
@@ -82,6 +111,17 @@ public class ChatGPTAPI {
         return content.getAsString();
     }
 
+    /**
+     * This method tests GPT's code completion on a given commit.
+     * It has 10 iterations to pass all the test cases.
+     * Testing for the commit will stop before 10 iterations if all test cases pass.
+     * @param args
+     * @param repo
+     * @param commit
+     * @param commitNumber
+     * @param workflow
+     * @throws IOException
+     */
     public void runTestIterations(String[] args, String repo, String commit, int commitNumber, String workflow)
             throws IOException{
         boolean task1 = true;
@@ -108,7 +148,8 @@ public class ChatGPTAPI {
                 String errors = resultAnalyzer.getErrors();
                 String task1Failures = resultAnalyzer.getT1Failures();
                 String task2Failures = resultAnalyzer.getT2Failures();
-                if(errors != ""){
+
+                if(errors != ""){  // If there are compilation errors in GPT's code
                     System.out.println("Last iteration had compilation errors");
                     if (task1)
                         resultAnalyzer = startTesting("1c", args, repo, attempt, CSVCreator, resultAnalyzer);
@@ -116,19 +157,21 @@ public class ChatGPTAPI {
                         resultAnalyzer = startTesting("2c", args, repo, attempt, CSVCreator, resultAnalyzer);
                 }
                 else{
+                    // If there are task 1 failures in GPT's code
                     if (!task1Failures.equals("")) {
                         System.out.println("Last iteration had Task 1 test failures: \n");
                         System.out.println(task1Failures);
                         resultAnalyzer = startTesting("1f", args, repo, attempt, CSVCreator, resultAnalyzer);
                     }
+                    // If there are task 2 failures in GPT's code
                     else if (task1Failures.equals("") && !task2Failures.equals("")) {
                         System.out.println("Last iteration had Task 2 test failures: \n");
                         System.out.println(task2Failures);
                         task1 = false;
                         resultAnalyzer = startTesting("2f", args, repo, attempt, CSVCreator, resultAnalyzer);
                     }
+                    // All tests pass
                     else{
-                        // All tests pass
                         System.out.println("All tests passed");
                         CSVCreator.save();
                         return;
@@ -140,6 +183,19 @@ public class ChatGPTAPI {
         CSVCreator.save();
     }
 
+    /**
+     * This method is responsible for creating requests to GPT to complete code.
+     * The responses are parsed and tested here.
+     * Results are recorded here.
+     * @param mode
+     * @param args
+     * @param repo
+     * @param attempt
+     * @param CSVCreator
+     * @param priorResults
+     * @return
+     * @throws IOException
+     */
     private TestResultAnalyzer startTesting(String mode, String[] args, String repo, int attempt, CSVCreator CSVCreator,
                                             TestResultAnalyzer priorResults)
             throws IOException{
@@ -214,6 +270,13 @@ public class ChatGPTAPI {
         return testingResults;
     }
 
+    /**
+     * This method is not fully functional.
+     * It is meant to create the JSON request for a natural language prompt to ask GPT to explain compilation failures.
+     * @param errorMessages
+     * @return
+     * @throws IOException
+     */
     @Deprecated
     public String writeNaturalLanguageJson(String errorMessages) throws IOException {
         String promptTemplate = getFileFromResource("Prompt Templates/NaturalLanguageError.txt");
@@ -235,6 +298,15 @@ public class ChatGPTAPI {
         return jsonRequest;
     }
 
+    /**
+     * This method writes prompts based on prompt templates in the resources folder.
+     * @param mode
+     * @param responseContent
+     * @param isNaturalLanguage
+     * @param results
+     * @return
+     * @throws IOException
+     */
     private static PromptWriter setPromptWriter(String mode, String responseContent,
                                                 boolean isNaturalLanguage, TestResultAnalyzer results)
             throws IOException {
@@ -286,6 +358,11 @@ public class ChatGPTAPI {
         }
     }
 
+    /**
+     * Sets the JSON request to be used in the next POST request to the GPT API.
+     * @param mode
+     * @return
+     */
     private static String setJsonRequest(String mode){
         if (mode.equals("1")){
             return "src/main/java/InitialTask1Request.json";
@@ -310,6 +387,12 @@ public class ChatGPTAPI {
         }
     }
 
+    /**
+     * This method helps get files from the resource folder.
+     * @param fileName
+     * @return
+     * @throws IOException
+     */
     public static String getFileFromResource(String fileName) throws IOException {
         // The class loader that loaded the class
         ClassLoader classLoader = ChatGPTAPI.class.getClassLoader();
@@ -324,6 +407,7 @@ public class ChatGPTAPI {
         }
 
     }
+
     public static String readLinesAsString(File file) throws IOException {
         String text = new String(Files.readAllBytes(Paths.get(file.getAbsolutePath())),
                     StandardCharsets.UTF_8);
