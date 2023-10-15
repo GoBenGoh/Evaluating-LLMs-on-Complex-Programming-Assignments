@@ -84,9 +84,11 @@ public class TestResultAnalyzer {
     public void setT3Failures(String failures){this.t3Failures=failures;}
 
     /**
-     * TODO: Explain this method
-     * @param xmlFilePath
-     * @return
+     * Extracts information about failed test cases from an XML file representing test suite results and organizes
+     * them by tasks.
+     * @param xmlFilePath The path to the XML file containing the testing results.
+     * @return A list of maps, where each map represents a task (Task 1, Task 2, and Task 3) and contains
+     *         test case names as keys and their associated failure messages as values.
      */
     public static List<Map<String, String>> extractFailedTestDetails(String xmlFilePath) {
         List<Map<String, String>> taskTestDetails = new ArrayList<>();

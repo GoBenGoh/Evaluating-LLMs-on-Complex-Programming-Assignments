@@ -9,6 +9,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 
+/**
+ * This class is used for extracting the actual test methods within MainTest.java or MainTestHidden.java to send back to
+ * GPT as part of the test failure prompt.
+ */
 public class TestFinder {
 
     public static List<String> extractTestMethods(List<String> testNames, String type) {
